@@ -15,6 +15,6 @@ TokenType type;
 int get_col() const { return this->column; };
 int get_line() const { return this->line; };
 const std::string& get_text() const { return this->text; };
-TokenType get_type() const { return this->text; };
+TokenType get_type() const { return this->type; };
 };
 #endif
