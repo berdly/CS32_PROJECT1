@@ -9,16 +9,16 @@ enum class TokenType{
 };
 
 class Token{
-int pcolumn;
-int pline;
-std::string ptext;
-TokenType ptype;
-
-Token(int column, int line, const std::string& text, TokenType type) : pcolumn{column}, pline{line}, ptext{text}, ptype{type} {}
-int get_col() const { return this->pcolumn; };
-int get_line() const { return this->pline; };
-const std::string& get_text() const { return this->ptext; };
-TokenType get_type() const { return this->ptype; };
+  int pcolumn;
+  int pline;
+  std::string ptext;
+  TokenType ptype;
+public:
+  Token(int column, int line, const std::string& text, TokenType type) : pcolumn{column}, pline{line}, ptext{text}, ptype{type} {}
+  int get_col() const { return this->pcolumn; };
+  int get_line() const { return this->pline; };
+  const std::string& get_text() const { return this->ptext; };
+  TokenType get_type() const { return this->ptype; };
 };
 #endif
 /*
