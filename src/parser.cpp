@@ -2,7 +2,7 @@
 
 
 ASTree::ASTree(const std::vector<Token>& tokens){
-
+    /*
     for(size_t i = 0 ; i < tokens.size();i++){
         Token check = tokens.at(i);
 
@@ -23,7 +23,8 @@ ASTree::ASTree(const std::vector<Token>& tokens){
 
         }
 
-    }
+    }*/
+    Token
 
 }
 
@@ -31,7 +32,7 @@ ASTree::ASTree(const std::vector<Token>& tokens){
 void ASnode::buildHelp(const std::vector<Token>& tokens, int idx){
 
     if(tokens.at(idx).get_type() == TokenType::CONST){
-        ASnode add = ASnode(tokens.at(idx))
+        ASTree::ASnode add = ASTree::ASnode(tokens.at(idx))
         self.pchildren.push_back(add);
         
 
@@ -40,7 +41,4 @@ void ASnode::buildHelp(const std::vector<Token>& tokens, int idx){
 
 }
 
-ASnode::ASnode(Token pdata){
-    self.pdata = pdata;
-    pchildren = std::vector<ASnode>();
-}
+ASTree::ASnode::ASnode(Token data) : pdata{data}, pchildren{} {}
