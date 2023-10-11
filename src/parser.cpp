@@ -40,8 +40,8 @@ std::vector<std::pair<int>> ASTree::get_child_idx(const std::vector<Token>& toke
             case TokenType::ERR:
                 throw ParserError(token);
                 break;
-            currend++;
         }
+        currend++;
     }
     return child_idx;
 }
