@@ -3,7 +3,7 @@
 
 #include <string>
 #include <vector>
-#include "Token.h"
+#include "token.h"
 
 std::vector<Token> reader(const std::string& input);
 
