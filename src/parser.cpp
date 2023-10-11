@@ -25,11 +25,12 @@ ASTree::ASNode build(const std::vector<Token>& tokens, start, end){
             else if(tokens[end] != TokenType::RPAR){
                 throw ParserError(tokens[end]);
             }
+            ASTree::ASNode rootNode{tokens[start+1]};
             std::vector<std::pair<int>> child_idx_list{this->get_child_idx(tokens, start+2, end-1)};
             for(const std::pair<int>& child_idx : child_idx_list){
-                curr.add_child(build(tokens, child_idx.first, child_idx.second));
+                rootNode.add_child(build(tokens, child_idx.first, child_idx.second));
                 }
-            break;
+            return rootNode;
         case TokenType::CONST:
             return curr;
         default:
