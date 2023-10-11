@@ -2,10 +2,9 @@
 #define LEXER_H
 
 #include <string>
-#include <stack>
+#include <vector>
 #include "Token.h"
 
-std::stack<Token> reader(const std::string& input);
-
+std::vector<Token> reader(const std::string& input);
 
 #endif
