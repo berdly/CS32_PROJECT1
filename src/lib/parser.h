@@ -7,19 +7,20 @@
 
 class ASTree{
 
-  class ASnode{
+  class ASNode{
     Token pdata;
-    std::vector<ASnode> pchildren;
+    std::vector<ASNode> pchildren;
     public:
-    ASnode(Token pdata);
+    ASNode(Token pdata);
     void add_child(ASNode child);
   }
 
-  ASnode proot;
+  ASNode proot;
 
 public:
   ASTree(const std::vector<Token>& tokens);
   ASNode build(const std::vector<Token>& tokens, int start, int end);
   std::vector<std::pair<int>> get_child_idx(const std::vector<Token>& tokens, int start, int end);
 }
+
 #endif
