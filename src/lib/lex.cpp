@@ -1,4 +1,5 @@
 #include "lexer.h"
+#incldue "error.h"
 #include <cctype>
 #include <sstream>
 
@@ -58,8 +59,8 @@ std::vector<Token> reader(const std::string& input) {  // Change return type to 
             case '.':
                 // Check for multiple decimal points in the current number.
                 if (currentNumber.find('.') != std::string::npos) {
-                    tokens.push_back(Token(column, line, "Error: multiple decimal points", TokenType::ERR));
                     currentNumber.clear();
+                    throw;
                 } else {
                     currentNumber += ch;
                 }
@@ -79,8 +80,8 @@ std::vector<Token> reader(const std::string& input) {  // Change return type to 
                 } 
                 // If it's an invalid character, create an error token.
                 else if (isalpha(ch) || !isspace(ch)) {
-                    tokens.push_back(Token(column, line, "Error: invalid character", TokenType::ERR));
                     currentNumber.clear();
+                    throw;
                 }
                 break;
         }
@@ -104,14 +105,19 @@ int main() {
     std::getline(std::cin, input);
 
     // Parse the input and get the tokens.
-    std::vector<Token> tokens = reader(input);  // Change to vector
-    
+    try{
+        std::vector<Token> tokens = reader(input);  // Change to vector
+    }
+    catch{
+        std::cout<<"Unexpected token at line "<< line <<" column " <<column;
+    }
     // Display the tokens.
     // Use a range-based for loop to iterate over the vector
     for (const Token& t : tokens) {
         std::cout << "Token: " << t.get_text() << ", Column: " << t.get_col() << ", Line: " << t.get_line() << std::endl;
     }
-
+    std::cout << "Token: END, Column: " << column << ", Line: " << line << std::endl;
+    
     return 0;
 }
 
