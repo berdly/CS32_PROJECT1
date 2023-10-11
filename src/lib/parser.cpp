@@ -1,3 +1,4 @@
+//Thanks to my brother Donald for helping me on this :)
 #include "reader.h"
 #include <cctype>
 #include <sstream>
@@ -96,4 +97,4 @@ int main() {
 
     return 0;
 }
-//Thanks to my brother Donald for helping me on this :)
+
