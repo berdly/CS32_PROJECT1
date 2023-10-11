@@ -27,7 +27,7 @@ ASTree::ASNode build(const std::vector<Token>& tokens, start, end){
             }
             std::vector<std::pair<int>> child_idx_list{this->get_child_idx(tokens, start+2, end-1)};
             for(const std::pair<int>& child_idx : child_idx_list){
-                curr.add_child(build(child_idx(tokens, child_idx.first, child_idx.second)));
+                curr.add_child(build(tokens, child_idx.first, child_idx.second));
                 }
             break;
         case TokenType::CONST:
