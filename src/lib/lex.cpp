@@ -72,6 +72,11 @@ std::vector<Token> reader(const std::string& input) {  // Change return type to 
                 line++;
                 column = 0;
                 break;
+
+            case ' ':
+                column++;
+                currentNumber.clear();
+                break;                
             
             // For other characters.
             default:
@@ -113,9 +118,9 @@ int main() {
     // Display the tokens.
     // Use a range-based for loop to iterate over the vector
     for (const Token& t : tokens) {
-        std::cout << "Token: " << t.get_text() << ", Column: " << t.get_col() << ", Line: " << t.get_line() << std::endl;
-        fLine = t.get_line();
+        std::cout << t.get_line() << "  " << t.get_col() << "  " << t.get_text() << std::endl;
+        fline = t.get_line();
     }
-    std::cout<<fLine+1<<"    1  END"
+    std::cout<<fline+1<<"   1  END";
     return 0;
 }
