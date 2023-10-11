@@ -19,21 +19,27 @@ ASTree::ASNode build(const std::vector<Token>& tokens, start, end){
     
     switch(curr.get_type()){
         case TokenType::LPAR:
+            //we know it should be an operand
             if(tokens[start+1] != TokenType::EXP){
                 throw ParserError(tokens[start+1]);
             }
             else if(tokens[end] != TokenType::RPAR){
                 throw ParserError(tokens[end]);
             }
+            //create node for operand and ignore parentheses
             ASTree::ASNode rootNode{tokens[start+1]};
+            //find where children begin and end
             std::vector<std::pair<int>> child_idx_list{this->get_child_idx(tokens, start+2, end-1)};
+            //recursively add children while properly building out their children
             for(const std::pair<int>& child_idx : child_idx_list){
                 rootNode.add_child(build(tokens, child_idx.first, child_idx.second));
                 }
             return rootNode;
         case TokenType::CONST:
+            //const has no children so can simply return
             return curr;
         default:
+            //should not start with anything but CONST or LPAR
             throw ParserError(tokens[start]);
     }   
 }
