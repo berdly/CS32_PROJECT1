@@ -79,3 +79,63 @@ ASTree::ASNode ASTree::build(const std::vector<Token>& tokens, start, end){
 ASTree::ASNode::ASNode(Token data) : pdata{data}, pchildren{} {}
 
 void ASTree::ASNode::add_child(ASNode child) { this->pchildren.push_back(child); }
+
+
+double ASTree::calc(){
+
+	
+	return proot.calcHelp();
+	
+
+}
+
+double ASTree::ASNode::calcHelp(){
+
+	switch(this->pdata.get_type()){
+		
+		case TokenType::EXP:
+			
+			double ret; // will be returned
+			
+			for(size_t i =0; i < this->pchildren.size();i++){
+				
+				double val = pchildren.at(i).calcHelp();
+
+				
+				if(i ==0){
+					ret = val;
+				}else{
+
+
+					switch(this->pdata.ptext){
+				
+						case "*":
+						
+							ret *=val;
+
+						case "+":
+						
+							ret += val;
+
+						case "-":
+
+							ret -= val;
+
+						case"\":
+							ret /= val;
+
+					}
+
+				}
+
+				return ret;
+			}
+
+		
+	case TokenType::CONST:
+		return std::stod(this->pdata.ptext);
+			
+	}
+
+
+}
