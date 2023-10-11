@@ -46,7 +46,7 @@ std::vector<std::pair<int>> ASTree::get_child_idx(const std::vector<Token>& toke
     return child_idx;
 }
 
-ASTree::ASNode build(const std::vector<Token>& tokens, start, end){
+ASTree::ASNode ASTree::build(const std::vector<Token>& tokens, start, end){
     ASTree::ASNode curr{tokens[start]};
     
     switch(curr.get_type()){
