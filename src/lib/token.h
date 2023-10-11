@@ -5,6 +5,7 @@
 enum class TokenType{
   EXP,
   CONST,
+  PAR,
   ERR,
 };
 
