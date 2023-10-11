@@ -12,6 +12,40 @@ std::vector<std::pair<int>> ASTree::get_child_idx(const std::vector<Token>& toke
     for example given 2 (* 4 3 2) 3 
     would output [(0.0), (1,6), (7,7)]
     */
+    int pdepth{};
+    std::vector<std::pair<int>> child_idx{};
+    int currstart{start};
+    int currend{end};
+    for(const Token& token : tokens){
+        switch(token.get_type()){
+            case TokenType::CONST:
+                child_idx.push_back(std::pair<int>(currstart,currstart));
+                currstart++;
+                break;
+            case TokenType::LPAR:
+                pdepth++;
+                break;
+            case TokenType::RPAR:
+                pdepth--;
+                if(pdepth == 0){
+                    child_idx.push_back(std::pair<int>(currstart,currend));
+                    currstart = currend + 1;
+                }
+                else if(pdepth < 0){
+                    throw ParserError(token);
+                }
+                break;
+            case TokenType::EXP:
+                break;
+            case TokenType::ERR:
+                throw ParserError(token);
+                break;
+            currend++;
+        }
+                
+            
+                
+    }
 }
 
 ASTree::ASNode build(const std::vector<Token>& tokens, start, end){
