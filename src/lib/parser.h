@@ -6,14 +6,20 @@
 
 class ASTree{
 
-  struct ASnode{
+  class ASnode{
     Token pdata;
     std::vector<ASnode> pchildren;
+
+    void buildHelp(const std::vector<Token>& tokens, int idx);
+    
+    ASnode(Token pdata);
   }
 
   ASnode proot;
 
 public:
   ASTree(const std::vector<Token>& tokens);
+
+  
 }
 #endif
