@@ -20,22 +20,42 @@ std::stack<Token> reader(const std::string& input) {
         
         // Switch-case to handle different characters.
         switch (ch) {
-            // For arithmetic operators and parentheses.
+            // For arithmetic operators.
             case '+':
             case '-':
             case '*':
             case '/':
+                // If there's an accumulated number, create a token for it.
+                if (!currentNumber.empty()) {
+                    tokens.push(Token(column - currentNumber.size(), line, currentNumber, TokenType::CONST));
+                    currentNumber.clear();
+                }
+                // Create a token for the operator.
+                tokens.push(Token(column, line, std::string(1, ch), TokenType::EXP));
+                break;
+
+            // For left parenthesis.
             case '(':
+                // If there's an accumulated number, create a token for it.
+                if (!currentNumber.empty()) {
+                    tokens.push(Token(column - currentNumber.size(), line, currentNumber, TokenType::CONST));
+                    currentNumber.clear();
+                }
+                // Create a token for the left parenthesis.
+                tokens.push(Token(column, line, std::string(1, ch), TokenType::LPAR));
+                break;
+
+            // For right parenthesis.
             case ')':
                 // If there's an accumulated number, create a token for it.
                 if (!currentNumber.empty()) {
                     tokens.push(Token(column - currentNumber.size(), line, currentNumber, TokenType::CONST));
                     currentNumber.clear();
                 }
-                // Create a token for the operator or parenthesis.
-                tokens.push(Token(column, line, std::string(1, ch), TokenType::EXP));
+                // Create a token for the right parenthesis.
+                tokens.push(Token(column, line, std::string(1, ch), TokenType::RPAR));
                 break;
-            
+
             // For decimal points.
             case '.':
                 // Check for multiple decimal points in the current number.
