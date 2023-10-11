@@ -4,9 +4,8 @@
 //Thanks to my brother Donald for helping me on this
 
 // Function to parse the input string and create tokens for each number and operand.
-std::stack<Token> reader(const std::string& input) {
-    // Stack to store the generated tokens.
-    std::stack<Token> tokens;
+std::vector<Token> reader(const std::string& input) {  // Change return type to vector
+    std::vector<Token> tokens;  // Use vector instead of stack to store generated tokens
     
     // Temporary string to accumulate digits of a number.
     std::string currentNumber;
@@ -27,40 +26,40 @@ std::stack<Token> reader(const std::string& input) {
             case '/':
                 // If there's an accumulated number, create a token for it.
                 if (!currentNumber.empty()) {
-                    tokens.push(Token(column - currentNumber.size(), line, currentNumber, TokenType::CONST));
+                    tokens.push_back(Token(column - currentNumber.size(), line, currentNumber, TokenType::CONST));
                     currentNumber.clear();
                 }
                 // Create a token for the operator.
-                tokens.push(Token(column, line, std::string(1, ch), TokenType::EXP));
+                tokens.push_back(Token(column, line, std::string(1, ch), TokenType::EXP));
                 break;
 
             // For left parenthesis.
             case '(':
                 // If there's an accumulated number, create a token for it.
                 if (!currentNumber.empty()) {
-                    tokens.push(Token(column - currentNumber.size(), line, currentNumber, TokenType::CONST));
+                    tokens.push_back(Token(column - currentNumber.size(), line, currentNumber, TokenType::CONST));
                     currentNumber.clear();
                 }
                 // Create a token for the left parenthesis.
-                tokens.push(Token(column, line, std::string(1, ch), TokenType::LPAR));
+                tokens.push_back(Token(column, line, std::string(1, ch), TokenType::LPAR));
                 break;
 
             // For right parenthesis.
             case ')':
                 // If there's an accumulated number, create a token for it.
                 if (!currentNumber.empty()) {
-                    tokens.push(Token(column - currentNumber.size(), line, currentNumber, TokenType::CONST));
+                    tokens.push_back(Token(column - currentNumber.size(), line, currentNumber, TokenType::CONST));
                     currentNumber.clear();
                 }
                 // Create a token for the right parenthesis.
-                tokens.push(Token(column, line, std::string(1, ch), TokenType::RPAR));
+                tokens.push_back(Token(column, line, std::string(1, ch), TokenType::RPAR));
                 break;
 
             // For decimal points.
             case '.':
                 // Check for multiple decimal points in the current number.
                 if (currentNumber.find('.') != std::string::npos) {
-                    tokens.push(Token(column, line, "Error: multiple decimal points", TokenType::ERR));
+                    tokens.push_back(Token(column, line, "Error: multiple decimal points", TokenType::ERR));
                     currentNumber.clear();
                 } else {
                     currentNumber += ch;
@@ -81,7 +80,7 @@ std::stack<Token> reader(const std::string& input) {
                 } 
                 // If it's an invalid character, create an error token.
                 else if (isalpha(ch) || !isspace(ch)) {
-                    tokens.push(Token(column, line, "Error: invalid character", TokenType::ERR));
+                    tokens.push_back(Token(column, line, "Error: invalid character", TokenType::ERR));
                     currentNumber.clear();
                 }
                 break;
@@ -91,7 +90,7 @@ std::stack<Token> reader(const std::string& input) {
 
     // If there's any remaining number, create a token for it.
     if (!currentNumber.empty()) {
-        tokens.push(Token(column - currentNumber.size(), line, currentNumber, TokenType::CONST));
+        tokens.push_back(Token(column - currentNumber.size(), line, currentNumber, TokenType::CONST));
     }
 
     return tokens;
@@ -106,13 +105,12 @@ int main() {
     std::getline(std::cin, input);
 
     // Parse the input and get the tokens.
-    std::stack<Token> tokens = reader(input);
+    std::vector<Token> tokens = reader(input);  // Change to vector
     
     // Display the tokens.
-    while (!tokens.empty()) {
-        Token t = tokens.top();
+    // Use a range-based for loop to iterate over the vector
+    for (const Token& t : tokens) {
         std::cout << "Token: " << t.get_text() << ", Column: " << t.get_col() << ", Line: " << t.get_line() << std::endl;
-        tokens.pop();
     }
 
     return 0;
