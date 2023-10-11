@@ -74,9 +74,13 @@ std::vector<Token> reader(const std::string& input) {  // Change return type to 
                 break;
 
             case ' ':
+                // White space seperate
+                if (!currentNumber.empty()) {
+                    tokens.push_back(Token(column - currentNumber.size(), line, currentNumber, TokenType::CONST));
+                    currentNumber.clear();
+                }
                 column++;
-                currentNumber.clear();
-                break;                
+                break;               
             
             // For other characters.
             default:
