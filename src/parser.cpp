@@ -42,5 +42,5 @@ void ASnode::buildHelp(const std::vector<Token>& tokens, int idx){
 
 ASnode::ASnode(Token pdata){
     self.pdata = pdata;
-    pchildren = new std::vector<ASnode>();
+    pchildren = std::vector<ASnode>();
 }
