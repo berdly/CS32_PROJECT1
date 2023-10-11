@@ -1,7 +1,7 @@
-//Thanks to my brother Donald for helping me on this :)
 #include "reader.h"
 #include <cctype>
 #include <sstream>
+//Thanks to my brother Donald for helping me on this
 
 // Function to parse the input string and create tokens for each number and operand.
 std::stack<Token> reader(const std::string& input) {
