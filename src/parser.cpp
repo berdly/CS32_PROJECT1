@@ -1,5 +1,6 @@
 #include "parser.h"
 #include "error.h"
+#include <iostream>
 
 ASTree::ASTree(const std::vector<Token>& tokens) {
     this->proot = this->build(tokens, 0, tokens.size() - 1);
@@ -88,6 +89,75 @@ double ASTree::calc(){
 	
 
 }
+void ASTree::print(){
+    proot.printHelp();
+}
+
+void ASTree::ASNode::printHelp(){
+
+    switch(this->pdata.get_type()){
+		
+		case TokenType::EXP:
+			
+			std::cout<<"(";
+			
+			for(size_t i =0; i < this->pchildren.size();i++){
+				
+				pchildren.at(i).calcHelp();
+
+				
+				if(i ==0){
+					continue;
+				}else{
+
+					switch(this->pdata.get_text()[0]){
+				
+						case '*':
+						
+							std::cout<<"*";
+                            break;
+
+						case '+':
+						
+							std::cout<<"+";
+                            break;
+
+						case '-':
+
+							std::cout<<"-";
+                            break;
+
+						case '/':
+							std::cout<<"/";
+                            break;
+
+                        default:
+                            
+                            break;
+
+
+					}
+
+				}
+
+				std::cout<<")";
+			}
+
+		
+	    case TokenType::CONST:
+		    std::cout<<this->pdata.get_text();
+            break;
+
+        default:
+            
+            break;
+
+			
+	}
+
+
+}
+
 
 double ASTree::ASNode::calcHelp(){
 
@@ -107,24 +177,30 @@ double ASTree::ASNode::calcHelp(){
 				}else{
 
 
-					switch(this->pdata.ptext){
+					switch(this->pdata.get_text()[0]){
 				
-						case "*":
+						case '*':
 						
 							ret *=val;
+                            break;
 
-						case "+":
+						case '+':
 						
 							ret += val;
+                            break;
 
-						case "-":
+						case '-':
 
 							ret -= val;
+                            break;
 
-						case"\":
+						case '/':
 							ret /= val;
+                            break;
 
                         default:
+                            int i= 0;
+                            break;
 
 
 					}
@@ -135,11 +211,14 @@ double ASTree::ASNode::calcHelp(){
 			}
 
 		
-	case TokenType::CONST:
-		return std::stod(this->pdata.ptext);
+	    case TokenType::CONST:
+		    return std::stod(this->pdata.get_text());
+            break;
 
-    default:
-        
+        default:
+            int i = 0;
+            break;
+
 			
 	}
 
