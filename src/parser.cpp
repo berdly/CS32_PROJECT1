@@ -5,7 +5,7 @@ ASTree::ASTree(const std::vector<Token>& tokens) {
     this->proot = this->build(tokens, 0, tokens.size() - 1);
 }
 
-std::vector<std::pair<int>> ASTree::get_child_idx(const std::vector<Token>& tokens, start, end){
+std::vector<std::pair<int,int>> ASTree::get_child_idx(const std::vector<Token>& tokens, int start, int end){
     /*TODO
     should take a list of tokens assumed to be inside the parentheses of an operator and produce a list of start and end points based on locations of left and right parentheses
     this is used to determine the number of and location of child nodes in the list.
@@ -13,13 +13,13 @@ std::vector<std::pair<int>> ASTree::get_child_idx(const std::vector<Token>& toke
     would output [(0.0), (1,6), (7,7)]
     */
     int pdepth{};
-    std::vector<std::pair<int>> child_idx{};
+    std::vector<std::pair<int,int>> child_idx{};
     int currstart{start};
     int currend{end};
     for(const Token& token : tokens){
         switch(token.get_type()){
             case TokenType::CONST:
-                child_idx.push_back(std::pair<int>(currstart,currstart));
+                child_idx.push_back(std::pair<int,int>(currstart,currstart));
                 currstart++;
                 break;
             case TokenType::LPAR:
@@ -28,7 +28,7 @@ std::vector<std::pair<int>> ASTree::get_child_idx(const std::vector<Token>& toke
             case TokenType::RPAR:
                 pdepth--;
                 if(pdepth == 0){
-                    child_idx.push_back(std::pair<int>(currstart,currend));
+                    child_idx.push_back(std::pair<int,int>(currstart,currend));
                     currstart = currend + 1;
                 }
                 else if(pdepth < 0){
@@ -46,24 +46,24 @@ std::vector<std::pair<int>> ASTree::get_child_idx(const std::vector<Token>& toke
     return child_idx;
 }
 
-ASTree::ASNode ASTree::build(const std::vector<Token>& tokens, start, end){
+ASTree::ASNode ASTree::build(const std::vector<Token>& tokens, int start, int end){
     ASTree::ASNode curr{tokens[start]};
     
-    switch(curr.get_type()){
+    switch(curr.pdata.get_type()){
         case TokenType::LPAR:
             //we know it should be an operand
-            if(tokens[start+1] != TokenType::EXP){
+            if(tokens[start+1].get_type() != TokenType::EXP){
                 throw ParserError(tokens[start+1]);
             }
-            else if(tokens[end] != TokenType::RPAR){
+            else if(tokens[end].get_type() != TokenType::RPAR){
                 throw ParserError(tokens[end]);
             }
             //create node for operand and ignore parentheses
             ASTree::ASNode rootNode{tokens[start+1]};
             //find where children begin and end
-            std::vector<std::pair<int>> child_idx_list{this->get_child_idx(tokens, start+2, end-1)};
+            std::vector<std::pair<int,int>> child_idx_list{this->get_child_idx(tokens, start+2, end-1)};
             //recursively add children while properly building out their children
-            for(const std::pair<int>& child_idx : child_idx_list){
+            for(const std::pair<int,int>& child_idx : child_idx_list){
                 rootNode.add_child(build(tokens, child_idx.first, child_idx.second));
                 }
             return rootNode;
@@ -124,6 +124,9 @@ double ASTree::ASNode::calcHelp(){
 						case"\":
 							ret /= val;
 
+                        default:
+
+
 					}
 
 				}
@@ -134,6 +137,9 @@ double ASTree::ASNode::calcHelp(){
 		
 	case TokenType::CONST:
 		return std::stod(this->pdata.ptext);
+
+    default:
+        
 			
 	}
 
