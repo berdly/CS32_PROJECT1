@@ -1,5 +1,4 @@
 #include "lexer.h"
-#incldue "error.h"
 #include <cctype>
 #include <sstream>
 
@@ -59,8 +58,9 @@ std::vector<Token> reader(const std::string& input) {  // Change return type to 
             case '.':
                 // Check for multiple decimal points in the current number.
                 if (currentNumber.find('.') != std::string::npos) {
+                    std::cout<<"Unexpected token at line "<< line <<" column " <<column;
                     currentNumber.clear();
-                    throw;
+                    return 1;
                 } else {
                     currentNumber += ch;
                 }
@@ -80,8 +80,9 @@ std::vector<Token> reader(const std::string& input) {  // Change return type to 
                 } 
                 // If it's an invalid character, create an error token.
                 else if (isalpha(ch) || !isspace(ch)) {
+                    std::cout<<"Unexpected token at line "<< line <<" column " <<column;
                     currentNumber.clear();
-                    throw;
+                    return 1;
                 }
                 break;
         }
@@ -99,25 +100,21 @@ std::vector<Token> reader(const std::string& input) {  // Change return type to 
 // Main function for testing.
 int main() {
     std::string input;
-    
+    int fline;
+
     // Prompt the user for input.
     std::cout << "Enter the expression: ";
     std::getline(std::cin, input);
 
     // Parse the input and get the tokens.
-    try{
-        std::vector<Token> tokens = reader(input);  // Change to vector
-    }
-    catch{
-        std::cout<<"Unexpected token at line "<< line <<" column " <<column;
-    }
+    std::vector<Token> tokens = reader(input);  // Change to vector
+    
     // Display the tokens.
     // Use a range-based for loop to iterate over the vector
     for (const Token& t : tokens) {
         std::cout << "Token: " << t.get_text() << ", Column: " << t.get_col() << ", Line: " << t.get_line() << std::endl;
+        fLine = t.get_line();
     }
-    std::cout << "Token: END, Column: " << column << ", Line: " << line << std::endl;
-    
+    std::cout<<fLine+1<<"    1  END"
     return 0;
 }
-
