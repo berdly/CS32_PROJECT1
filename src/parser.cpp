@@ -1,5 +1,5 @@
 #include "parser.h"
-
+#include "error.h"
 
 ASTree::ASTree(const std::vector<Token>& tokens) {
     this->proot = this->build(tokens, 0, tokens.size() - 1);
