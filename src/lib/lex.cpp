@@ -1,4 +1,5 @@
 #include "lexer.h"
+#include <cstdlib>
 #include <cctype>
 #include <sstream>
 
@@ -60,7 +61,7 @@ std::vector<Token> reader(const std::string& input) {  // Change return type to 
                 if (currentNumber.find('.') != std::string::npos) {
                     std::cout<<"Unexpected token at line "<< line <<" column " <<column;
                     currentNumber.clear();
-                    return 1;
+                    exit(1);
                 } else {
                     currentNumber += ch;
                 }
@@ -82,7 +83,7 @@ std::vector<Token> reader(const std::string& input) {  // Change return type to 
                 else if (isalpha(ch) || !isspace(ch)) {
                     std::cout<<"Unexpected token at line "<< line <<" column " <<column;
                     currentNumber.clear();
-                    return 1;
+                    exit(1);
                 }
                 break;
         }
