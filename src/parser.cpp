@@ -38,3 +38,5 @@ ASTree::ASNode build(const std::vector<Token>& tokens, start, end){
 }
 
 ASTree::ASNode::ASNode(Token data) : pdata{data}, pchildren{} {}
+
+void ASTree::ASNode::add_child(ASNode child) { this->pchildren.push_back(child); }
