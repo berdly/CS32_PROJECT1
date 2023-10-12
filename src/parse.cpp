@@ -2,17 +2,20 @@
 #include <string>
 #include "lexer.h"
 #include "parser.h"
-
+#include "error.h"
 
 
 int main(){
     std::string input{};
     std::cin >> input;
+    try{
     ASTree tree{reader(input)};
     tree.print();
     std::cout << '\n';
-    try{
     std::cout << tree.calc();
+    }
+    catch(const ParserError& e){
+        std::cout << e.what();
     }
     catch(const ZeroDivision&){
         std::cout << "Runtime error: division by zero.";
