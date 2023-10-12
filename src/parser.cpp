@@ -103,7 +103,7 @@ void ASTree::ASNode::printHelp(){
 			
 			for(size_t i =0; i < this->pchildren.size();i++){
 				
-				pchildren.at(i).calcHelp();
+				pchildren.at(i).printHelp();
 
 				
 				if(i ==0){
