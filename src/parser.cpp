@@ -96,21 +96,16 @@ void ASTree::print(){
 void ASTree::ASNode::printHelp(){
 
     switch(this->pdata.get_type()){
-		
+
 		case TokenType::EXP:
-			
 			std::cout << '(';
-			
 			for(size_t i =0; i < this->pchildren.size();i++){
-				
 				this->pchildren.at(i).printHelp();
 
-				
 				if(i == this->pchildren.size() - 1){
 					std::cout << ')';
 				}
 				else{
-
 					switch(this->pdata.get_text()[0]){
 				
 						case '*':
@@ -133,9 +128,7 @@ void ASTree::ASNode::printHelp(){
                             break;
 
                         default:
-                            
                             break;
-
 
 					}
 
@@ -164,56 +157,35 @@ double ASTree::ASNode::calcHelp(){
 	switch(this->pdata.get_type()){
 		
 		case TokenType::EXP:
-			
 			double ret; // will be returned
-			
 			for(size_t i =0; i < this->pchildren.size();i++){
-				
 				double val = pchildren.at(i).calcHelp();
 
-				
 				if(i ==0){
 					ret = val;
 				}else{
-
-
 					switch(this->pdata.get_text()[0]){
-				
 						case '*':
-						
 							ret *=val;
                             break;
-
 						case '+':
-						
 							ret += val;
                             break;
-
 						case '-':
-
 							ret -= val;
                             break;
-
 						case '/':
 							if(val == 0){
 								throw ZeroDivision{};
 							}
 							ret /= val;
                             break;
-
                         default:
-                            int i= 0;
                             break;
-
-
 					}
-
 				}
-
 				return ret;
 			}
-
-		
 	    case TokenType::CONST:
 		    return std::stod(this->pdata.get_text());
             break;
@@ -222,7 +194,7 @@ double ASTree::ASNode::calcHelp(){
             int i = 0;
             break;
 
-			
+		
 	}
 
 
