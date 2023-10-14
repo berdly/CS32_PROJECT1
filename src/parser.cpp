@@ -20,8 +20,10 @@ std::vector<std::pair<int,int>> ASTree::get_child_idx(const std::vector<Token>& 
     for(const Token& token : tokens){
         switch(token.get_type()){
             case TokenType::CONST:
+		if(pdepth == 0){
                 child_idx.push_back(std::pair<int,int>(currstart,currstart));
                 currstart++;
+		}
                 break;
             case TokenType::LPAR:
                 pdepth++;
