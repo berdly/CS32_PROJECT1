@@ -180,7 +180,7 @@ double ASTree::ASNode::calcHelp(){
                             break;
 						case '/':
 							if(val == 0){
-								throw std::ZeroDivision("");
+								throw ZeroDivision{};
 							}
 							ret /= val;
                             break;
