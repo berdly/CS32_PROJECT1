@@ -51,7 +51,7 @@ std::vector<std::pair<int,int>> ASTree::get_child_idx(const std::vector<Token>& 
 
 ASTree::ASNode ASTree::build(const std::vector<Token>& tokens, int start, int end){
     ASTree::ASNode curr{tokens[start]};
-    ASTree:ASNode rootNode;
+    ASTree::ASNode rootNode;
     
     std::vector<std::pair<int,int>> child_idx_list;
     switch(curr.get_pdata().get_type()){
@@ -139,6 +139,7 @@ void ASTree::ASNode::printHelp(){
 				}
 
 			}
+            break;
 
 		
 	    case TokenType::CONST:
@@ -146,7 +147,6 @@ void ASTree::ASNode::printHelp(){
             break;
 
         default:
-            
             break;
 
 			
@@ -161,7 +161,7 @@ double ASTree::ASNode::calcHelp(){
 	switch(this->pdata.get_type()){
 		
 		case TokenType::EXP:
-			double ret; // will be returned
+			double ret = 0; // will be returned
 			for(size_t i =0; i < this->pchildren.size();i++){
 				double val = pchildren.at(i).calcHelp();
 
