@@ -201,12 +201,16 @@ double ASTree::ASNode::calcHelp(){
 		    return std::stod(this->pdata.get_text());
             break;
         case TokenType::LPAR:
+            return -1;
             break;
         case TokenType::RPAR:
+            return -1;
             break;
         case TokenType::ERR:
+            return -1;
             break;
         default:
+            return -1;
             break;
 
 		
