@@ -1,5 +1,5 @@
 #include "parser.h"
-#include "errors.h"
+#include "error.h"
 #include <iostream>
 
 ASTree::ASTree(const std::vector<Token>& tokens) {
