@@ -83,6 +83,11 @@ ASTree::ASNode ASTree::build(const std::vector<Token>& tokens, int start, int en
 
 ASTree::ASNode::ASNode(Token data) : pdata{data}, pchildren{} {}
 
+ASTree::ASNode::ASNode(){
+    Token temp = Token(0,0,"",TokenType::ERR);
+    pdata = temp;
+    
+}
 void ASTree::ASNode::add_child(ASNode child) { this->pchildren.push_back(child); }
 
 
