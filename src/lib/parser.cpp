@@ -1,5 +1,5 @@
 #include "parser.h"
-#include "error.h"
+#include "errors.h"
 #include <iostream>
 
 ASTree::ASTree(const std::vector<Token>& tokens) {
@@ -51,8 +51,10 @@ std::vector<std::pair<int,int>> ASTree::get_child_idx(const std::vector<Token>& 
 
 ASTree::ASNode ASTree::build(const std::vector<Token>& tokens, int start, int end){
     ASTree::ASNode curr{tokens[start]};
+    ASTree:ASNode rootNode;
     
-    switch(curr.pdata.get_type()){
+    std::vector<std::pair<int,int>> child_idx_list;
+    switch(curr.get_pdata().get_type()){
         case TokenType::LPAR:
             //we know it should be an operand
             if(tokens[start+1].get_type() != TokenType::EXP){
@@ -62,9 +64,9 @@ ASTree::ASNode ASTree::build(const std::vector<Token>& tokens, int start, int en
                 throw ParserError(tokens[end]);
             }
             //create node for operand and ignore parentheses
-            ASTree::ASNode rootNode{tokens[start+1]};
+            rootNode = tokens[start+1];
             //find where children begin and end
-            std::vector<std::pair<int,int>> child_idx_list{this->get_child_idx(tokens, start+2, end-1)};
+            child_idx_list  =this->get_child_idx(tokens, start+2, end-1);
             //recursively add children while properly building out their children
             for(const std::pair<int,int>& child_idx : child_idx_list){
                 rootNode.add_child(build(tokens, child_idx.first, child_idx.second));
@@ -178,7 +180,7 @@ double ASTree::ASNode::calcHelp(){
                             break;
 						case '/':
 							if(val == 0){
-								throw ZeroDivision{};
+								throw std::ZeroDivision("");
 							}
 							ret /= val;
                             break;
@@ -193,11 +195,15 @@ double ASTree::ASNode::calcHelp(){
             break;
 
         default:
-            int i = 0;
             break;
 
 		
 	}
 
 
+}
+
+
+Token ASTree::ASNode::get_pdata(){
+    return pdata;
 }

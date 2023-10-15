@@ -31,3 +31,4 @@ class LexerError : public std::exception {
         ;
     }
 };
+#endif

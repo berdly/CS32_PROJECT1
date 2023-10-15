@@ -11,7 +11,10 @@ class ASTree{
     Token pdata;
     std::vector<ASNode> pchildren;
     public:
+    ASNode();
     ASNode(Token pdata);
+    Token get_pdata();
+
     void add_child(ASNode child);
     double calcHelp();
     void printHelp();
@@ -22,6 +25,7 @@ class ASTree{
   ASNode proot;
 
 public:
+  
   ASTree(const std::vector<Token>& tokens);
   ASNode build(const std::vector<Token>& tokens, int start, int end);
   std::vector<std::pair<int,int>> get_child_idx(const std::vector<Token>& tokens, int start, int end);
