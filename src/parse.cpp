@@ -1,8 +1,8 @@
 #include <iostream>
 #include <string>
-#include "lexer.h"
-#include "parser.h"
-#include "errors.h"
+#include "lib/lexer.h"
+#include "lib/parser.h"
+#include "lib/error.h"
 
 
 int main(){
