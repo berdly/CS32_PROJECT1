@@ -1,5 +1,5 @@
 #include "parser.h"
-#include "error.h"
+#include "errors.h"
 #include <iostream>
 
 ASTree::ASTree(const std::vector<Token>& tokens) {
@@ -193,7 +193,6 @@ double ASTree::ASNode::calcHelp(){
             break;
 
         default:
-            int i = 0;
             break;
 
 		

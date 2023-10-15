@@ -8,9 +8,9 @@ class ParserError : public std::exception {
         ParserError(Token token) : etoken{token} {}
       char* what () {
         std::string msg{"Unexpected token at line "};
-        msg.append(std::to_string(this->etoken.get_line());
+        msg.append(std::to_string(this->etoken.get_line()));
         msg.append(" column ");
-        msg.append(std::to_string(this->etoken.get_col());
+        msg.append(std::to_string(this->etoken.get_col()));
         msg.push_back(': ');
         msg.append(this->etoken.get_text());
         return msg.c_string();
@@ -23,11 +23,13 @@ class LexerError : public std::exception {
         LexerError(Token token) : etoken{token} {}
       char* what () {
         std::string msg{"Syntax error on line "};
-        msg.append(std::to_string(this->etoken.get_line());
+        msg.append(std::to_string(this->etoken.get_line()));
         msg.append(" and column ");
-        msg.append(std::to_string(this->etoken.get_col());
+        msg.append(std::to_string(this->etoken.get_col()));
         msg.push_back('.');
         return msg.c_string();
         ;
     }
 };
+
+#endif
