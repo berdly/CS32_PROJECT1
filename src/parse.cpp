@@ -15,7 +15,7 @@ int main(){
     std::cout << tree.calc();
     }
     catch(const ParserError& e){
-        std::cout << e.what();
+        std::cout << e.new_what();
     }
     catch(const ZeroDivision&){
         std::cout << "Runtime error: division by zero.";
