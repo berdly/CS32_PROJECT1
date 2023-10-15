@@ -215,6 +215,7 @@ double ASTree::ASNode::calcHelp(){
 
 		
 	}
+    return ret;
 
 
 }
