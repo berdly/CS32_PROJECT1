@@ -105,7 +105,7 @@ std::vector<Token> reader(const std::string& input) {  // Change return type to 
 }
 
 // Main function for testing.
-int main() {
+/* int main() {
     std::string input;
     int fline;
 
@@ -124,4 +124,4 @@ int main() {
     }
     std::cout<<fline+1<<"   1  END";
     return 0;
-}
+} */
