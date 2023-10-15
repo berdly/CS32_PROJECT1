@@ -21,7 +21,7 @@ class LexerError : public std::exception {
     public:
         Token etoken;
         LexerError(Token token) : etoken{token} {}
-      char* new_what () const{
+      std::string new_what () const{
         std::string msg{"Syntax error on line "};
         msg.append(std::to_string(this->etoken.get_line());
         msg.append(" and column ");
