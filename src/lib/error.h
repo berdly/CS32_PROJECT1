@@ -13,7 +13,7 @@ class ParserError : public std::exception {
         msg.append(std::to_string(this->etoken.get_col());
         msg.push_back(': ');
         msg.append(this->etoken.get_text());
-        return msg.c_str();
+        return const_cast<char*>(msg.c_str());
         ;
     }
 };
@@ -27,7 +27,7 @@ class LexerError : public std::exception {
         msg.append(" and column ");
         msg.append(std::to_string(this->etoken.get_col());
         msg.push_back('.');
-        return msg.c_str();
+        return const_cast<char*>(msg.c_str());
         ;
     }
 };
