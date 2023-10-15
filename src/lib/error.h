@@ -31,4 +31,7 @@ class LexerError : public std::exception {
         ;
     }
 };
+
+class ZeroDivision : public std::exception {
+};
 #endif
