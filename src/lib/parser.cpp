@@ -163,11 +163,11 @@ void ASTree::ASNode::printHelp(){
 
 
 double ASTree::ASNode::calcHelp(){
-
+    double ret = 0.0; // will be returned
 	switch(this->pdata.get_type()){
 		
 		case TokenType::EXP:
-			double ret = 0; // will be returned
+			
 			for(size_t i =0; i < this->pchildren.size();i++){
 				double val = pchildren.at(i).calcHelp();
 
