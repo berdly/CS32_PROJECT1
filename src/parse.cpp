@@ -6,15 +6,19 @@
 
 
 int main(){
-    std::string input{};
-    std::string fullstr{};
-    
-    std::getline(std::cin, input);
-    while(input.size() > 0){
-        fullstr.append(input);
-        fullstr.push_back('\n');
-        input.clear();
-        std::getline(std::cin, input);
+    std::string input, line;
+    bool l = false;  // Initialize l to false
+
+    while (true) {
+        getline(std::cin, line);
+        if (!line.empty()) {
+            input += line + "\n"; // Concatenating each line with a newline character
+            l = true;
+        }
+        if (std::cin.eof()) {
+            break;
+        }
+        l = false;
     }
     
     try{
