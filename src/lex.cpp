@@ -1,5 +1,5 @@
 // Main function for testing.
-#include "lexer.h"
+#include "lib/lexer.h"
 #include <cstdlib>
 #include <cctype>
 #include <sstream>
