@@ -26,15 +26,14 @@ int main(){
     try{
     if(!tokens.empty()){
     ASTree tree{tokens};
-    double result{tree.calc()};
     tree.print();
     std::cout << '\n';
-    std::cout << result;
+    std::cout << tree.calc();
     std::cout << '\n';
     }
     }
     catch(const ParserError& e){
-        std::cout << e.new_what();
+        std::cout << e.new_what() << '\n';
         return 2;
     }
     catch(const ZeroDivision&){
