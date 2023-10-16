@@ -8,7 +8,7 @@ int main() {
      std::string input{};
     std::string fullstr{};
     std::getline(std::cin, input);
-    while(input != "/n"){
+    while(input != "\n"){
         fullstr.append(input);
         input.clear();
         std::getline(std::cin, input);
