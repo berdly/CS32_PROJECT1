@@ -30,5 +30,5 @@ int main() {
         std::cout << "   1    1  END" << std::endl; // If there are no tokens, default to line 1
     }
 
-    return 1;
+    return 0;
 }
