@@ -10,8 +10,8 @@ int main() {
     int fline;
     while (!std::cin.eof()){
         std::getline(std::cin, input);
-        input.clear();
         fullstr.append(input);
+        input.clear();
     }
 
     // Parse the input and get the tokens.
