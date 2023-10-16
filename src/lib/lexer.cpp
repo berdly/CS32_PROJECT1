@@ -56,19 +56,19 @@ std::vector<Token> reader(const std::string& input) {  // Change return type to 
             case '.':
                 // Check for multiple decimal points in the current number.
                 if (currentNumber.find('.') != std::string::npos) {
-                   std::cout << "Syntax error on line " << line << " column " << column << std::endl;
+                   std::cout << "Syntax error on line " << line << " column " << column << "." << std::endl;
                    currentNumber.clear();
                    exit(1);
                 }
                 // Check for trailing decimals.
                 else if (i + 1 == input.size() || isspace(input[i + 1]) || input[i + 1] == '\n') {
-                    std::cout << "Syntax error on line " << line << " column " << column << std::endl;
+                    std::cout << "Syntax error on line " << line << " column " << column << "." << std::endl;
                     currentNumber.clear();
                     exit(1);
                }
                 // Check for leading decimals.
                else if (currentNumber.empty()) {
-                   std::cout << "Syntax error on line " << line << " column " << column << std::endl;
+                   std::cout << "Syntax error on line " << line << " column " << column << "." << std::endl;
                    currentNumber.clear();
                    exit(1);
                } else {
@@ -103,7 +103,7 @@ std::vector<Token> reader(const std::string& input) {  // Change return type to 
                 } 
                 // If it's an invalid character, create an error token.
                 else if (isalpha(ch) || !isspace(ch)) {
-                    std::cout<<"Syntax error on line "<< line <<" column " <<column;
+                    std::cout<<"Syntax error on line "<< line <<" column " << "." << column;
                     currentNumber.clear();
                     exit(1);
                 }
