@@ -5,15 +5,16 @@
 #include <sstream>
 
 int main() {
-    std::string input;
-    int fline;
-
-    // Prompt the user for input.
-    std::cout << "Enter the expression: ";
-    std::getline(std::cin, input);
+    std::string input{};
+    std::string fullstr{};
+    while (!std::cin.eof()){
+        std::getline(std::cin, input);
+        input.clear();
+        fullstr.append(input);
+    }
 
     // Parse the input and get the tokens.
-    std::vector<Token> tokens = reader(input);  // Change to vector
+    std::vector<Token> tokens = reader(fullstr);  // Change to vector
     
     // Display the tokens.
     // Use a range-based for loop to iterate over the vector
