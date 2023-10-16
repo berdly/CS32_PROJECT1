@@ -16,8 +16,10 @@ int main(){
     }
     catch(const ParserError& e){
         std::cout << e.new_what();
+        return 2;
     }
     catch(const ZeroDivision&){
         std::cout << "Runtime error: division by zero.";
+        return 3;
     }
 }
