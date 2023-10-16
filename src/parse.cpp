@@ -23,6 +23,12 @@ int main(){
     }
     
     auto tokens{reader(input)};
+    int linecount
+    for(auto c: input){
+        if (c == '\n'){
+            c++;
+        }
+    }
     try{
     if(!tokens.empty()){
     ASTree tree{tokens};
@@ -32,7 +38,7 @@ int main(){
     std::cout << '\n';
     }
     else{
-        std::cout << "Unexpected token at line 1 column 1: END\n";
+        std::cout << "Unexpected token at line  " << c << " column 1: END\n";
         return 2;
     }
     }
