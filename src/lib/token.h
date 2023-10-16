@@ -17,6 +17,7 @@ class Token{
   TokenType ptype;
 public:
   Token(int column, int line, const std::string& text, TokenType type) : pcolumn{column}, pline{line}, ptext{text}, ptype{type} {}
+  Token() : pcolumn{0}, pline{0}, ptext{""}, ptype{TokenType::ERR}{}
   int get_col() const { return this->pcolumn; };
   int get_line() const { return this->pline; };
   const std::string& get_text() const { return this->ptext; };
