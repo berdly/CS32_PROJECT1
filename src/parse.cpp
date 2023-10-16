@@ -9,7 +9,7 @@ int main(){
     std::string input{};
     std::string fullstr{};
     std::getline(std::cin, input);
-    while(!std::cin.fail()){
+    while(input.size() > 0){
         fullstr.append(input);
         input.clear();
         std::getline(std::cin, input);
