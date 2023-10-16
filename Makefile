@@ -2,8 +2,15 @@ CXXFLAGS = -g -std=c++17 -Wall -Wextra -Werror
 CXX      = g++
 
 
-test: run
-	./run
+parser: parse
+	./parse
 
-run: src/lib/error.h src/lib/lexer.cpp src/lib/lexer.h src/lib/parser.cpp src/lib/parser.h src/lib/token.h src/parse.cpp
+lexer: lex
+	./lex
+
+parse: src/lib/error.h src/lib/lexer.cpp src/lib/lexer.h src/lib/parser.cpp src/lib/parser.h src/lib/token.h src/parse.cpp
+	${CXX} $(CXXFLAGS)  $^ -o $@
+
+
+lex: src/lib/error.h src/lib/lexer.cpp src/lib/lexer.h src/lib/token.h src/lex.cpp
 	${CXX} $(CXXFLAGS)  $^ -o $@
