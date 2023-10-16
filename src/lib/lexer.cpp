@@ -1,4 +1,4 @@
-/*
+
 #include "lexer.h"
 #include <cstdlib>
 #include <cctype>
@@ -104,7 +104,7 @@ std::vector<Token> reader(const std::string& input) {  // Change return type to 
 
     return tokens;
 }
-
+/*
 // Main function for testing.
 int main() {
     std::string input;
@@ -125,4 +125,5 @@ int main() {
     }
     std::cout<<fline+1<<"   1  END";
     return 0;
-} */
+} 
+*/
