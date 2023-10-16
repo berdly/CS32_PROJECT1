@@ -1,4 +1,4 @@
-#include "lexer.cpp"
+#include "lexer.h"
 #include <iomanip> 
 int main() {
     std::string input, line;
