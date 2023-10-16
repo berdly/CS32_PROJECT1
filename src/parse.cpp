@@ -27,6 +27,7 @@ int main(){
     tree.print();
     std::cout << '\n';
     std::cout << tree.calc();
+    std::cout << '\n';
     }
     catch(const ParserError& e){
         std::cout << e.new_what();
