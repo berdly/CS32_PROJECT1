@@ -47,7 +47,9 @@ std::vector<std::pair<int,int>> ASTree::get_child_idx(const std::vector<Token>& 
                 }
                 break;
             case TokenType::EXP:
-                break;
+                if(i <= 0 || tokens.at(i - 1).get_type() != TokenType::LPAR){
+			throw ParserError(curr);
+		}
             case TokenType::ERR:
                 throw ParserError(curr);
                 break;
