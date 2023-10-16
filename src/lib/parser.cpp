@@ -164,7 +164,7 @@ void ASTree::ASNode::printHelp(){
 
 		
 	    case TokenType::CONST:
-		    std::cout<<this->pdata.get_text();
+		    std::cout<<std::stod(this->pdata.get_text());
             break;
         case TokenType::LPAR:
             break;
