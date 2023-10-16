@@ -28,10 +28,10 @@ int main() {
     }
 
     // Display the END token
-    if (!tokens.empty() && l == false) {  // Use == for comparison
+    if (!tokens.empty() && l == false) {  
         std::cout << std::right << std::setw(4) << tokens.back().get_line() + 1 
                   << "    1  END" << std::endl;
-    } else if (!tokens.empty() && l == true) {  // Use == for comparison and correct the else if syntax
+    } else if (!tokens.empty() && l == true) {  
         std::cout << std::right << std::setw(4) << tokens.back().get_line() 
                   << "    1  END" << std::endl;
     } else {
