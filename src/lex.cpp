@@ -11,6 +11,7 @@ int main() {
     while(input.size() > 0){
         fullstr.append(input);
          fullstr.push_back('\n');
+         std::cout <<fullstr;
         input.clear();
         std::getline(std::cin, input);
     }
