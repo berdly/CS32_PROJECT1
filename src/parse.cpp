@@ -8,7 +8,7 @@
 
 int main(){
     std::string input, line;
-    bool  1 = false;  // Initialize l to false
+    bool l = false;  // Initialize l to false
 
     while (true) {
         getline(std::cin, line);
