@@ -40,7 +40,12 @@ int main(){
     }
     }
     catch(const ParserError& e){
+        if(e.etype == PErrType::NORM){
         std::cout << e.new_what() << '\n';
+        }
+        else{
+        std::cout << "Unexpected token at line " << e.etoken.get_line() << " column " << e.etoken.get_col() + e.etoken.get_text().size() << ": END\n";
+        }
         return 2;
     }
     catch(const ZeroDivision&){
