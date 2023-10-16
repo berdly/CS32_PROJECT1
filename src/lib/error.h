@@ -9,8 +9,8 @@ class ParserError : public std::exception {
     public:
         Token etoken;
         PErrType etype;
-        ParserError(Token token) : etoken{token} etype{PErrType::NORM} {}
-        ParserError(Token token, PErrType type) : etoken{token} etype{type} {}
+        ParserError(Token token) : etoken{token}, etype{PErrType::NORM} {}
+        ParserError(Token token, PErrType type) : etoken{token}, etype{type} {}
       std::string new_what () const{
         std::string msg{"Unexpected token at line "};
         msg.append(std::to_string(this->etoken.get_line()));
