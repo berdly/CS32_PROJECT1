@@ -7,11 +7,11 @@
 int main() {
      std::string input{};
     std::string fullstr{};
-    std::getline(input, std::cin);
+    std::getline(std::cin, input);
     while(input != "/n"){
         fullstr.append(input);
         input.clear();
-        std::getline(input, std::cin);
+        std::getline(std::cin, input);
     }
     
     int fline;
