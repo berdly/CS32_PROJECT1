@@ -3,7 +3,7 @@
 #include <string>
 #include "../src/lib/lexer.h"
 #include "../src/lib/parser.h"
-#include "..src/lib/error.h"
+#include "../src/lib/error.h"
 
 
 int main(){
