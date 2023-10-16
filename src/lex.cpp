@@ -32,7 +32,7 @@ int main() {
         std::cout << std::right << std::setw(4) << tokens.back().get_line() + 1 
                   << "    1  END" << std::endl;
     } else if (!tokens.empty() && l == true) {  
-        std::cout << std::right << std::setw(4) << tokens.back().get_line() 
+        std::cout << std::right << std::setw(4) << tokens.back().get_line() << " " 
                   << std::right << std::setw(4) << tokens.back().get_col()+1 << "  "
                   << t.get_text() << std::endl;
     } else {
