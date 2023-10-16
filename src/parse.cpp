@@ -38,7 +38,7 @@ int main(){
     std::cout << '\n';
     }
     else{
-        std::cout << "Unexpected token at line " << linecount+1 << " column 1: END\n";
+        std::cout << "Unexpected token at line " << linecount+2 << " column 1: END\n";
         return 2;
     }
     }
