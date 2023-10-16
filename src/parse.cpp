@@ -1,9 +1,9 @@
 #include <iostream>
 #include <iomanip>
 #include <string>
-#include "lib/lexer.h"
-#include "lib/parser.h"
-#include "lib/error.h"
+#include "../src/lib/lexer.h"
+#include "../src/lib/parser.h"
+#include "..src/lib/error.h"
 
 
 int main(){
