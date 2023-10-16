@@ -19,6 +19,7 @@ class ASTree{
     double calcHelp();
     void printHelp();
     
+    std::vector<ASNode> getkids();
   };
 
   
@@ -31,6 +32,7 @@ public:
   std::vector<std::pair<int,int>> get_child_idx(const std::vector<Token>& tokens, int start, int end);
   double calc();
   void print();
+  ASNode getProot();
 };
 
 #endif
