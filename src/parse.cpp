@@ -8,7 +8,8 @@
 
 int main(){
     std::string input, line;
-    //bool l = false;  // Initialize l to false
+    //bool l = false;  // Initialize l to false'
+    int linecount{}
 
     while (true) {
         getline(std::cin, line);
@@ -19,16 +20,12 @@ int main(){
         if (std::cin.eof()) {
             break;
         }
+        linecount++;
         //l = false;
     }
     
     auto tokens{reader(input)};
-    int linecount{};
-    for(char c: input){
-        if (c == '\n'){
-            linecount++;
-        }
-    }
+    
     try{
     if(!tokens.empty()){
     ASTree tree{tokens};
@@ -38,7 +35,7 @@ int main(){
     std::cout << '\n';
     }
     else{
-        std::cout << "Unexpected token at line " << linecount+2 << " column 1: END\n";
+        std::cout << "Unexpected token at line " << linecount << " column 1: END\n";
         return 2;
     }
     }
