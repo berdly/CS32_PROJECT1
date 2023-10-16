@@ -8,18 +8,18 @@
 
 int main(){
     std::string input, line;
-    bool l = false;  // Initialize l to false
+    //bool l = false;  // Initialize l to false
 
     while (true) {
         getline(std::cin, line);
         if (!line.empty()) {
             input += line + "\n"; // Concatenating each line with a newline character
-            l = true;
+            //l = true;
         }
         if (std::cin.eof()) {
             break;
         }
-        l = false;
+        //l = false;
     }
     
     try{
