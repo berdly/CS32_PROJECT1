@@ -22,12 +22,16 @@ int main(){
         //l = false;
     }
     
+    auto tokens{reader(input)};
     try{
-    ASTree tree{reader(input)};
+    if(!tokens.empty()){
+    ASTree tree{tokens};
+    double result{tree.calc()};
     tree.print();
     std::cout << '\n';
-    std::cout << tree.calc();
+    std::cout << result;
     std::cout << '\n';
+    }
     }
     catch(const ParserError& e){
         std::cout << e.new_what();
