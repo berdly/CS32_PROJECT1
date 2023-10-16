@@ -96,6 +96,8 @@ ASTree::ASNode ASTree::build(const std::vector<Token>& tokens, int start, int en
 	    }
 	    else{
 		    throw ParserError(tokens.at(start+1));
+	    }
+	    break;
         default:
             //should not start with anything but CONST or LPAR
             throw ParserError(tokens[start]);
