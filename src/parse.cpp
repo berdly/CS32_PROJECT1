@@ -24,9 +24,9 @@ int main(){
     
     auto tokens{reader(input)};
     int linecount
-    for(auto c: input){
+    for(char c: input){
         if (c == '\n'){
-            c++;
+            linecount++;
         }
     }
     try{
