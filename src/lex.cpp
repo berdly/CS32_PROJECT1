@@ -5,10 +5,12 @@ int main() {
 
     while (true) {
         getline(std::cin, line);
-        if (line.empty() && std::cin.eof()) { // Check if line is empty and end of file
+        if (!line.empty()) {
+            input += line + "\n"; // Concatenating each line with a newline character
+        }
+        if (std::cin.eof()) {
             break;
         }
-        input += line + "\n"; // Concatenating each line with a newline character
     }
 
     // Parse the input and get the tokens.
