@@ -7,6 +7,7 @@
 int main() {
     std::string input{};
     std::string fullstr{};
+    int fline;
     while (!std::cin.eof()){
         std::getline(std::cin, input);
         input.clear();
