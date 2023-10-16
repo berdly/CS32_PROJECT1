@@ -1,5 +1,5 @@
 #include "parser.h"
-#include "errors.h"
+#include "error.h"
 #include <iostream>
 
 ASTree::ASTree(const std::vector<Token>& tokens) {
@@ -51,7 +51,7 @@ std::vector<std::pair<int,int>> ASTree::get_child_idx(const std::vector<Token>& 
 
 ASTree::ASNode ASTree::build(const std::vector<Token>& tokens, int start, int end){
     ASTree::ASNode curr{tokens[start]};
-    ASTree:ASNode rootNode;
+    ASTree::ASNode rootNode;
     
     std::vector<std::pair<int,int>> child_idx_list;
     switch(curr.get_pdata().get_type()){
@@ -83,6 +83,11 @@ ASTree::ASNode ASTree::build(const std::vector<Token>& tokens, int start, int en
 
 ASTree::ASNode::ASNode(Token data) : pdata{data}, pchildren{} {}
 
+ASTree::ASNode::ASNode(){
+    Token temp = Token(0,0,"",TokenType::ERR);
+    pdata = temp;
+    
+}
 void ASTree::ASNode::add_child(ASNode child) { this->pchildren.push_back(child); }
 
 
@@ -139,14 +144,20 @@ void ASTree::ASNode::printHelp(){
 				}
 
 			}
+            break;
 
 		
 	    case TokenType::CONST:
 		    std::cout<<this->pdata.get_text();
             break;
+        case TokenType::LPAR:
+            break;
+        case TokenType::RPAR:
+            break;
+        case TokenType::ERR:
+            break;
 
         default:
-            
             break;
 
 			
@@ -157,11 +168,11 @@ void ASTree::ASNode::printHelp(){
 
 
 double ASTree::ASNode::calcHelp(){
-
+    double ret = 0.0; // will be returned
 	switch(this->pdata.get_type()){
 		
 		case TokenType::EXP:
-			double ret; // will be returned
+			
 			for(size_t i =0; i < this->pchildren.size();i++){
 				double val = pchildren.at(i).calcHelp();
 
@@ -180,7 +191,7 @@ double ASTree::ASNode::calcHelp(){
                             break;
 						case '/':
 							if(val == 0){
-								throw std::ZeroDivision("");
+								throw ZeroDivision{};
 							}
 							ret /= val;
                             break;
@@ -190,15 +201,26 @@ double ASTree::ASNode::calcHelp(){
 				}
 				return ret;
 			}
+            break;
 	    case TokenType::CONST:
 		    return std::stod(this->pdata.get_text());
             break;
-
+        case TokenType::LPAR:
+            return -1;
+            break;
+        case TokenType::RPAR:
+            return -1;
+            break;
+        case TokenType::ERR:
+            return -1;
+            break;
         default:
+            return -1;
             break;
 
 		
 	}
+    return ret;
 
 
 }
