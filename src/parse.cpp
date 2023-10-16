@@ -7,9 +7,14 @@
 
 int main(){
     std::string input{};
-    std::cin >> input;
+    std::string fullstr{};
+    while (!std::cin.eof()){
+        std::getline(std::cin, input);
+        input.clear();
+        fullstr.append(input);
+    }
     try{
-    ASTree tree{reader(input)};
+    ASTree tree{reader(fullstr)};
     tree.print();
     std::cout << '\n';
     std::cout << tree.calc();
