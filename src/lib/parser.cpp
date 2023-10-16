@@ -91,7 +91,11 @@ ASTree::ASNode ASTree::build(const std::vector<Token>& tokens, int start, int en
             return rootNode;
         case TokenType::CONST:
             //const has no children so can simply return
-            return curr;
+	    if(start == end){
+            	return curr;
+	    }
+	    else{
+		    throw ParserError(tokens.at(start+1));
         default:
             //should not start with anything but CONST or LPAR
             throw ParserError(tokens[start]);
