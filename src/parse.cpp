@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 #include <string>
 #include "lib/lexer.h"
 #include "lib/parser.h"
@@ -7,7 +8,7 @@
 
 int main(){
     std::string input, line;
-    bool l = false;  // Initialize l to false
+    bool  1 = false;  // Initialize l to false
 
     while (true) {
         getline(std::cin, line);
