@@ -1,8 +1,10 @@
 #include "../src/lib/lexer.h"
 #include <iomanip> 
+
 int main() {
     std::string input, line;
-    bool l;
+    bool l = false;  // Initialize l to false
+
     while (true) {
         getline(std::cin, line);
         if (!line.empty()) {
@@ -26,10 +28,10 @@ int main() {
     }
 
     // Display the END token
-    if (!tokens.empty()&& l = false) { 
+    if (!tokens.empty() && l == false) {  // Use == for comparison
         std::cout << std::right << std::setw(4) << tokens.back().get_line() + 1 
                   << "    1  END" << std::endl;
-    } if else (!tokens.empty()&& l = true) {
+    } else if (!tokens.empty() && l == true) {  // Use == for comparison and correct the else if syntax
         std::cout << std::right << std::setw(4) << tokens.back().get_line() 
                   << "    1  END" << std::endl;
     } else {
