@@ -56,7 +56,7 @@ std::vector<Token> reader(const std::string& input) {  // Change return type to 
             case '.':
                 // Check for multiple decimal points in the current number.
                 if (currentNumber.find('.') != std::string::npos) {
-                    std::cout<<"Unexpected token at line "<< line <<" column " <<column;
+                    std::cout<<"Syntax error on "<< line <<" column " <<column;
                     currentNumber.clear();
                     exit(1);
                 } else {
@@ -92,7 +92,7 @@ std::vector<Token> reader(const std::string& input) {  // Change return type to 
                 } 
                 // If it's an invalid character, create an error token.
                 else if (isalpha(ch) || !isspace(ch)) {
-                    std::cout<<"Unexpected token at line "<< line <<" column " <<column;
+                    std::cout<<"Syntax error on "<< line <<" column " <<column;
                     currentNumber.clear();
                     exit(1);
                 }
