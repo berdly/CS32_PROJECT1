@@ -1,3 +1,5 @@
+#include "lexer.cpp"
+
 int main() {
     std::string input;
     int fline;
