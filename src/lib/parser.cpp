@@ -178,14 +178,9 @@ void ASTree::ASNode::printHelp(){
 	    case TokenType::CONST:
 		    std::cout<<std::stod(this->pdata.get_text());
             break;
-        case TokenType::LPAR:
-            break;
-        case TokenType::RPAR:
-            break;
-        case TokenType::ERR:
-            break;
 
         default:
+		throw ParserError(this->pdata);
             break;
 
 			
@@ -236,17 +231,9 @@ double ASTree::ASNode::calcHelp(){
             
 		    return std::stod(this->pdata.get_text());
             break;
-        case TokenType::LPAR:
-            return -1;
-            break;
-        case TokenType::RPAR:
-            return -1;
-            break;
-        case TokenType::ERR:
-            return -1;
-            break;
+        
         default:
-            return -1;
+            throw ParserError(this->pdata);
             break;
 
 		
