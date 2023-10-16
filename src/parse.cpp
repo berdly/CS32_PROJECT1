@@ -16,7 +16,7 @@ int main(){
         input.clear();
         std::getline(std::cin, input);
     } */
-    input = "(/ 2 (- 3 3))";
+    input = "(* (+ 1 2) 3 (/ 4 5 (- 6 7)))";
     
     try{
     ASTree tree{reader(input)};

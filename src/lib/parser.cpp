@@ -13,36 +13,44 @@ std::vector<std::pair<int,int>> ASTree::get_child_idx(const std::vector<Token>& 
     for example given 2 (* 4 3 2) 3 
     would output [(0.0), (1,6), (7,7)]
     */
-    int pdepth{};
+    int pdepth = 0;
     std::vector<std::pair<int,int>> child_idx{};
-    int currstart{start};
-    int currend{end};
+    
+    int parStart=0;
     for(int i = start; i <= end; i++){
         Token curr = tokens.at(i);
 
         switch(curr.get_type()){
             case TokenType::CONST:
-		if(pdepth == 0){
-                child_idx.push_back(std::pair<int,int>(currstart,currstart));
-                currstart++;
-		}
+		    if(pdepth == 0){
+                child_idx.push_back(std::pair<int,int>(i,i));
+		    }
                 break;
+
             case TokenType::LPAR:
+                if(pdepth == 0){
+                parStart = i;
+                
+                }
                 pdepth++;
                 break;
             case TokenType::RPAR:
+                
                 pdepth--;
+                
                 if(pdepth == 0){
-                    child_idx.push_back(std::pair<int,int>(currstart,currend));
-                    currstart = currend + 1;
+                    child_idx.push_back(std::pair<int,int>(parStart,i));
                 }
                 else if(pdepth < 0){
+                    
+                    std::cout<<"THROWING3 confirmed hereee";
                     throw ParserError(curr);
                 }
                 break;
             case TokenType::EXP:
                 break;
             case TokenType::ERR:
+                std::cout<<"THROWING4";
                 throw ParserError(curr);
                 break;
         }
@@ -62,9 +70,11 @@ ASTree::ASNode ASTree::build(const std::vector<Token>& tokens, int start, int en
         case TokenType::LPAR:
             //we know it should be an operand
             if(tokens[start+1].get_type() != TokenType::EXP){
+                std::cout<<"THROWING";
                 throw ParserError(tokens[start+1]);
             }
             else if(tokens[end].get_type() != TokenType::RPAR){
+                std::cout<<"THROWING2";
                 throw ParserError(tokens[end]);
             }
             //create node for operand and ignore parentheses
@@ -74,6 +84,7 @@ ASTree::ASNode ASTree::build(const std::vector<Token>& tokens, int start, int en
             //recursively add children while properly building out their children
             for(const std::pair<int,int>& child_idx : child_idx_list){
                 rootNode.add_child(build(tokens, child_idx.first, child_idx.second));
+                
                 }
             return rootNode;
         case TokenType::CONST:
@@ -81,6 +92,7 @@ ASTree::ASNode ASTree::build(const std::vector<Token>& tokens, int start, int en
             return curr;
         default:
             //should not start with anything but CONST or LPAR
+            std::cout<<"THROWING5";
             throw ParserError(tokens[start]);
     }   
 }

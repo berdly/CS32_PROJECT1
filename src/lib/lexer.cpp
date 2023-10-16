@@ -1,4 +1,3 @@
-
 #include "lexer.h"
 #include <cstdlib>
 #include <cctype>
@@ -57,16 +56,33 @@ std::vector<Token> reader(const std::string& input) {  // Change return type to 
             case '.':
                 // Check for multiple decimal points in the current number.
                 if (currentNumber.find('.') != std::string::npos) {
-                    std::cout<<"Unexpected token at line "<< line <<" column " <<column;
+                   std::cout << "Syntax error on line " << line << " column " << column << "." << std::endl;
+                   currentNumber.clear();
+                   exit(1);
+                }
+                // Check for trailing decimals.
+                else if (i + 1 == input.size() || isspace(input[i + 1]) || input[i + 1] == '\n') {
+                    std::cout << "Syntax error on line " << line << " column " << column << "." << std::endl;
                     currentNumber.clear();
                     exit(1);
-                } else {
-                    currentNumber += ch;
+               }
+                // Check for leading decimals.
+               else if (currentNumber.empty()) {
+                   std::cout << "Syntax error on line " << line << " column " << column << "." << std::endl;
+                   currentNumber.clear();
+                   exit(1);
+               } else {
+                   currentNumber += ch;
                 }
-                break;
+               break;
             
             // For newline characters.
             case '\n':
+            // If there's an accumulated number, create a token for it.
+            if (!currentNumber.empty()) {
+                tokens.push_back(Token(column - currentNumber.size(), line, currentNumber, TokenType::CONST));
+                currentNumber.clear();
+            }
                 line++;
                 column = 0;
                 break;
@@ -77,7 +93,6 @@ std::vector<Token> reader(const std::string& input) {  // Change return type to 
                     tokens.push_back(Token(column - currentNumber.size(), line, currentNumber, TokenType::CONST));
                     currentNumber.clear();
                 }
-                column++;
                 break;               
             
             // For other characters.
@@ -88,7 +103,7 @@ std::vector<Token> reader(const std::string& input) {  // Change return type to 
                 } 
                 // If it's an invalid character, create an error token.
                 else if (isalpha(ch) || !isspace(ch)) {
-                    std::cout<<"Unexpected token at line "<< line <<" column " <<column;
+                    std::cout<<"Syntax error on line "<< line <<" column " << "." << column;
                     currentNumber.clear();
                     exit(1);
                 }
@@ -104,8 +119,8 @@ std::vector<Token> reader(const std::string& input) {  // Change return type to 
 
     return tokens;
 }
-/*
-// Main function for testing.
+
+/* Main function for testing.
 int main() {
     std::string input;
     int fline;
@@ -124,6 +139,5 @@ int main() {
         fline = t.get_line();
     }
     std::cout<<fline+1<<"   1  END";
-    return 0;
-} 
-*/
+    return 1;
+}*/
