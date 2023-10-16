@@ -37,7 +37,7 @@ int main(){
         return 2;
     }
     catch(const ZeroDivision&){
-        std::cout << "Runtime error: division by zero.";
+        std::cout << "Runtime error: division by zero." << '\n';
         return 3;
     }
 }
