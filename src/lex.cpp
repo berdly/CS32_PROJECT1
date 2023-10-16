@@ -2,15 +2,17 @@
 #include <iomanip> 
 int main() {
     std::string input, line;
-
+    bool l;
     while (true) {
         getline(std::cin, line);
         if (!line.empty()) {
             input += line + "\n"; // Concatenating each line with a newline character
+            l = true;
         }
         if (std::cin.eof()) {
             break;
         }
+        l = false;
     }
 
     // Parse the input and get the tokens.
@@ -24,11 +26,14 @@ int main() {
     }
 
     // Display the END token
-    if (!tokens.empty()) { 
+    if (!tokens.empty()&& l = false) { 
         std::cout << std::right << std::setw(4) << tokens.back().get_line() + 1 
                   << "    1  END" << std::endl;
+    } if else (!tokens.empty()&& l = true) {
+        std::cout << std::right << std::setw(4) << tokens.back().get_line() 
+                  << "    1  END" << std::endl;
     } else {
-        std::cout << "   1    1  END" << std::endl; // If there are no tokens, default to line 1
+        std::cout << "   1    1  END" << std::endl; // If there are no tokens, default to line 1 
     }
 
     return 0;
