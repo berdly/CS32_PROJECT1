@@ -9,7 +9,7 @@
 int main(){
     std::string input, line;
     //bool l = false;  // Initialize l to false'
-    int linecount{}
+    int linecount{};
 
     while (true) {
         getline(std::cin, line);
