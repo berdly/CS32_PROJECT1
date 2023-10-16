@@ -43,7 +43,7 @@ std::vector<std::pair<int,int>> ASTree::get_child_idx(const std::vector<Token>& 
                 }
                 else if(pdepth < 0){
                     
-                    throw ParserError(curr);
+                    throw ParserError(tokens.at(i+1));
                 }
                 break;
             case TokenType::EXP:
