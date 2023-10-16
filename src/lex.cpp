@@ -7,6 +7,7 @@
 int main() {
     char* raw{new char[1000]};
     std::cin.read(raw, 1000);
+    raw[std::cin.gcount()] = '/0';
     std::string input{raw};
     delete raw;
     
