@@ -93,7 +93,6 @@ std::vector<Token> reader(const std::string& input) {  // Change return type to 
                     tokens.push_back(Token(column - currentNumber.size(), line, currentNumber, TokenType::CONST));
                     currentNumber.clear();
                 }
-                column++;
                 break;               
             
             // For other characters.
