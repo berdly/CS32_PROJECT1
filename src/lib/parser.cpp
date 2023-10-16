@@ -71,7 +71,7 @@ ASTree::ASNode ASTree::build(const std::vector<Token>& tokens, int start, int en
                 throw ParserError(tokens[start+1]);
             }
             else if(tokens[end].get_type() != TokenType::RPAR){
-                throw ParserError(tokens[end]);
+                throw ParserError(tokens[end], PErrType::END);
             }
             //create node for operand and ignore parentheses
             rootNode = tokens[start+1];
