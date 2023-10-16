@@ -8,13 +8,15 @@
 int main(){
     std::string input{};
     std::string fullstr{};
-    std::getline(std::cin, input);
+    
+    /* std::getline(std::cin, input);
     while(input.size() > 0){
         fullstr.append(input);
         fullstr.push_back('\n');
         input.clear();
         std::getline(std::cin, input);
-    }
+    } */
+    input = "(/ 2 (- 3 3))";
     
     try{
     ASTree tree{reader(input)};

@@ -17,8 +17,10 @@ std::vector<std::pair<int,int>> ASTree::get_child_idx(const std::vector<Token>& 
     std::vector<std::pair<int,int>> child_idx{};
     int currstart{start};
     int currend{end};
-    for(const Token& token : tokens){
-        switch(token.get_type()){
+    for(int i = start; i <= end; i++){
+        Token curr = tokens.at(i);
+
+        switch(curr.get_type()){
             case TokenType::CONST:
 		if(pdepth == 0){
                 child_idx.push_back(std::pair<int,int>(currstart,currstart));
@@ -35,17 +37,18 @@ std::vector<std::pair<int,int>> ASTree::get_child_idx(const std::vector<Token>& 
                     currstart = currend + 1;
                 }
                 else if(pdepth < 0){
-                    throw ParserError(token);
+                    throw ParserError(curr);
                 }
                 break;
             case TokenType::EXP:
                 break;
             case TokenType::ERR:
-                throw ParserError(token);
+                throw ParserError(curr);
                 break;
         }
-        currend++;
+        //currend++;
     }
+   
     return child_idx;
 }
 
@@ -54,6 +57,7 @@ ASTree::ASNode ASTree::build(const std::vector<Token>& tokens, int start, int en
     ASTree::ASNode rootNode;
     
     std::vector<std::pair<int,int>> child_idx_list;
+
     switch(curr.get_pdata().get_type()){
         case TokenType::LPAR:
             //we know it should be an operand
@@ -90,13 +94,18 @@ ASTree::ASNode::ASNode(){
 }
 void ASTree::ASNode::add_child(ASNode child) { this->pchildren.push_back(child); }
 
+ASTree::ASNode ASTree::getProot(){
+    return this->proot;
+}
+
+std::vector<ASTree::ASNode> ASTree::ASNode::getkids(){
+    return pchildren;
+}
 
 double ASTree::calc(){
 
-	
 	return proot.calcHelp();
 	
-
 }
 void ASTree::print(){
     proot.printHelp();
@@ -174,8 +183,9 @@ double ASTree::ASNode::calcHelp(){
 		case TokenType::EXP:
 			
 			for(size_t i =0; i < this->pchildren.size();i++){
-				double val = pchildren.at(i).calcHelp();
-
+                
+				double val = this->pchildren.at(i).calcHelp();
+                
 				if(i ==0){
 					ret = val;
 				}else{
@@ -199,10 +209,12 @@ double ASTree::ASNode::calcHelp(){
                             break;
 					}
 				}
-				return ret;
+				
 			}
+            return ret;
             break;
 	    case TokenType::CONST:
+            
 		    return std::stod(this->pdata.get_text());
             break;
         case TokenType::LPAR:
@@ -220,7 +232,7 @@ double ASTree::ASNode::calcHelp(){
 
 		
 	}
-    return ret;
+    return -1;
 
 
 }
