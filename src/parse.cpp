@@ -23,7 +23,7 @@ int main(){
     }
     
     auto tokens{reader(input)};
-    int linecount
+    int linecount{};
     for(char c: input){
         if (c == '\n'){
             linecount++;
