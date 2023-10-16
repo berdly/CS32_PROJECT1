@@ -6,15 +6,13 @@
 
 
 int main(){
-    std::string input{};
-    std::string fullstr{};
-    while (!std::cin.eof()){
-        std::getline(std::cin, input);
-        input.clear();
-        fullstr.append(input);
-    }
+    char* raw{new char[1000]};
+    std::cin.read(raw, 1000);
+    std::string input{raw};
+    delete raw;
+    
     try{
-    ASTree tree{reader(fullstr)};
+    ASTree tree{reader(input)};
     tree.print();
     std::cout << '\n';
     std::cout << tree.calc();
