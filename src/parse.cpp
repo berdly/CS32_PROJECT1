@@ -31,6 +31,9 @@ int main(){
     std::cout << tree.calc();
     std::cout << '\n';
     }
+    else{
+        return 2;
+    }
     }
     catch(const ParserError& e){
         std::cout << e.new_what() << '\n';
