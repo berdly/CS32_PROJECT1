@@ -10,7 +10,7 @@ int main() {
     std::getline(std::cin, input);
     while(input.size() > 0){
         fullstr.append(input);
-          std::cout <<fullstr;
+         fullstr.push_back('\n');
         input.clear();
         std::getline(std::cin, input);
     }
