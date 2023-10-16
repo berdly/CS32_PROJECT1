@@ -33,8 +33,7 @@ int main() {
                   << "    1  END" << std::endl;
     } else if (!tokens.empty() && l == true) {  
         std::cout << std::right << std::setw(4) << tokens.back().get_line() << " " 
-                  << std::right << std::setw(4) << tokens.back().get_col()+1 << "  "
-                  << t.get_text() << std::endl;
+                  << std::right << std::setw(4) << tokens.back().get_col()+1 << "  END" << std::endl;
     } else {
         std::cout << "   1    1  END" << std::endl; // If there are no tokens, default to line 1 
     }
