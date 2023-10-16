@@ -6,7 +6,7 @@ int main() {
     // std::cout << "Enter the expression:" << std::endl;
     while (true) {
         getline(std::cin, line);
-        if (line.empty()||std::cin.peek() == EOF) { // Check if line is empty
+        if (std::cin.eof()) { // Check if line is empty
             break;
         }
         input += line + "\n"; // Concatenating each line with a newline character
