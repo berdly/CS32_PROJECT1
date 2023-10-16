@@ -66,6 +66,11 @@ std::vector<Token> reader(const std::string& input) {  // Change return type to 
             
             // For newline characters.
             case '\n':
+            // If there's an accumulated number, create a token for it.
+            if (!currentNumber.empty()) {
+                tokens.push_back(Token(column - currentNumber.size(), line, currentNumber, TokenType::CONST));
+                currentNumber.clear();
+            }
                 line++;
                 column = 0;
                 break;
@@ -103,7 +108,6 @@ std::vector<Token> reader(const std::string& input) {  // Change return type to 
 
     return tokens;
 }
-
 /* Main function for testing.
 int main() {
     std::string input;
