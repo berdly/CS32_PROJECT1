@@ -62,7 +62,7 @@ std::vector<Token> reader(const std::string& input) {  // Change return type to 
                 }
                 // Check for trailing decimals.
                 else if (i + 1 == input.size() || isspace(input[i + 1]) || input[i + 1] == '\n') {
-                    std::cout << "Syntax error on line " << line << " column " << column << "." << std::endl;
+                    std::cout << "Syntax error on line " << line << " column " << column-1 << "." << std::endl;
                     currentNumber.clear();
                     exit(1);
                }
@@ -103,7 +103,7 @@ std::vector<Token> reader(const std::string& input) {  // Change return type to 
                 } 
                 // If it's an invalid character, create an error token.
                 else if (isalpha(ch) || !isspace(ch)) {
-                    std::cout<<"Syntax error on line "<< line <<" column " << "." << column;
+                    std::cout<<"Syntax error on line "<< line <<" column " << column << "." << std::endl;
                     currentNumber.clear();
                     exit(1);
                 }
