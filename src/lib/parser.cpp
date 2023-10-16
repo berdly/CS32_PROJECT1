@@ -57,6 +57,9 @@ std::vector<std::pair<int,int>> ASTree::get_child_idx(const std::vector<Token>& 
         }
         //currend++;
     }
+    if(child_idx.empty()){
+	    throw ParserError(tokens.at(start));
+    }
    
     return child_idx;
 }
