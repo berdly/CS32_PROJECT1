@@ -23,10 +23,11 @@ int main(){
         linecount++;
         //l = false;
     }
-    
+    //read in token vector
     auto tokens{reader(input)};
     
     try{
+    //if there are tokens, build tree
     if(!tokens.empty()){
     ASTree tree{tokens};
     tree.print();
@@ -40,6 +41,7 @@ int main(){
     }
     }
     catch(const ParserError& e){
+        //handles parser errors and displays error messages, else block is for early endings since the END token is not on the actual vector and must be imagined next to the final token
         if(e.etype == PErrType::NORM){
         std::cout << e.new_what() << '\n';
         }

@@ -7,8 +7,8 @@ ASTree::ASTree(const std::vector<Token>& tokens) {
 }
 
 std::vector<std::pair<int,int>> ASTree::get_child_idx(const std::vector<Token>& tokens, int start, int end){
-    /*TODO
-    should take a list of tokens assumed to be inside the parentheses of an operator and produce a list of start and end points based on locations of left and right parentheses
+    /*
+    Takes a list of tokens assumed to be inside the parentheses of an operator and produce a list of start and end points based on locations of left and right parentheses
     this is used to determine the number of and location of child nodes in the list.
     for example given 2 (* 4 3 2) 3 
     would output [(0.0), (1,6), (7,7)]
@@ -42,7 +42,7 @@ std::vector<std::pair<int,int>> ASTree::get_child_idx(const std::vector<Token>& 
                     child_idx.push_back(std::pair<int,int>(parStart,i));
                 }
                 else if(pdepth < 0){
-                    
+                    //there's an extra outer parenthesis
                     throw ParserError(tokens.at(i+1));
                 }
                 break;
@@ -57,6 +57,7 @@ std::vector<std::pair<int,int>> ASTree::get_child_idx(const std::vector<Token>& 
         }
         //currend++;
     }
+	//multiple expression error
     if(child_idx.empty()){
 	    throw ParserError(tokens.at(start));
     }
@@ -65,6 +66,8 @@ std::vector<std::pair<int,int>> ASTree::get_child_idx(const std::vector<Token>& 
 }
 
 ASTree::ASNode ASTree::build(const std::vector<Token>& tokens, int start, int end){
+	/* recursive builder for ASTrees, uses ASTree::get_child_idx() to find where children are located in the token vector and recursively build them out
+		*/
     ASTree::ASNode curr{tokens[start]};
     ASTree::ASNode rootNode;
     
@@ -106,7 +109,7 @@ ASTree::ASNode ASTree::build(const std::vector<Token>& tokens, int start, int en
 
 ASTree::ASNode::ASNode(Token data) : pdata{data}, pchildren{} {}
 
-ASTree::ASNode::ASNode(){
+ASTree::ASNode::ASNode(){ // default node constructor
     Token temp = Token(0,0,"",TokenType::ERR);
     pdata = temp;
     
@@ -130,20 +133,20 @@ void ASTree::print(){
     proot.printHelp();
 }
 
-void ASTree::ASNode::printHelp(){
+void ASTree::ASNode::printHelp(){ 
 
     switch(this->pdata.get_type()){
 
-		case TokenType::EXP:
+		case TokenType::EXP: //checks the token type - if it is an expression, more recursion needs to be done on the children of the expression
 			std::cout << '(';
-			for(size_t i =0; i < this->pchildren.size();i++){
-				this->pchildren.at(i).printHelp();
+			for(size_t i =0; i < this->pchildren.size();i++){ //loops through all children of the current node being examined
+				this->pchildren.at(i).printHelp(); //recursive call
 
 				if(i == this->pchildren.size() - 1){
-					std::cout << ')';
+					std::cout << ')'; // if it is the last node in a child list, print a ')'
 				}
 				else{
-					switch(this->pdata.get_text()[0]){
+					switch(this->pdata.get_text()[0]){ // if it isnt at the end of the list print the operator
 				
 						case '*':
 						
@@ -175,7 +178,7 @@ void ASTree::ASNode::printHelp(){
             break;
 
 		
-	    case TokenType::CONST:
+	    case TokenType::CONST: //if the current token is just a constant, there is no more recursion, just print the constant
 		    std::cout<<std::stod(this->pdata.get_text());
             break;
 
@@ -198,12 +201,12 @@ double ASTree::ASNode::calcHelp(){
 			
 			for(size_t i =0; i < this->pchildren.size();i++){
                 
-				double val = this->pchildren.at(i).calcHelp();
+				double val = this->pchildren.at(i).calcHelp(); // recursively obtains the value of a child, the children could be an expression or a constant
                 
-				if(i ==0){
+				if(i ==0){ // if the child is the first of its siblings, set the return value to that childs value
 					ret = val;
 				}else{
-					switch(this->pdata.get_text()[0]){
+					switch(this->pdata.get_text()[0]){ //math operations
 						case '*':
 							ret *=val;
                             break;
@@ -229,7 +232,7 @@ double ASTree::ASNode::calcHelp(){
             break;
 	    case TokenType::CONST:
             
-		    return std::stod(this->pdata.get_text());
+		    return std::stod(this->pdata.get_text()); // if the token is a constant, just return it casted as a double
             break;
         
         default:

@@ -2,6 +2,10 @@
 #define TOKEN_H
 
 #include <string>
+/*
+used in switches to determine what kind of value a token is
+EXP is an expression/operator, CONST is a constant, LPAR is a left parentheses, RPAR is a right one, and ERR means there was a problem reading
+*/
 enum class TokenType{
   EXP,
   CONST,
@@ -9,7 +13,7 @@ enum class TokenType{
   RPAR,
   ERR,
 };
-
+//contains all information needed about a given token, including what kind of value it is through the ptype member, also has accessors
 class Token{
   int pcolumn;
   int pline;

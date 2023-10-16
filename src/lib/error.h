@@ -1,6 +1,9 @@
 #ifndef ERRORS_H
 #include <string>
 #include "token.h"
+//used by program to automatically display an error, gets passed the offending token and produces a string with the error message with the new_what method
+//same for both types
+//the PErrType enum class designates whether an error occured in the token vector itself in NORM or though the absence of a token in END
 enum class PErrType{
     NORM,
     END,
@@ -35,7 +38,7 @@ class LexerError : public std::exception {
         ;
     }
 };
-
+//very simple solution for catching this case
 class ZeroDivision : public std::exception {
 };
 #endif
