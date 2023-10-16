@@ -3,10 +3,9 @@
 int main() {
     std::string input, line;
 
-    // std::cout << "Enter the expression:" << std::endl;
     while (true) {
         getline(std::cin, line);
-        if (std::cin.eof()) { // Check if line is empty
+        if (line.empty() && std::cin.eof()) { // Check if line is empty and end of file
             break;
         }
         input += line + "\n"; // Concatenating each line with a newline character
