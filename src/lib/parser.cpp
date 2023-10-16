@@ -7,8 +7,8 @@ ASTree::ASTree(const std::vector<Token>& tokens) {
 }
 
 std::vector<std::pair<int,int>> ASTree::get_child_idx(const std::vector<Token>& tokens, int start, int end){
-    /*TODO
-    should take a list of tokens assumed to be inside the parentheses of an operator and produce a list of start and end points based on locations of left and right parentheses
+    /*
+    Takes a list of tokens assumed to be inside the parentheses of an operator and produce a list of start and end points based on locations of left and right parentheses
     this is used to determine the number of and location of child nodes in the list.
     for example given 2 (* 4 3 2) 3 
     would output [(0.0), (1,6), (7,7)]
@@ -42,7 +42,7 @@ std::vector<std::pair<int,int>> ASTree::get_child_idx(const std::vector<Token>& 
                     child_idx.push_back(std::pair<int,int>(parStart,i));
                 }
                 else if(pdepth < 0){
-                    
+                    //there's an extra outer parenthesis
                     throw ParserError(tokens.at(i+1));
                 }
                 break;
@@ -57,6 +57,7 @@ std::vector<std::pair<int,int>> ASTree::get_child_idx(const std::vector<Token>& 
         }
         //currend++;
     }
+	//multiple expression error
     if(child_idx.empty()){
 	    throw ParserError(tokens.at(start));
     }
@@ -65,6 +66,8 @@ std::vector<std::pair<int,int>> ASTree::get_child_idx(const std::vector<Token>& 
 }
 
 ASTree::ASNode ASTree::build(const std::vector<Token>& tokens, int start, int end){
+	/* recursive builder for ASTrees, uses ASTree::get_child_idx() to find where children are located in the token vector and recursively build them out
+		*/
     ASTree::ASNode curr{tokens[start]};
     ASTree::ASNode rootNode;
     
