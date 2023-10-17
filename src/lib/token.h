@@ -9,6 +9,7 @@ EXP is an expression/operator, CONST is a constant, LPAR is a left parentheses, 
 enum class TokenType{
   EXP,
   CONST,
+  VAR,
   LPAR,
   RPAR,
   ERR,
