@@ -60,7 +60,7 @@ class ASGrove{
                 return lastVal;
                 break;
 		
-		case TokenType::EXP:
+	case TokenType::EXP:
 			auto children{curr.get_kids()};
 			
             
@@ -115,7 +115,7 @@ class ASGrove{
 			}
             return ret;
             break;
-	    case TokenType::CONST:
+	case TokenType::CONST:
             
 		    return std::stod(root.get_pdata().get_text()); // if the token is a constant, just return it casted as a double
             break;
