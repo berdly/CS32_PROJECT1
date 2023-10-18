@@ -21,7 +21,7 @@ class ASTree{
 
     double getVariableVal();// node will call this method if token type is var... will return the value of the variable
     
-    std::vector<ASNode> getkids();
+    const std::vector<ASNode>& getkids();
   };
 
   
