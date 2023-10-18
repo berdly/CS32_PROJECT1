@@ -13,7 +13,7 @@ class ASTree{
     public:
     ASNode();
     ASNode(Token pdata);
-    Token get_pdata();
+    const Token& get_pdata();
 
     void add_child(ASNode child);
     double calcHelp();
