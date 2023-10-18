@@ -2,7 +2,7 @@
 #include <vector>
 #include <map>
 
-class ASGrove<template class T>{
+template <class T> class ASGrove{
   std::vector<ASTree> statements;
   std::map<std::string, double> variables;
   void step();
