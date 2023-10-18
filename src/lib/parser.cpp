@@ -206,6 +206,8 @@ double ASTree::ASNode::calcHelp(){
                 for(size_t j =0; j < this->pchildren.size();j++){
                     
                     //set these children nodes to be lastVal... TODO...
+                    //add to variables list
+
                     
                 }
                 return lastVal;
@@ -219,6 +221,7 @@ double ASTree::ASNode::calcHelp(){
                     if( this->pchildren.at(i).get_pdata().get_type() == TokenType::VAR){
                         varFlag = 1;
                         //  ret = ..... search through variable list to find the right one
+                        
                     }else{
 				        val = this->pchildren.at(i).calcHelp(); // recursively obtains the value of a child, the children could be an expression or a constant
                     }
