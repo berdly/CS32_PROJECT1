@@ -135,12 +135,12 @@ const std::vector<ASTree::ASNode>& ASTree::ASNode::get_kids() const{
     return pchildren;
 }
 
-double ASTree::calc(){
+/* double ASTree::calc(){
 
 	return proot.calcHelp();
 	
-}
-void ASTree::print(){
+} */
+/* void ASTree::print(){
     proot.printHelp();
 }
 
@@ -202,9 +202,9 @@ void ASTree::ASNode::printHelp() const{
 
 
 }
+ */
 
-
-double ASTree::ASNode::calcHelp(){
+/* double ASTree::ASNode::calcHelp(){
     double ret = 0.0; // will be returned
 	switch(this->pdata.get_type()){
 
@@ -283,7 +283,7 @@ double ASTree::ASNode::calcHelp(){
     return -1;
 
 
-}
+} */
 
 
 const Token& ASTree::ASNode::get_pdata() const{

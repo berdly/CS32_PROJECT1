@@ -4,6 +4,7 @@
 #include <optional>
 #include "error.h"
 #include <stdexcept>
+#include <iostream>
 
 class ASGrove{
   std::vector<ASTree> statements;
@@ -126,7 +127,87 @@ class ASGrove{
 	}
     return -1;
 
+  }
+
+  void print(){
+
+    if(place >= statements.size()){
+		  throw std::out_of_range("");
+	  }
+
+	  for(size_t i = 0; i < statements.size();i++){
+
+      printHelp(statements.at(i).getProot());
     }
+    
+  }
+
+  void printHelp(ASTree::ASNode root) const{ 
+
+    switch(root.get_pdata().get_type()){
+
+		case TokenType::EXP: //checks the token type - if it is an expression, more recursion needs to be done on the children of the expression
+			std::cout << '(';
+			for(size_t i =0; i < root.get_kids().size();i++){ //loops through all children of the current node being examined
+				  printHelp(root.get_kids().at(i)); //recursive call
+
+				if(i == root.get_kids().size() - 1){
+					std::cout << ')'; // if it is the last node in a child list, print a ')'
+				}
+				else{
+					switch(root.get_pdata().get_text()[0]){ // if it isnt at the end of the list print the operator
+				
+            case '=':
+              std::cout<< " = ";
+              break;
+              
+						case '*':
+						
+							std::cout << " * ";
+                            break;
+
+						case '+':
+						
+							std::cout << " + ";
+                            break;
+
+						case '-':
+
+							std::cout << " - ";
+                            break;
+
+						case '/':
+							std::cout << " / ";
+                            break;
+
+                        default:
+                            break;
+
+					}
+
+				}
+
+			}
+            break;
+
+		
+	    case TokenType::CONST: //if the current token is just a constant, there is no more recursion, just print the constant
+		    std::cout<<std::stod(root.get_pdata().get_text());
+            break;
+      case TokenType::VAR:
+        std::cout<<root.get_pdata().get_text();
+        break;
+
+      default:
+		    throw ParserError(root.get_pdata());
+            break;
+
+			
+	}
+
+
+}
+
 
 };
 
