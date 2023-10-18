@@ -76,7 +76,23 @@ std::vector<Token> reader(const std::string& input) {  // Change return type to 
                 // Create a token for the right parenthesis.
                 tokens.push_back(Token(column, line, std::string(1, ch), TokenType::RPAR));
                 break;
-
+            case '=':
+                // If there's an accumulated number, create a token for it.
+                if (!currToken.empty()) {
+                if(startsVar){
+                    tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::VAR));
+                    currToken.clear();
+                    startsVar = false;
+                }
+                else if(startsNum){
+                    tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::CONST));
+                    currToken.clear();
+                    startsNum = false;
+                }
+            }
+                // Create a token for the left parenthesis.
+                tokens.push_back(Token(column, line, std::string(1, ch), TokenType::EQUAL));
+                break;
             // For decimal points.
             case '.':
                 // Check for multiple decimal points in the current number.
