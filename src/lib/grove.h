@@ -2,11 +2,11 @@
 #include <vector>
 #include <map>
 
-template <class T> class ASGrove{
-    std::vector<ASTree> statements;
-    std::map<std::string, double> variables;
-    
-
+template <class T> 
+class ASGrove{
+  std::vector<ASTree> statements;
+  std::map<std::string, double> variables;
+  void step();
   public:
     void step();
     T eval();
@@ -43,7 +43,8 @@ class VarDict{
   void add(const std::string& name, const T& data); 
   std::pair<std::any, std::type_index> access(const std::string& 
 }
-class ASGrove<template class ReturnType>{
+template<class ReturnType>
+class ASGrove{
   static std::set<std::type_index> valid_types;
   std::vector<ASTree> statements;
   VarDict variables;
