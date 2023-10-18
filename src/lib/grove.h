@@ -29,7 +29,7 @@ class ASGrove{
 	if(place >= statements.size()){
 		throw std::out_of_range{};
 	}
-	double ret{calcHelp(statements.at(place).getProot());
+	double ret{calcHelp(statements.at(place).getProot()};
 	++place;
       return ret; //should return final value of tree and update variables but only once
     }
