@@ -7,6 +7,7 @@
 class ASGrove{
   std::vector<ASTree> statements;
   std::map<std::string, double> vars;
+  unsigned place; //how many trees have been executed
   void step();
   public:
     void step(); 
