@@ -275,6 +275,6 @@ double ASTree::ASNode::calcHelp(){
 }
 
 
-Token ASTree::ASNode::get_pdata(){
+const Token& ASTree::ASNode::get_pdata(){
     return pdata;
 }
