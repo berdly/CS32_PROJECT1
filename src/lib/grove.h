@@ -67,11 +67,8 @@ class ASGrove{
             double val{};
 	    unsigned idx{};
 	    for(const auto& child: children){
-
-                    bool varFlag{false};
                     
                     if( child.get_pdata().get_type() == TokenType::VAR){
-                        varFlag = 1;
 			std::optional<double> value{this->search_var(child.get_pdata().get_text())};
 			if(value.has_value()){
 				val = *value;
