@@ -15,11 +15,11 @@ class ASGrove{
     std::map<std::string, double> getVariables(){
         return vars;
     }
-    void addVar(const std::string& name, double val){ //should be called anytime an equal sign operator is reached in the eval phase, no need for passing around chunky nodes, we'll extract the data inside eval
+    void add_var(const std::string& name, double val){ //should be called anytime an equal sign operator is reached in the eval phase, no need for passing around chunky nodes, we'll extract the data inside eval
                                                               //plus this would require passing in two tokens, a var and a const but a var can be assigned from another var so better to make it more general i think
-      vars.emplace(name, val); //emplace is easier and better, makes pair automatically inside dict with no copying
+      vars[name] = val; //this syntax allows for overwriting
     }
-    std::optional<double> searchVar(const std::string& query){ //definitely shouldn't be in tree, trees are statements so they only evaluate, theres only continuity between trees in the same grove(scope)
+    std::optional<double> search_Var(const std::string& query){ //definitely shouldn't be in tree, trees are statements so they only evaluate, theres only continuity between trees in the same grove(scope)
                                                                //made optional so that it may or may not have a value, can use std::optional<T>::has_value() method to check
       auto value{vars.find(query)};//map iterator type
       return (value == vars.end()) ? {} : std::optional<double>{value->second}; //returns empty option if not found, option with value otherwise
@@ -50,33 +50,37 @@ class ASGrove{
 			throw ParserError{children[0]};
 		}
   */ //pro
-                double lastVal = pchildren.at(pchildren.size()-1).calcHelp();
+                double lastVal{this->calcHelp(children.back())};
 
-                for(size_t j =0; j < this->pchildren.size();j++){
-                    
+                for(size_t i{}; i < children.size() - 1 ;j++){
+                    this->add_var(children.at(i).get_pdata(), lastVal);
                     //set these children nodes to be lastVal... TODO...
                     //add to variables list
-
-                    
                 }
                 return lastVal;
                 break;
-            
 		
 		case TokenType::EXP:
+			auto children{curr.get_kids()};
 			
             
             double val;
-			for(size_t i =0; i < this->pchildren.size();i++){
+			for(const auto& child: children){
 
-                    bool varFlag = 0;
+                    bool varFlag{false};
                     
-                    if( this->pchildren.at(i).get_pdata().get_type() == TokenType::VAR){
+                    if( child.get_pdata().get_type() == TokenType::VAR){
                         varFlag = 1;
-                        //  ret = ..... search through variable list to find the right one
+			std::optional<double> value{this->search_var(child.get_pdata().get_text())};
+			if(value.has_value()){
+				ret = *value;
+			}
+			else{
+				throw ParserError(child.get_pdata());
+			}
                         
                     }else{
-				        val = this->pchildren.at(i).calcHelp(); // recursively obtains the value of a child, the children could be an expression or a constant
+				        val = this->calcHelp(child); // recursively obtains the value of a child, the children could be an expression or a constant
                     }
                                       
                 
@@ -84,7 +88,7 @@ class ASGrove{
 					ret = val;
 				}else if(!varFlag){
                     
-					switch(this->pdata.get_text()[0]){ //math operations
+					switch(root.get_pdata().get_text()[0]){ //math operations
 
 						case '*':
 							ret *=val;
@@ -115,7 +119,7 @@ class ASGrove{
             break;
         
         default:
-            throw ParserError(this->pdata);
+            throw ParserError(root.get_pdata());
             break;
 
 		
