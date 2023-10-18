@@ -199,14 +199,36 @@ double ASTree::ASNode::calcHelp(){
 		
 		case TokenType::EXP:
 			
+            if(this->pdata.get_text()[0] == '='){
+
+                double lastVal = pchildren.at(pchildren.size()-1).calcHelp();
+
+                for(size_t j =0; j < this->pchildren.size();j++){
+                    
+                    //set these children nodes to be lastVal... TODO...
+                    
+                }
+
+            }
+            double val;
 			for(size_t i =0; i < this->pchildren.size();i++){
+
+                    bool varFlag = 0;
+                    
+                    if( this->pchildren.at(i).get_pdata().get_type() == TokenType::VAR){
+                        varFlag = 1;
+                        //  ret = ..... search through variable list to find the right one
+                    }else{
+				        val = this->pchildren.at(i).calcHelp(); // recursively obtains the value of a child, the children could be an expression or a constant
+                    }
+                                      
                 
-				double val = this->pchildren.at(i).calcHelp(); // recursively obtains the value of a child, the children could be an expression or a constant
-                
-				if(i ==0){ // if the child is the first of its siblings, set the return value to that childs value
+				if(i ==0 and !varFlag){ // if the child is the first of its siblings, set the return value to that childs value
 					ret = val;
-				}else{
+				}else if(!varFlag){
+                    
 					switch(this->pdata.get_text()[0]){ //math operations
+
 						case '*':
 							ret *=val;
                             break;

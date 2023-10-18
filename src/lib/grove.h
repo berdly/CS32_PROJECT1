@@ -8,4 +8,4 @@ class ASGrove<template class T>{
   void step();
   public:
   T eval();
-}
+};
