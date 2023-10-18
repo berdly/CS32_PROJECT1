@@ -19,6 +19,7 @@ class ASGrove{
     }
     std::optional<double> searchVar(const std::string& query){ //definitely shouldn't be in tree, trees are statements so they only evaluate, theres only continuity between trees in the same grove(scope)
                                                                //made optional so that it may or may not have a value, can use std::optional<T>::has_value() method to check
+                                                              // if has_value() then use operator '*' to access just like pointer, it's basically a memory safe wrapper around a pointer that can be null
       auto value{variables.find(query)};//map iterator type
       return (value == variables.end()) ? {} : std::optional<double>{value->second}; //returns empty option if not found, option with value otherwise
     }
