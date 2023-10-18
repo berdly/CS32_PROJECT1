@@ -10,6 +10,7 @@ enum class TokenType{
   EXP,
   CONST,
   VAR,
+  EQUAL,
   LPAR,
   RPAR,
   ERR,
