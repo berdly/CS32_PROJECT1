@@ -110,6 +110,7 @@ class ASGrove{
                             break;
 					}
 				}
+		  ++idx;
 				
 			}
             return ret;
