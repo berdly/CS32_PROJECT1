@@ -6,7 +6,7 @@
 #include "token.h"
 
 class ASTree{
-
+public:
   class ASNode{
     Token pdata;
     std::vector<ASNode> pchildren;
@@ -24,7 +24,7 @@ class ASTree{
     const std::vector<ASNode>& get_kids();
   };
 
-  
+private:
   ASNode proot;
 
 public:
