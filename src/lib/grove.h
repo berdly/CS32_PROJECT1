@@ -3,6 +3,7 @@
 #include <map>
 #include <optional>
 #include "error.h"
+#include <stdexcept>
 
 class ASGrove{
   std::vector<ASTree> statements;
@@ -22,12 +23,12 @@ class ASGrove{
     std::optional<double> search_Var(const std::string& query){ //definitely shouldn't be in tree, trees are statements so they only evaluate, theres only continuity between trees in the same grove(scope)
                                                                //made optional so that it may or may not have a value, can use std::optional<T>::has_value() method to check
       auto value{vars.find(query)};//map iterator type
-      return (value == vars.end()) ? {} : std::optional<double>{value->second}; //returns empty option if not found, option with value otherwise
+      return (value == vars.end()) ? std::optional<double>{} : std::optional<double>{value->second}; //returns empty option if not found, option with value otherwise
     }
 
   double calc(){
 	  if(place >= statements.size()){
-		  throw std::out_of_range{};
+		  throw std::out_of_range("");
 	  }
 
 	  double ret{calcHelp(statements.at(place).getProot())};
