@@ -41,8 +41,15 @@ class ASGrove{
     double ret = 0.0; // will be returned
 	    const Token& curr{root.get_pdata()};
 	  switch(curr.get_type()){
-
+	
         case TokenType::EQUAL:
+		auto children{curr.get_kids()};
+		/*
+		for(unsigned i{}; i < (children.size() - 1); i++){
+			if(children[0].get_type() != TokenType::VAR){
+			throw ParserError{children[0]};
+		}
+  */ //pro
                 double lastVal = pchildren.at(pchildren.size()-1).calcHelp();
 
                 for(size_t j =0; j < this->pchildren.size();j++){
