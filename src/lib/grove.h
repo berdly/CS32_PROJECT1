@@ -1,27 +1,26 @@
 #include "parser.h"
 #include <vector>
 #include <map>
+#include <optional>
 
-template <class T> 
 class ASGrove{
   std::vector<ASTree> statements;
-  std::map<std::string, double> variables;
+  std::map<std::string, double> vars;
   void step();
   public:
-    void step();
-    T eval();
+    void step(); 
+    double eval();
     std::map<std::string, double> getVariables(){
         return variables;
     }
-    /* void addVariable(ASTree::ASNode add, double val){ // needs to be figured out - unknown what grove the node shoudl belong to when this method is called....
-      string a = add.get_pdata().get_text();            //might need to be in the tree class... calc will be called by trees
-      double d = stod(add.get_pdata().get_text());
-      
-      variables.insert(std::pair<std::string, double>(a, d));
-
-    } */
-    void searchVariable(Token find){ // probably needs to be in tree class too, variables might need to be stored in trees, and combined later
-      return variables[find.get_text()];
+    void addVar(const std::string& name, double val){ //should be called anytime an equal sign operator is reached in the eval phase, no need for passing around chunky nodes, we'll extract the data inside eval
+                                                              //plus this would require passing in two tokens, a var and a const but a var can be assigned from another var so better to make it more general i think
+      variables.emplace(name, val); //emplace is easier and better, makes pair automatically inside dict with no copying
+    }
+    std::optional<double> searchVar(const std::string& query){ //definitely shouldn't be in tree, trees are statements so they only evaluate, theres only continuity between trees in the same grove(scope)
+                                                               //made optional so that it may or may not have a value, can use std::optional<T>::has_value() method to check
+      auto value{variables.find(query)};//map iterator type
+      return (value == variables.end()) ? {} : std::optional<double>{value->second}; //returns empty option if not found, option with value otherwise
     }
 
 };
