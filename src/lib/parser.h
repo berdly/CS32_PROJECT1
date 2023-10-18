@@ -13,15 +13,15 @@ public:
     public:
     ASNode();
     ASNode(Token pdata);
-    const Token& get_pdata();
+    const Token& get_pdata() const;
 
     void add_child(ASNode child);
     double calcHelp();
-    void printHelp();
+    void printHelp() const;
 
    //tree shouldn't have variable val
     
-    const std::vector<ASNode>& get_kids();
+    const std::vector<ASNode>& get_kids() const;
   };
 
 private:

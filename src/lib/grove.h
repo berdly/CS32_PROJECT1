@@ -25,35 +25,36 @@ class ASGrove{
       return (value == vars.end()) ? {} : std::optional<double>{value->second}; //returns empty option if not found, option with value otherwise
     }
 
-    double calc(){
-	if(place >= statements.size()){
-		throw std::out_of_range{};
-	}
-	double ret{calcHelp(statements.at(place).getProot()};
-	++place;
-      return ret; //should return final value of tree and update variables but only once
-    }
+  double calc(){
+	  if(place >= statements.size()){
+		  throw std::out_of_range{};
+	  }
+
+	  double ret{calcHelp(statements.at(place).getProot())};
+	  ++place;
+    return ret; //should return final value of tree and update variables but only once
+  }
 
 
-    double calcHelp(ASTree::ASNode root){
+  double calcHelp(ASTree::ASNode root){
       
-
     double ret = 0.0; // will be returned
-	    const Token& curr{root.get_pdata()};
+    auto children{root.get_kids()};
+	  const Token& curr{root.get_pdata()};
+
 	  switch(curr.get_type()){
-	
+
         case TokenType::EQUAL:
-		auto children{curr.get_kids()};
+		
 		/*
 		for(unsigned i{}; i < (children.size() - 1); i++){
 			if(children[0].get_type() != TokenType::VAR){
 			throw ParserError{children[0]};
 		}
   */ //pro
-                double lastVal{this->calcHelp(children.back())};
-
-                for(size_t i{}; i < children.size() - 1 ;j++){
-                    this->add_var(children.at(i).get_pdata(), lastVal);
+      double lastVal{this->calcHelp(children.back())};
+            for(size_t i{}; i < children.size() - 1 ; i++){
+                  this->add_var(children.at(i).get_pdata().get_text(), lastVal);
                     //set these children nodes to be lastVal... TODO...
                     //add to variables list
                 }
@@ -61,31 +62,30 @@ class ASGrove{
                 break;
 		
 	case TokenType::EXP:
-			auto children{curr.get_kids()};
+			//auto children{.get_kids()};
 			
             
-            double val{};
+      double val{};
 	    unsigned idx{};
 	    for(const auto& child: children){
                     
-                    if( child.get_pdata().get_type() == TokenType::VAR){
-			std::optional<double> value{this->search_var(child.get_pdata().get_text())};
-			if(value.has_value()){
-				val = *value;
-			}
-			else{
-				throw ParserError(child.get_pdata());
-			}
+        if( child.get_pdata().get_type() == TokenType::VAR){
+			    std::optional<double> value{this->search_Var(child.get_pdata().get_text())};
+
+			    if(value.has_value()){
+				    val = *value;
+			    }
+			    else{
+				    throw ParserError(child.get_pdata());
+			    }
                         
-                    }else{
-				        val = this->calcHelp(child); // recursively obtains the value of a child, the children could be an expression or a constant
-                    }
-                                      
-                
+        }else{
+				    val = this->calcHelp(child); // recursively obtains the value of a child, the children could be an expression or a constant
+          }
+                                            
 				if(idx ==0){ // if the child is the first of its siblings, set the return value to that childs value
 					ret = val;
-				}else{
-                    
+				}else{         
 					switch(root.get_pdata().get_text()[0]){ //math operations
 
 						case '*':
@@ -102,16 +102,16 @@ class ASGrove{
 								throw ZeroDivision{};
 							}
 							ret /= val;
-                            break;
-                        default:
-                            break;
+              break;
+            default:
+              break;
 					}
 				}
 		  ++idx;
 				
 			}
-            return ret;
-            break;
+      return ret;
+            
 	case TokenType::CONST:
             
 		    return std::stod(root.get_pdata().get_text()); // if the token is a constant, just return it casted as a double
