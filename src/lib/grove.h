@@ -26,11 +26,12 @@ class ASGrove{
     }
 
     double calc(){
-      double ret;
-      for(size_t i = 0; i < statements.size();i++){
-          ret = calcHelp(statements.at(i).getProot());
-      }
-      return ret;
+	if(place >= statements.size()){
+		throw std::out_of_range{};
+	}
+	double ret{calcHelp(statements.at(place).getProot());
+	++place;
+      return ret; //should return final value of tree and update variables but only once
     }
 
 
@@ -38,10 +39,10 @@ class ASGrove{
       
 
     double ret = 0.0; // will be returned
-	  switch(curr->pdata.get_type()){
+	    const Token& curr{root.get_pdata()};
+	  switch(curr.get_type()){
 
         case TokenType::EQUAL:
-            
                 double lastVal = pchildren.at(pchildren.size()-1).calcHelp();
 
                 for(size_t j =0; j < this->pchildren.size();j++){
