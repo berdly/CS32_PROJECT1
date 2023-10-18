@@ -47,6 +47,7 @@ std::vector<std::pair<int,int>> ASTree::get_child_idx(const std::vector<Token>& 
                 }
                 break;
             case TokenType::EXP:
+            case TokenType::EQUAL:
                 if(i <= 0 || tokens.at(i - 1).get_type() != TokenType::LPAR){
 			throw ParserError(curr);
 		}
@@ -76,7 +77,7 @@ ASTree::ASNode ASTree::build(const std::vector<Token>& tokens, int start, int en
     switch(curr.get_pdata().get_type()){
         case TokenType::LPAR:
             //we know it should be an operand
-            if(tokens[start+1].get_type() != TokenType::EXP){
+            if((tokens[start+1].get_type() != TokenType::EXP) || (tokens[start+1].get_type() != TokenType::EQUAL)){
                 throw ParserError(tokens[start+1]);
             }
             else if(tokens[end].get_type() != TokenType::RPAR){
@@ -88,9 +89,19 @@ ASTree::ASNode ASTree::build(const std::vector<Token>& tokens, int start, int en
             child_idx_list  =this->get_child_idx(tokens, start+2, end-1);
             //recursively add children while properly building out their children
             for(const std::pair<int,int>& child_idx : child_idx_list){
-                rootNode.add_child(build(tokens, child_idx.first, child_idx.second));
-                
+                rootNode.add_child(build(tokens, child_idx.first, child_idx.second)); 
+            }
+            if(curr.get_pdata().get_type() == TokenType::EQUAL){
+                std::vector<ASNode> kids{curr.get_kids()};
+                if(kids.back().get_pdata().get_type() == TokenType::VAR){
+                    throw ParserError(kids.back().get_pdata());
                 }
+                for(unsigned i{}; i < kids.size() - 1; i++){
+                    if(kids.at(i).get_pdata().get_type() != TokenType::VAR){
+                        throw ParserError(kids.back().get_pdata());
+                    }
+                }
+            }
             return rootNode;
         case TokenType::CONST:
             //const has no children so can simply return
@@ -104,7 +115,7 @@ ASTree::ASNode ASTree::build(const std::vector<Token>& tokens, int start, int en
         default:
             //should not start with anything but CONST or LPAR
             throw ParserError(tokens[start]);
-    }   
+    }
 }
 
 ASTree::ASNode::ASNode(Token data) : pdata{data}, pchildren{} {}
