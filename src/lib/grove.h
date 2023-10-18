@@ -64,8 +64,9 @@ class ASGrove{
 			auto children{curr.get_kids()};
 			
             
-            double val;
-			for(const auto& child: children){
+            double val{};
+	    unsigned idx{};
+	    for(const auto& child: children){
 
                     bool varFlag{false};
                     
@@ -73,7 +74,7 @@ class ASGrove{
                         varFlag = 1;
 			std::optional<double> value{this->search_var(child.get_pdata().get_text())};
 			if(value.has_value()){
-				ret = *value;
+				val = *value;
 			}
 			else{
 				throw ParserError(child.get_pdata());
@@ -84,9 +85,9 @@ class ASGrove{
                     }
                                       
                 
-				if(i ==0 and !varFlag){ // if the child is the first of its siblings, set the return value to that childs value
+				if(idx ==0){ // if the child is the first of its siblings, set the return value to that childs value
 					ret = val;
-				}else if(!varFlag){
+				}else{
                     
 					switch(root.get_pdata().get_text()[0]){ //math operations
 
@@ -115,7 +116,7 @@ class ASGrove{
             break;
 	    case TokenType::CONST:
             
-		    return std::stod(this->pdata.get_text()); // if the token is a constant, just return it casted as a double
+		    return std::stod(root.get_pdata().get_text()); // if the token is a constant, just return it casted as a double
             break;
         
         default:
