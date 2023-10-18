@@ -196,11 +196,9 @@ void ASTree::ASNode::printHelp(){
 double ASTree::ASNode::calcHelp(){
     double ret = 0.0; // will be returned
 	switch(this->pdata.get_type()){
-		
-		case TokenType::EXP:
-			
-            if(this->pdata.get_text()[0] == '='){
 
+        case TokenType::EQUAL:
+            
                 double lastVal = pchildren.at(pchildren.size()-1).calcHelp();
 
                 for(size_t j =0; j < this->pchildren.size();j++){
@@ -211,7 +209,11 @@ double ASTree::ASNode::calcHelp(){
                     
                 }
                 return lastVal;
-            }
+                break;
+            
+		
+		case TokenType::EXP:
+			
             
             double val;
 			for(size_t i =0; i < this->pchildren.size();i++){
