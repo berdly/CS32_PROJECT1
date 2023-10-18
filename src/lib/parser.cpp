@@ -208,8 +208,9 @@ double ASTree::ASNode::calcHelp(){
                     //set these children nodes to be lastVal... TODO...
                     
                 }
-
+                return lastVal;
             }
+            
             double val;
 			for(size_t i =0; i < this->pchildren.size();i++){
 

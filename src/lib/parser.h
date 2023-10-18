@@ -18,6 +18,8 @@ class ASTree{
     void add_child(ASNode child);
     double calcHelp();
     void printHelp();
+
+    double getVariableVal();// node will call this method if token type is var... will return the value of the variable
     
     std::vector<ASNode> getkids();
   };

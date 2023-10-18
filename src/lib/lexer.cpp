@@ -82,7 +82,7 @@ std::vector<Token> reader(const std::string& input) {  // Change return type to 
                 // Check for multiple decimal points in the current number.
                 if(startsVar){
                    std::cout << "Syntax error on line " << line << " column " << column << "." << std::endl;
-                   currToken.clear(
+                   currToken.clear();
                    exit(1);
                 }
                 if (currToken.find('.') != std::string::npos) {
@@ -97,7 +97,7 @@ std::vector<Token> reader(const std::string& input) {  // Change return type to 
                     exit(1);
                }
                 // Check for leading decimals.
-               else if (currentNumber.empty()) {
+               else if (currToken.empty()) {
                    std::cout << "Syntax error on line " << line << " column " << column << "." << std::endl;
                    currToken.clear();
                    exit(1);
