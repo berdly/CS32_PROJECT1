@@ -18,7 +18,7 @@ int main() {
     }
 
     // Parse the input and get the tokens.
-    std::cout<<input<<std::endl;
+    
     std::vector<Token> tokens = reader(input);  
     
     // Function to display the tokens with right-aligned columns.
