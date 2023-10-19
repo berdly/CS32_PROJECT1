@@ -144,6 +144,7 @@ std::vector<Token> reader(const std::string& input) {  // Change return type to 
 
             case ' ':
                 // White space seperate
+                std::cout<<"WHITESPACE"<<std::endl;
                 if (!currToken.empty()) {
                 if(startsVar){
                     tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::VAR));
