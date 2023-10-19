@@ -18,9 +18,12 @@ class ASGrove{
   void add_var(const std::string& name, double val);
   std::optional<double> search_var(const std::string& query);
   double calc();
+  double calcHelp(const ASTree::ASNode&);
+  void printHelp(const ASTree::ASNode&) const;
 public:
   ASGrove(const std::vector<ASTree>&);
   double eval();
+  voud print() const;
 }
 #endif
 
