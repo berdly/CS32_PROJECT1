@@ -22,12 +22,13 @@ public:
    //tree shouldn't have variable val
     
     const std::vector<ASNode>& get_kids() const;
-    static std::vector<Token> infix_tokens(const std::vector<Token>& tokens); // Infix Function
-    static int get_operator_precedence(TokenType type);  // Infix Function Helper for Precedence
   };
 
 private:
   ASNode proot;
+  std::vector<Token> infixToPostfix(const std::vector<Token>& tokens);
+  int getPrecedence(const Token& token);
+  std::vector<Token> postfixToInfix(const std::vector<Token>& postfixTokens);
 
 public:
   
@@ -37,6 +38,7 @@ public:
   //double calc();
   //void print();
   const ASNode& getProot() const;
+  std::vector<Token> infixWithParens(const std::vector<Token>& tokens);
 };
 
 #endif
