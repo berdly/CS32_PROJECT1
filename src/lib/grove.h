@@ -22,6 +22,7 @@ class ASGrove{
   void printHelp(const ASTree::ASNode&) const;
 public:
   ASGrove(const std::vector<ASTree>&);
+  ASGrove(const ASTree&);
   double eval();
   void print() const;
 };
