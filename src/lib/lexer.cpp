@@ -145,12 +145,12 @@ std::vector<Token> reader(const std::string& input) {  // Change return type to 
                 // White space seperate
                 if (!currToken.empty()) {
                 if(startsVar){
-                    tokens.push_back(Token(column - currToken.size() -1, line, currToken, TokenType::VAR));
+                    tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::VAR));
                     currToken.clear();
                     startsVar = false;
                 }
                 else if(startsNum){
-                    tokens.push_back(Token(column - currToken.size() -1 , line, currToken, TokenType::CONST));
+                    tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::CONST));
                     currToken.clear();
                     startsNum = false;
                 }
