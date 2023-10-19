@@ -14,7 +14,7 @@ std::vector<Token> reader(const std::string& input) {  // Change return type to 
 
     for (size_t i = 0; i < input.size(); ++i) {
         char ch = input[i];
-        std::cout<< "CH = "<< ch<< " col = "<< column<<std::endl;
+        
         
         // Switch-case to handle different characters.
         switch (ch) {
@@ -144,7 +144,7 @@ std::vector<Token> reader(const std::string& input) {  // Change return type to 
 
             case ' ':
                 // White space seperate
-                std::cout<<"WHITESPACE"<<std::endl;
+               
                 if (!currToken.empty()) {
                 if(startsVar){
                     tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::VAR));
@@ -152,7 +152,7 @@ std::vector<Token> reader(const std::string& input) {  // Change return type to 
                     startsVar = false;
                 }
                 else if(startsNum){
-                    std::cout<< column << " "<< currToken << " "<< currToken.size()<<std::endl;
+                    
                     tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::CONST));
                     currToken.clear();
                     startsNum = false;
