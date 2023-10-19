@@ -5,6 +5,121 @@ ASTree::ASTree(const std::vector<Token>& tokens) {
     this->proot = this->build(tokens, 0, tokens.size() - 1);
 }
 
+// Convert an infix expression to a postfix expression
+std::vector<Token> ASTree::infixToPostfix(const std::vector<Token>& tokens) {
+    std::vector<Token> output;  // Holds the resulting postfix expression
+    std::vector<Token> stack;   // Used to store operators and ensure proper order
+
+    // Process each token in the infix expression
+    for (const Token& token : tokens) {
+        switch (token.get_type()) {
+            case TokenType::CONST:
+            case TokenType::VAR:
+                // Directly add constants and variables to the output
+                output.push_back(token);
+                break;
+            case TokenType::LPAR:
+                // Push left parentheses onto the stack
+                stack.push_back(token);
+                break;
+            case TokenType::RPAR:
+                // Pop operators from the stack until a left parenthesis is encountered
+                while (!stack.empty() && stack.back().get_type() != TokenType::LPAR) {
+                    output.push_back(stack.back());
+                    stack.pop_back();
+                }
+                // Ensure there's a matching left parenthesis for every right parenthesis
+                if (stack.empty()) {
+                    throw ParserError(token);  // If not, throw an error
+                }
+                stack.pop_back();  // Pop the left parenthesis from the stack
+                break;
+            case TokenType::EXP:
+            case TokenType::EQUAL:
+                // Ensure operators in the stack have higher precedence before pushing the current token
+                while (!stack.empty() && getPrecedence(stack.back()) >= getPrecedence(token)) {
+                    output.push_back(stack.back());
+                    stack.pop_back();
+                }
+                stack.push_back(token);
+                break;
+            default:
+                // If an unexpected token is encountered, throw an error
+                throw ParserError(token);
+        }
+    }
+
+    // Pop any remaining operators from the stack and add them to the output
+    while (!stack.empty()) {
+        if (stack.back().get_type() == TokenType::LPAR) {
+            throw ParserError(stack.back(), PErrType::END); // Error for unmatched left parenthesis
+        }
+        output.push_back(stack.back());
+        stack.pop_back();
+    }
+
+    return output;
+}
+
+// Get the precedence level of an operator
+int ASTree::getPrecedence(const Token& token) {
+    switch (token.get_type()) {
+        case TokenType::EXP:
+            if (token.get_text() == "*" || token.get_text() == "/") {
+                return 3;
+            } else if (token.get_text() == "+" || token.get_text() == "-") {
+                return 2;
+            }
+            break;
+        case TokenType::EQUAL:
+            return 1;
+        default:
+            // If an unknown token is encountered when checking precedence, throw an error
+            throw LexerError(token);
+    }
+    return -1;
+}
+
+// Convert a postfix expression back to infix
+std::vector<Token> ASTree::postfixToInfix(const std::vector<Token>& postfixTokens) {
+    std::vector<std::vector<Token>> stack;  // Used to hold intermediate results
+
+    // Process each token in the postfix expression
+    for (const Token& token : postfixTokens) {
+        if (token.get_type() == TokenType::CONST || token.get_type() == TokenType::VAR) {
+            // Directly push constants and variables onto the stack
+            stack.push_back({token});
+        } else {
+            // Ensure there are enough operands on the stack for the current operator
+            if (stack.size() < 2) {
+                throw ParserError(token);
+            }
+            std::vector<Token> right = stack.back(); stack.pop_back();
+            std::vector<Token> left = stack.back(); stack.pop_back();
+            // Create an infix sub-expression from the two operands and the operator
+            std::vector<Token> combined = { Token(0, 0, "(", TokenType::LPAR) };
+            combined.insert(combined.end(), left.begin(), left.end());
+            combined.push_back(token);
+            combined.insert(combined.end(), right.begin(), right.end());
+            combined.push_back(Token(0, 0, ")", TokenType::RPAR));
+            stack.push_back(combined);
+        }
+    }
+
+    // Ensure the postfix expression was valid
+    if (stack.size() != 1) {
+        throw ParserError(Token(0, 0, "", TokenType::NONE));
+    }
+
+    return stack.back();
+}
+
+// Convert an infix expression to postfix and then back to infix with proper parentheses
+std::vector<Token> ASTree::infixWithParens(const std::vector<Token>& tokens) {
+    std::vector<Token> postfix = infixToPostfix(tokens);
+    return postfixToInfix(postfix);
+}
+
 std::vector<std::pair<int,int>> ASTree::get_child_idx(const std::vector<Token>& tokens, int start, int end){
     /*
     Takes a list of tokens assumed to be inside the parentheses of an operator and produce a list of start and end points based on locations of left and right parentheses
