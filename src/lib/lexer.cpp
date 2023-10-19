@@ -14,6 +14,7 @@ std::vector<Token> reader(const std::string& input) {  // Change return type to 
 
     for (size_t i = 0; i < input.size(); ++i) {
         char ch = input[i];
+        std::cout<< "CH = "<< ch<< " col = "<< column<<std::endl;
         
         // Switch-case to handle different characters.
         switch (ch) {
@@ -183,6 +184,7 @@ std::vector<Token> reader(const std::string& input) {  // Change return type to 
                     currToken.clear();
                     exit(1);
                 }
+
                 break;
         }
         column++;
