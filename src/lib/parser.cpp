@@ -1,6 +1,9 @@
 #include "parser.h"
 #include "error.h"
 #include <iostream>
+ASTree::ASTree(const std::vector<Token>& tokens) {
+    this->proot = this->build(tokens, 0, tokens.size() - 1);
+}
 
 ASTree::ASTree(const std::vector<Token>& tokens) {
     this->proot = this->build(tokens, 0, tokens.size() - 1);
@@ -129,7 +132,7 @@ ASTree::ASNode::ASNode(){ // default node constructor
 }
 void ASTree::ASNode::add_child(ASNode child) { this->pchildren.push_back(child); }
 
-ASTree::ASNode ASTree::getProot(){
+const ASTree::ASNode& ASTree::getProot()const {
     return this->proot;
 }
 
