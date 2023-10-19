@@ -2,6 +2,10 @@
 #include "error.h"
 #include <iostream>
 
+ASTree::ASTree(const std::vector<Token>& tokens) {
+    this->proot = this->build(tokens, 0, tokens.size() - 1);
+}
+
 std::vector<std::pair<int,int>> ASTree::get_child_idx(const std::vector<Token>& tokens, int start, int end){
     /*
     Takes a list of tokens assumed to be inside the parentheses of an operator and produce a list of start and end points based on locations of left and right parentheses
