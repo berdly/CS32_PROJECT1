@@ -1,4 +1,5 @@
 #include "grove.h"
+
 ASGrove::ASGrove(const std::vector<ASTree> tree) : statements{tree}, vars{}, place{} {}
 
 double ASGrove::eval(){
@@ -27,15 +28,15 @@ double ASGrove::calc(){
     return ret; //should return final value of tree and update variables but only once
 }
 
-double calcHelp(ASTree::ASNode root){
+double ASGrove::calcHelp(const ASTree::ASNode& root){
       
     double ret{}; // will be returned
-    auto children{root.get_kids()};
-	  const Token& curr{root.get_pdata()};
+    const auto& children{root.get_kids()};
+    const Token& curr{root.get_pdata()};
     double val{};
-	  unsigned idx{};
+    unsigned idx{};
   
-	  switch(curr.get_type()){
+    switch(curr.get_type()){
 
       case TokenType::EQUAL:
             val = this->calcHelp(children.back());
@@ -49,78 +50,75 @@ double calcHelp(ASTree::ASNode root){
 
             break;
 		
-	    case TokenType::EXP:
-	    for(const auto& child: children){
+     case TokenType::EXP:
+	for(const auto& child: children){
                     
-        if( child.get_pdata().get_type() == TokenType::VAR){
-			    std::optional<double> value{this->search_Var(child.get_pdata().get_text())};
-
-			    if(value.has_value()){
-				    val = *value;
+            if(child.get_pdata().get_type() == TokenType::VAR){
+		    std::optional<double> value{this->search_Var(child.get_pdata().get_text())};
+		    if(value.has_value()){
+			    val = *value;
 			    }
-			    else{
-				    throw ParserError(child.get_pdata());
+		    else{
+			    throw ParserError(child.get_pdata());
 			    }
                         
-        }else{
-				    val = this->calcHelp(child); // recursively obtains the value of a child, the children could be an expression or a constant
-          }
+            }
+	else{
+		    val = this->calcHelp(child); // recursively obtains the value of a child, the children could be an expression or a constant
+            }
                                             
-				if(idx ==0){ // if the child is the first of its siblings, set the return value to that childs value
-					ret = val;
-				}else{         
-					switch(root.get_pdata().get_text()[0]){ //math operations
+	    if(idx ==0){ // if the child is the first of its siblings, set the return value to that childs value
+		   ret = val;
+	    }else{         
+		   switch(root.get_pdata().get_text()[0]){ //math operations
 
-						case '*':
-							ret *=val;
+			case '*':
+			    ret *=val;
                             break;
-						case '+':
-							ret += val;
+			case '+':
+			    ret += val;
                             break;
-						case '-':
-							ret -= val;
+			case '-':
+			    ret -= val;
                             break;
-						case '/':
-							if(val == 0){
-								throw ZeroDivision{};
-							}
-							ret /= val;
-              break;
-            default:
-              break;
-					}
-				}
-		  ++idx;
-				
-			}
-      return ret;
-      break;
+			case '/':
+			    if(val == 0){
+				throw ZeroDivision{};
+			    }
+			    ret /= val;
+                            break;
+                         default:
+                            break;
+		    }
+		}
+		++idx;	
+	   }
+        return ret;
+    }
+           break;
             
-	case TokenType::CONST:
+    case TokenType::CONST:
             
-		    return std::stod(root.get_pdata().get_text()); // if the token is a constant, just return it casted as a double
+	    return std::stod(root.get_pdata().get_text()); // if the token is a constant, just return it casted as a double
             break;
         
-  default:
+    default:
             throw ParserError(root.get_pdata());
             break;
 
 		
 	}
-    return -1;
+    return -1.0;
 
   }
 
-  void print(){
-
+  void ASGrove::print() const {
 	  for(size_t i = 0; i < statements.size();i++){
-
-      printHelp(statements.at(i).getProot());
-    }
-    
+      		printHelp(statements.at(i).getProot());
+          }
   }
 
-  void printHelp(ASTree::ASNode root) const{ 
+  void ASGrove::printHelp(const ASTree::ASNode& root) const{ 
 
     switch(root.get_pdata().get_type()){
 
@@ -182,3 +180,4 @@ double calcHelp(ASTree::ASNode root){
 
 			
 	}
+  }
