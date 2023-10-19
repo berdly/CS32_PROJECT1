@@ -1,4 +1,5 @@
-#ifndef ERRORS_H
+#ifndef ERROR_H
+#define ERROR_H
 #include <string>
 #include "token.h"
 //used by program to automatically display an error, gets passed the offending token and produces a string with the error message with the new_what method

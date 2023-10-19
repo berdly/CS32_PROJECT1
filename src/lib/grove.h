@@ -1,3 +1,7 @@
+#ifndef GROVE_H
+#define GROVE_H
+
+
 #include "parser.h"
 #include <vector>
 #include <map>
@@ -10,10 +14,23 @@ class ASGrove{
   std::vector<ASTree> statements;
   std::map<std::string, double> vars;
   unsigned place; //how many trees have been executed
-  void step();
+  
   public:
-    void step(); 
-    double eval();
+    ASGrove(){}
+    ASGrove( const std::vector<ASTree>& a){
+      statements = a;
+    }
+    void step(){
+      place++;
+    }
+    double eval(){
+      double val{};
+      for(size_t i = 0; i < statements.size();i++){
+          val = calc();
+          step();
+      }
+      return val;
+    }
     std::map<std::string, double> getVariables(){
         return vars;
     }
@@ -43,10 +60,12 @@ class ASGrove{
     double ret = 0.0; // will be returned
     auto children{root.get_kids()};
 	  const Token& curr{root.get_pdata()};
-
+    double lastVal{};
+    double val{};
+	  unsigned idx{};
 	  switch(curr.get_type()){
 
-        case TokenType::EQUAL:
+      case TokenType::EQUAL:
 		
 		/*
 		for(unsigned i{}; i < (children.size() - 1); i++){
@@ -54,21 +73,22 @@ class ASGrove{
 			throw ParserError{children[0]};
 		}
   */ //pro
-      double lastVal{this->calcHelp(children.back())};
+            lastVal = this->calcHelp(children.back());
             for(size_t i{}; i < children.size() - 1 ; i++){
                   this->add_var(children.at(i).get_pdata().get_text(), lastVal);
                     //set these children nodes to be lastVal... TODO...
                     //add to variables list
                 }
-                return lastVal;
-                break;
+
+            return lastVal;
+
+            break;
 		
-	case TokenType::EXP:
+	    case TokenType::EXP:
 			//auto children{.get_kids()};
 			
             
-      double val{};
-	    unsigned idx{};
+      
 	    for(const auto& child: children){
                     
         if( child.get_pdata().get_type() == TokenType::VAR){
@@ -113,13 +133,14 @@ class ASGrove{
 				
 			}
       return ret;
+      break;
             
 	case TokenType::CONST:
             
 		    return std::stod(root.get_pdata().get_text()); // if the token is a constant, just return it casted as a double
             break;
         
-        default:
+  default:
             throw ParserError(root.get_pdata());
             break;
 
@@ -130,10 +151,6 @@ class ASGrove{
   }
 
   void print(){
-
-    if(place >= statements.size()){
-		  throw std::out_of_range("");
-	  }
 
 	  for(size_t i = 0; i < statements.size();i++){
 
@@ -207,6 +224,7 @@ class ASGrove{
 
 
 }
+#endif
 
 
 };
