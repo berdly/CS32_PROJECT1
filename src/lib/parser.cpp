@@ -5,9 +5,6 @@ ASTree::ASTree(const std::vector<Token>& tokens) {
     this->proot = this->build(tokens, 0, tokens.size() - 1);
 }
 
-ASTree::ASTree(const std::vector<Token>& tokens) {
-    this->proot = this->build(tokens, 0, tokens.size() - 1);
-}
 
 std::vector<std::pair<int,int>> ASTree::get_child_idx(const std::vector<Token>& tokens, int start, int end){
     /*
