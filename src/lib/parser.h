@@ -22,7 +22,8 @@ public:
    //tree shouldn't have variable val
     
     const std::vector<ASNode>& get_kids() const;
-    static std::vector<Token> infix(const std::vector<Token>& tokens); // Infix Function
+    static std::vector<Token> infix_tokens(const std::vector<Token>& tokens); // Infix Function
+    static int get_operator_precedence(TokenType type);  // Infix Function Helper for Precedence
   };
 
 private:
