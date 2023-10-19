@@ -151,6 +151,7 @@ std::vector<Token> reader(const std::string& input) {  // Change return type to 
                     startsVar = false;
                 }
                 else if(startsNum){
+                    std::cout<< column << " "<< currToken << " "<< currToken.size()<<std::endl;
                     tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::CONST));
                     currToken.clear();
                     startsNum = false;
