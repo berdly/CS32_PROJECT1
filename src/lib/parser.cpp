@@ -128,7 +128,7 @@ ASTree::ASNode::ASNode(){ // default node constructor
 }
 void ASTree::ASNode::add_child(ASNode child) { this->pchildren.push_back(child); }
 
-ASTree::ASNode ASTree::getProot(){
+const ASTree::ASNode& ASTree::getProot()const {
     return this->proot;
 }
 

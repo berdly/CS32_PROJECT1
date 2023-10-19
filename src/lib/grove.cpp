@@ -1,6 +1,6 @@
 #include "grove.h"
 
-ASGrove::ASGrove(const std::vector<ASTree> tree) : statements{tree}, vars{}, place{} {}
+ASGrove::ASGrove(const std::vector<ASTree>& tree) : statements{tree}, vars{}, place{} {}
 
 double ASGrove::eval(){
   double val{};
@@ -51,10 +51,10 @@ double ASGrove::calcHelp(const ASTree::ASNode& root){
             break;
 		
      case TokenType::EXP:
-	for(const auto& child: children){
+		for(const auto& child: children){
                     
             if(child.get_pdata().get_type() == TokenType::VAR){
-		    std::optional<double> value{this->search_Var(child.get_pdata().get_text())};
+		    std::optional<double> value{this->search_var(child.get_pdata().get_text())};
 		    if(value.has_value()){
 			    val = *value;
 			    }
@@ -62,15 +62,14 @@ double ASGrove::calcHelp(const ASTree::ASNode& root){
 			    throw ParserError(child.get_pdata());
 			    }
                         
-            }
-	else{
+            }else{
 		    val = this->calcHelp(child); // recursively obtains the value of a child, the children could be an expression or a constant
             }
                                             
-	    if(idx ==0){ // if the child is the first of its siblings, set the return value to that childs value
-		   ret = val;
-	    }else{         
-		   switch(root.get_pdata().get_text()[0]){ //math operations
+	    	if(idx ==0){ // if the child is the first of its siblings, set the return value to that childs value
+		   		ret = val;
+	   		}else{         
+		   		switch(root.get_pdata().get_text()[0]){ //math operations
 
 			case '*':
 			    ret *=val;
@@ -94,8 +93,8 @@ double ASGrove::calcHelp(const ASTree::ASNode& root){
 		++idx;	
 	   }
         return ret;
-    }
-           break;
+    
+           
             
     case TokenType::CONST:
             

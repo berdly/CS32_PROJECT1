@@ -36,7 +36,7 @@ public:
   std::vector<std::pair<int,int>> get_child_idx(const std::vector<Token>& tokens, int start, int end);
   //double calc();
   //void print();
-  ASNode getProot();
+  const ASNode& getProot() const;
 };
 
 #endif
