@@ -22,6 +22,7 @@ public:
    //tree shouldn't have variable val
     
     const std::vector<ASNode>& get_kids() const;
+    static std::vector<Token> infix(const std::vector<Token>& tokens); // Infix Function
   };
 
 private:
