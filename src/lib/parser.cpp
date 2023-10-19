@@ -3,12 +3,12 @@
 #include <iostream>
 
 ASTree::ASTree(const std::vector<Token>& tokens) {
-    auto infixedTokens = infix_tokens(tokens);
+    auto infixedTokens = ASNode::infix_tokens(tokens);
     this->proot = this->build(infixedTokens, 0, infixedTokens.size() - 1);
 }
 
 // This function returns the precedence of the operators
-int ASTree::get_operator_precedence(TokenType type) {
+int ASTree::ASNode::get_operator_precedence(TokenType type) {
     switch(type) {
         case TokenType::LPAR:
         case TokenType::RPAR: return 4;
@@ -20,7 +20,7 @@ int ASTree::get_operator_precedence(TokenType type) {
     }
 }
 
-std::vector<Token> ASTree::infix_tokens(const std::vector<Token>& tokens) {
+std::vector<Token> ASTree::ASNode::infix_tokens(const std::vector<Token>& tokens) {
     std::vector<Token> output;  // Vector to store the resulting ordered tokens.
     std::vector<Token> opstack; // Operator stack used for keeping track of operators.
 
