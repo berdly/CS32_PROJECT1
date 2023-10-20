@@ -109,7 +109,7 @@ std::vector<Token> ASTree::postfixToInfix(const std::vector<Token>& postfixToken
 
     // Ensure the postfix expression was valid
     if (stack.size() != 1) {
-        throw ParserError(Token(0, 0, "", TokenType::ERR);
+        throw ParserError(Token(0, 0, "", TokenType::ERR));
     }
 
     return stack.back();
