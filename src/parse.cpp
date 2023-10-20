@@ -7,12 +7,12 @@
 #include "../src/lib/grove.h"
 
 int main(){
-    //std::string input, line;
+    std::string input, line;
     //bool l = false;  // Initialize l to false'
-    //int linecount{};
+    int linecount{};
     std::vector<ASTree> statements{};
 
-    /* while (true) {
+     while (true) {
         getline(std::cin, line);
         if (!line.empty()) {
             input += line + "\n"; // Concatenating each line with a newline character
@@ -52,9 +52,13 @@ int main(){
             return 3;
         }
     }
- */
 
-    auto tokens1{reader(" ( = a ( + 5 6 )) ")};
+    ASGrove grove{statements};
+    grove.print();
+    std:: cout<< grove.eval();
+ 
+ 
+    /* auto tokens1{reader(" ( = a ( + 5 6 )) ")};
     auto tokens2{reader(" ( * a 3) ")};
     ASTree tree1{tokens1};
     ASTree tree2{tokens2};
@@ -66,7 +70,7 @@ int main(){
 
     ASGrove grove{statements};
     std::cout<<grove.eval()<<std::endl;
-    //read in token vector
+    //read in token vector */
     
     
     
