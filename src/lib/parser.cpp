@@ -2,7 +2,8 @@
 #include "error.h"
 #include <iostream>
 ASTree::ASTree(const std::vector<Token>& tokens) {
-    this->proot = this->build(tokens, 0, tokens.size() - 1);
+    std::vector<Token> infixTokens = infixWithParens(tokens);
+    this->proot = this->build(infixTokens, 0, infixTokens.size() - 1);
 }
 
 // Convert an infix expression to a postfix expression
