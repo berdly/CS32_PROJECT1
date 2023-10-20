@@ -6,11 +6,12 @@
 #include "../src/lib/error.h"
 #include "../src/lib/grove.h"
 
-int main(){
+ int main(){
+    std::vector<ASTree> statements{};
     std::string input, line;
     //bool l = false;  // Initialize l to false'
     int linecount{};
-    std::vector<ASTree> statements{};
+    
 
      while (true) {
         getline(std::cin, line);
@@ -24,6 +25,7 @@ int main(){
         linecount++;
         //l = false;
         std::cout<<input<<std::endl;
+
         auto tokens{reader(input)};
 
 
@@ -34,6 +36,7 @@ int main(){
                 statements.push_back(tree);
             }
             else{
+                std::cout<<"THORW 1";
                 std::cout << "Unexpected token at line " << linecount+1 << " column 1: END\n";
             return 2;
             }
@@ -44,6 +47,7 @@ int main(){
             std::cout << e.new_what() << '\n';
             }
             else{
+                std::cout<<"THORW 2";
                 std::cout << "Unexpected token at line " << e.etoken.get_line() << " column " << e.etoken.get_col() + e.etoken.get_text().size() << ": END\n";
             }
             return 2;
@@ -56,22 +60,22 @@ int main(){
 
     ASGrove grove{statements};
     grove.print();
-    std:: cout<< grove.eval();
+    std:: cout<< grove.eval(); 
  
  
-    /* auto tokens1{reader(" ( = a ( + 5 6 )) ")};
-    auto tokens2{reader(" ( * a 3) ")};
+   /*  auto tokens1{reader("(= x 12)")};
+    auto tokens2{reader("(+ 34 x 56)")};
     ASTree tree1{tokens1};
     ASTree tree2{tokens2};
     //auto tokens2{reader(input)};
     //auto tokens3{reader(input)};
     statements.push_back(tree1);
-    statements.push_back(tree2);
+    statements.push_back(tree2); */
     //statements.push_back(tokens3);
 
-    ASGrove grove{statements};
-    std::cout<<grove.eval()<<std::endl;
-    //read in token vector */
+    /* ASGrove grove{statements};
+    std::cout<<grove.eval()<<std::endl; */
+    //read in token vector 
     
     
     
