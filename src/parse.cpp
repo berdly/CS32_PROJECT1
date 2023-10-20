@@ -15,7 +15,7 @@
 
      while (true) {
         input.clear();
-        
+
         getline(std::cin, line);
         if (!line.empty()) {
             input += line + "\n"; // Concatenating each line with a newline character
@@ -26,7 +26,7 @@
         }
         linecount++;
         //l = false;
-        std::cout<<input<<std::endl;
+        //std::cout<<input<<std::endl;
 
         auto tokens{reader(input)};
 
@@ -45,7 +45,7 @@
         catch(const ParserError& e){
             //handles parser errors and displays error messages, else block is for early endings since the END token is not on the actual vector and must be imagined next to the final token
             if(e.etype == PErrType::NORM){
-                std::cout<<"THORW 3";
+                //std::cout<<"THORW 3";
             std::cout << e.new_what() << '\n';
             }
             else{
