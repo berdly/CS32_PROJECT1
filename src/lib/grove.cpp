@@ -1,7 +1,7 @@
 #include "grove.h"
 
 ASGrove::ASGrove(const std::vector<ASTree>& tree) : statements{tree}, vars{}, place{} {}
-ASGrove::ASGroce(const ASTree& tree) : statements(std::vector<ASTree>{tree}, vars{}, place{} {}
+ASGrove::ASGrove(const ASTree& tree) : statements(std::vector<ASTree>{tree}), vars{}, place{} {}
 
 double ASGrove::eval(){
   double val{};
