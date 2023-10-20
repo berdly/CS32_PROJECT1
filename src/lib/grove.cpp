@@ -175,7 +175,7 @@ double ASGrove::calcHelp(const ASTree::ASNode& root){
             break;
 
       default:
-        std::cout<<"THROW13"<<std::endl;
+        //std::cout<<"THROW13"<<std::endl;
 		    throw ParserError(root.get_pdata());
             break;
 
