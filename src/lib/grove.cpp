@@ -4,11 +4,9 @@ ASGrove::ASGrove(const std::vector<ASTree>& tree) : statements{tree}, vars{}, pl
 ASGrove::ASGrove(const ASTree& tree) : statements(std::vector<ASTree>{tree}), vars{}, place{} {}
 
 double ASGrove::eval(){
-  double val{};
-  for(size_t i{}; i < statements.size(); i++){
-      val = calc();
-  }
-  return val;
+  
+      double val = calc();
+      return val;
 }
 
 void ASGrove::add_var(const std::string& name, double val){
@@ -114,10 +112,10 @@ double ASGrove::calcHelp(const ASTree::ASNode& root){
   }
 
   void ASGrove::print() const {
-	  for(size_t i = 0; i < statements.size();i++){
-      		printHelp(statements.at(i).getProot());
+	 
+      		printHelp(statements.at(place).getProot());
           std::cout<<std::endl;
-          }
+          
   }
 
   void ASGrove::printHelp(const ASTree::ASNode& root) const{ 

@@ -60,8 +60,10 @@
     }
 
     ASGrove grove{statements};
+    for(size_t i = 0; i < statements.size();i++){
     grove.print();
     grove.eval(); 
+    }
  
  
    /*  auto tokens1{reader("(= x 12)")};
