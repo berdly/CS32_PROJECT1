@@ -120,7 +120,8 @@ double ASGrove::calcHelp(const ASTree::ASNode& root){
   void ASGrove::printHelp(const ASTree::ASNode& root) const{ 
 
     switch(root.get_pdata().get_type()){
-
+    
+    case TokenType::EQUAL:
 		case TokenType::EXP: //checks the token type - if it is an expression, more recursion needs to be done on the children of the expression
 			std::cout << '(';
 			for(size_t i =0; i < root.get_kids().size();i++){ //loops through all children of the current node being examined
@@ -171,9 +172,10 @@ double ASGrove::calcHelp(const ASTree::ASNode& root){
             break;
       case TokenType::VAR:
         std::cout<<root.get_pdata().get_text();
-        break;
+            break;
 
       default:
+        std::cout<<"THROW13"<<std::endl;
 		    throw ParserError(root.get_pdata());
             break;
 

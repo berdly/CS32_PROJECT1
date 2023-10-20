@@ -54,16 +54,18 @@ int main(){
     }
  */
 
-    auto tokens1{reader("(= a (5+5))")};
+    auto tokens1{reader(" ( = a ( + 5 6 )) ")};
+    auto tokens2{reader(" ( * a 3) ")};
     ASTree tree1{tokens1};
+    ASTree tree2{tokens2};
     //auto tokens2{reader(input)};
     //auto tokens3{reader(input)};
     statements.push_back(tree1);
-    //statements.push_back(tokens2);
+    statements.push_back(tree2);
     //statements.push_back(tokens3);
 
     ASGrove grove{statements};
-    grove.print();
+    std::cout<<grove.eval()<<std::endl;
     //read in token vector
     
     
