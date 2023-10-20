@@ -25,6 +25,7 @@ double ASGrove::calc(){
 		  throw std::out_of_range("");
 	  }
 	  double ret{calcHelp(statements.at(place).getProot())};
+    std::cout<<ret<<std::endl;
 	  ++place;
     return ret; //should return final value of tree and update variables but only once
 }
@@ -182,4 +183,5 @@ double ASGrove::calcHelp(const ASTree::ASNode& root){
 
 			
 	}
+  std::cout<<std::endl;
   }

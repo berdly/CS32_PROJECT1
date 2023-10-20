@@ -61,7 +61,7 @@
 
     ASGrove grove{statements};
     grove.print();
-    std:: cout<< grove.eval(); 
+    grove.eval(); 
  
  
    /*  auto tokens1{reader("(= x 12)")};
