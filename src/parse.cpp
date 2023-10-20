@@ -15,6 +15,7 @@
 
      while (true) {
         input.clear();
+        linecount = 0;
 
         getline(std::cin, line);
         if (!line.empty()) {
