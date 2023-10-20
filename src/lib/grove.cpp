@@ -116,6 +116,7 @@ double ASGrove::calcHelp(const ASTree::ASNode& root){
   void ASGrove::print() const {
 	  for(size_t i = 0; i < statements.size();i++){
       		printHelp(statements.at(i).getProot());
+          std::cout<<std::endl;
           }
   }
 
@@ -183,5 +184,5 @@ double ASGrove::calcHelp(const ASTree::ASNode& root){
 
 			
 	}
-  std::cout<<std::endl;
+  
   }
