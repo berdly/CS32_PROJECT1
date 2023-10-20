@@ -14,6 +14,8 @@
     
 
      while (true) {
+        input.clear();
+        
         getline(std::cin, line);
         if (!line.empty()) {
             input += line + "\n"; // Concatenating each line with a newline character
@@ -36,7 +38,6 @@
                 statements.push_back(tree);
             }
             else{
-                std::cout<<"THORW 1";
                 std::cout << "Unexpected token at line " << linecount+1 << " column 1: END\n";
             return 2;
             }
@@ -48,7 +49,6 @@
             std::cout << e.new_what() << '\n';
             }
             else{
-                std::cout<<"THORW 2";
                 std::cout << "Unexpected token at line " << e.etoken.get_line() << " column " << e.etoken.get_col() + e.etoken.get_text().size() << ": END\n";
             }
             return 2;
