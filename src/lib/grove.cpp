@@ -1,14 +1,12 @@
 #include "grove.h"
 
 ASGrove::ASGrove(const std::vector<ASTree>& tree) : statements{tree}, vars{}, place{} {}
-ASGrove::ASGroce(const ASTree& tree) : statements(std::vector<ASTree>{tree}, vars{}, place{} {}
+ASGrove::ASGrove(const ASTree& tree) : statements(std::vector<ASTree>{tree}), vars{}, place{} {}
 
 double ASGrove::eval(){
-  double val{};
-  for(size_t i{}; i < statements.size(); i++){
-      val = calc();
-  }
-  return val;
+  
+      double val = calc();
+      return val;
 }
 
 void ASGrove::add_var(const std::string& name, double val){
@@ -25,6 +23,7 @@ double ASGrove::calc(){
 		  throw std::out_of_range("");
 	  }
 	  double ret{calcHelp(statements.at(place).getProot())};
+    std::cout<<ret<<std::endl;
 	  ++place;
     return ret; //should return final value of tree and update variables but only once
 }
@@ -113,15 +112,17 @@ double ASGrove::calcHelp(const ASTree::ASNode& root){
   }
 
   void ASGrove::print() const {
-	  for(size_t i = 0; i < statements.size();i++){
-      		printHelp(statements.at(i).getProot());
-          }
+	 
+      		printHelp(statements.at(place).getProot());
+          std::cout<<std::endl;
+          
   }
 
   void ASGrove::printHelp(const ASTree::ASNode& root) const{ 
 
     switch(root.get_pdata().get_type()){
-
+    
+    case TokenType::EQUAL:
 		case TokenType::EXP: //checks the token type - if it is an expression, more recursion needs to be done on the children of the expression
 			std::cout << '(';
 			for(size_t i =0; i < root.get_kids().size();i++){ //loops through all children of the current node being examined
@@ -172,12 +173,14 @@ double ASGrove::calcHelp(const ASTree::ASNode& root){
             break;
       case TokenType::VAR:
         std::cout<<root.get_pdata().get_text();
-        break;
+            break;
 
       default:
+        //std::cout<<"THROW13"<<std::endl;
 		    throw ParserError(root.get_pdata());
             break;
 
 			
 	}
+  
   }
