@@ -59,7 +59,7 @@ double ASGrove::calcHelp(const ASTree::ASNode& root){
 			    val = *value;
 			    }
 		    else{
-			    throw ParserError(child.get_pdata());
+			    throw IdentifierError(child.get_pdata());
 			    }
                         
             }else{
