@@ -105,13 +105,13 @@ ASTree::ASNode ASTree::build(const std::vector<Token>& tokens, int start, int en
                 std::vector<ASNode> kids{rootNode.get_kids()};
                 if(kids.back().get_pdata().get_type() == TokenType::VAR){
                     //std::cout<<"THROW3"<<std::endl;
-                    throw ParserError(kids.back().get_pdata());
+                    throw ParserError(kids.at(i).get_pdata());
                 }
                 
                 for(unsigned i{}; i < kids.size() - 1; i++){
                     if(kids.at(i).get_pdata().get_type() != TokenType::VAR){
                         //std::cout<<"THROW4"<<std::endl;
-                        throw ParserError(kids.back().get_pdata());
+                        throw ParserError(kids.at(i).get_pdata());
                     }
                 }
             }
