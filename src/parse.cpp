@@ -27,7 +27,7 @@
         }
         linecount++;
         //l = false;
-        std::cout<<input<<std::endl;
+        //std::cout<<input<<std::endl;
 
         auto tokens{reader(input)};
 
