@@ -58,6 +58,10 @@
             std::cout << "Runtime error: division by zero." << '\n';
             return 3;
         }
+        catch(const IdentifierError& e){
+            std::cout<<e.new_what()<<"\n";
+            return 3;
+        }
     }
 
     ASGrove grove{statements};
