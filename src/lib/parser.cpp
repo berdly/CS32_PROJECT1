@@ -102,9 +102,16 @@ ASTree::ASNode ASTree::build(const std::vector<Token>& tokens, int start, int en
                 rootNode.add_child(build(tokens, child_idx.first, child_idx.second)); 
             }
 
-            
-            if(tokens[start+1].get_type() == TokenType::EQUAL){
+            if(tokens[start+1].get_type()== TokenType::EXP and tokens[start+2].get_type() == TokenType::VAR){
                 std::vector<ASNode> kids{rootNode.get_kids()};
+                if(kids.size() == 1){
+                    throw ParserError(tokens[start+3]);
+                }
+            }
+           
+            if(tokens[start+1].get_type() == TokenType::EQUAL){
+                 std::vector<ASNode> kids{rootNode.get_kids()};
+                
                 if(kids.back().get_pdata().get_type() == TokenType::VAR){
                     //std::cout<<"THROW3"<<std::endl;
                     throw ParserError(kids.back().get_pdata());

@@ -71,7 +71,7 @@
     }
   */
     
-    auto tokens1{reader("(+ 7 (+ 6))")};
+    auto tokens1{reader("(+ x)")};
     //auto tokens2{reader("(+ 34 x 56)")};
     ASTree tree1{tokens1};
     //ASTree tree2{tokens2};
