@@ -8,7 +8,7 @@
 
  int main(){
     std::vector<ASTree> statements{};
-    std::string input, line;
+    /* std::string input, line;
     //bool l = false;  // Initialize l to false'
     int linecount{};
     
@@ -69,20 +69,26 @@
     grove.print();
     grove.eval(); 
     }
- 
- 
-   /*  auto tokens1{reader("(= x 12)")};
-    auto tokens2{reader("(+ 34 x 56)")};
+  */
+    
+    auto tokens1{reader("(+ 7 (+ 6))")};
+    //auto tokens2{reader("(+ 34 x 56)")};
     ASTree tree1{tokens1};
-    ASTree tree2{tokens2};
+    //ASTree tree2{tokens2};
     //auto tokens2{reader(input)};
     //auto tokens3{reader(input)};
     statements.push_back(tree1);
-    statements.push_back(tree2); */
+    //statements.push_back(tree2); 
     //statements.push_back(tokens3);
+    
+    ASGrove grove{statements};
+    for(size_t i = 0; i < statements.size();i++){
+    grove.print();
+    grove.eval(); 
+    }
 
-    /* ASGrove grove{statements};
-    std::cout<<grove.eval()<<std::endl; */
+   
+        
     //read in token vector 
     
     
