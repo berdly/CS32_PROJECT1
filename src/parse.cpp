@@ -8,7 +8,7 @@
 
  int main(){
     std::vector<ASTree> statements{};
-     std::string input, line;
+    std::string input, line;
     //bool l = false;  // Initialize l to false'
     int linecount{};
     
@@ -27,12 +27,12 @@
         }
         linecount++;
         //l = false;
-        //std::cout<<input<<std::endl;
+        std::cout<<input<<std::endl;
 
-        auto tokens{reader(input)};
+        //auto tokens{reader(input)};
 
 
-        try{
+        /*try{
             //if there are tokens, build tree
             if(!tokens.empty()){
                 ASTree tree{tokens};
@@ -61,17 +61,17 @@
         catch(const IdentifierError& e){
             std::cout<<e.new_what()<<"\n";
             return 3;
-        }
+        }*/
     }
 
-    ASGrove grove{statements};
+    /* ASGrove grove{statements};
     for(size_t i = 0; i < statements.size();i++){
     grove.print();
     grove.eval(); 
-    }
+    } */
   
-    
-   /* auto tokens1{reader("(+ x)")};
+   /* try{
+    auto tokens1{reader(" + a 3")};
     //auto tokens2{reader("(+ 34 x 56)")};
     ASTree tree1{tokens1};
     //ASTree tree2{tokens2};
@@ -85,7 +85,32 @@
     for(size_t i = 0; i < statements.size();i++){
     grove.print();
     grove.eval(); 
-    }*/
+    }
+
+    }catch(const ParserError& e){
+            //handles parser errors and displays error messages, else block is for early endings since the END token is not on the actual vector and must be imagined next to the final token
+            if(e.etype == PErrType::NORM){
+                //std::cout<<"THORW 3";
+            std::cout << e.new_what() << '\n';
+            }
+            else{
+                std::cout << "Unexpected token at line " << e.etoken.get_line() << " column " << e.etoken.get_col() + e.etoken.get_text().size() << ": END\n";
+            }
+            return 2;
+        }
+        catch(const ZeroDivision&){
+            std::cout << "Runtime error: division by zero." << '\n';
+            return 3;
+        }
+        catch(const IdentifierError& e){
+            std::cout<<e.new_what()<<"\n";
+            return 3;
+        }
+
+        */
+    }
+
+
 
    
         
@@ -93,4 +118,4 @@
     
     
     
-}
+
