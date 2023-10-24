@@ -116,11 +116,15 @@ ASTree::ASNode ASTree::build(const std::vector<Token>& tokens, int start, int en
                 }
 		*/
                 //the variable could have value so maybe this isn't actually invalid
+		
                 for(unsigned i{}; i < kids.size() - 1; i++){
-                    if(kids.at(i).get_pdata().get_type() != TokenType::VAR){
+                    if(kids.at(i).get_pdata().get_type() == TokenType::EXP || kids.at(i).get_pdata().get_type() == TokenType::EQUAL){
                         //std::cout<<"THROW4"<<std::endl;
-                        throw ParserError(kids.at(i).get_pdata());
+                        throw ParserError(Token{kids.at(i).get_col() - 1, kids.at(i).get_row(), ")", TokenType::LPAR});
                     }
+		    else if(kids.at(i).get_pdata().get_type() != TokenType::VAR){
+			    throw ParserError(kids.at(i));
+		    }
                 }
             }
             return rootNode;
