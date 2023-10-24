@@ -104,10 +104,10 @@ ASTree::ASNode ASTree::build(const std::vector<Token>& tokens, int start, int en
             }
 	
 	    //should only ever have kids if its an exp or var, one kid is a bad thing always
-           kids = rootNode.get_kids();
-	   if(kids.size() == 1){
-		   throw ParserError(kids.front().get_pdata());
-	   }
+            kids = rootNode.get_kids();
+	        if(kids.size() == 1){
+		   throw ParserError(tokens[start+3]);
+	        }
             if(tokens[start+1].get_type() == TokenType::EQUAL){
 		/*
                 if(kids.back().get_pdata().get_type() == TokenType::VAR){
