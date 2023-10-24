@@ -79,6 +79,7 @@ ASTree::ASNode ASTree::build(const std::vector<Token>& tokens, int start, int en
     ASTree::ASNode rootNode;
     
     std::vector<std::pair<int,int>> child_idx_list;
+    std::vector<ASTree::ASNode> kids;
 
     switch(curr.get_pdata().get_type()){
         case TokenType::LPAR:
@@ -103,7 +104,7 @@ ASTree::ASNode ASTree::build(const std::vector<Token>& tokens, int start, int en
             }
 	
 	    //should only ever have kids if its an exp or var, one kid is a bad thing always
-           std::vector<ASTree::ASNode> kids{rootNode.get_kids()};
+           kids = rootNode.get_kids();
 	   if(kids.size() == 1){
 		   throw ParserError(kids.front().get_pdata());
 	   }
