@@ -10,7 +10,7 @@ std::vector<Token> reader(const std::string& input) {  // Change return type to 
     bool startsVar{false};
     // Temporary string to accumulate digits of a number.
     std::string currToken;
-    int column = 1
+    int column = 1;
     static int line = 1;
 
     for (size_t i = 0; i < input.size(); ++i) {
