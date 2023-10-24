@@ -30,6 +30,10 @@
         //std::cout<<input<<std::endl;
 
         auto tokens{reader(input)};
+        for(const auto& token: tokens){
+         std::cout << token.get_text() << ' ';
+        }
+        std::cout << '\n';
         try{
             //if there are tokens, build tree
             if(!tokens.empty()){
