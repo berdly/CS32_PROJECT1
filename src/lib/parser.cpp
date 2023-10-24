@@ -65,10 +65,11 @@ std::vector<std::pair<int,int>> ASTree::get_child_idx(const std::vector<Token>& 
         //currend++;
     }
 	//multiple expression error
+   /*
     if(child_idx.empty()){
 	    throw ParserError(tokens.at(start));
     }
-   
+   */
     return child_idx;
 }
 
