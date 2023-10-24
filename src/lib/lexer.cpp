@@ -10,7 +10,8 @@ std::vector<Token> reader(const std::string& input) {  // Change return type to 
     bool startsVar{false};
     // Temporary string to accumulate digits of a number.
     std::string currToken;
-    int column = 1, line = 1;
+    int column = 1
+    static int line = 1;
 
     for (size_t i = 0; i < input.size(); ++i) {
         char ch = input[i];
@@ -138,7 +139,7 @@ std::vector<Token> reader(const std::string& input) {  // Change return type to 
                     startsNum = false;
                 }
             }
-                line++;
+                //line++;
                 column = 0;
                 break;
 
@@ -213,7 +214,7 @@ std::vector<Token> reader(const std::string& input) {  // Change return type to 
     if (!currToken.empty()) {
         tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::CONST));
     }
-
+    line++;
     return tokens;
 }
 
