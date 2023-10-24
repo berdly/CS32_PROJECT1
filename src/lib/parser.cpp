@@ -101,23 +101,20 @@ ASTree::ASNode ASTree::build(const std::vector<Token>& tokens, int start, int en
             for(const std::pair<int,int>& child_idx : child_idx_list){
                 rootNode.add_child(build(tokens, child_idx.first, child_idx.second)); 
             }
-
-            if((tokens[start+1].get_type() == TokenType::EXP and tokens[start+2].get_type() == TokenType::VAR) or tokens[start+1].get_type() == TokenType::EQUAL){ //deals with (+ x), (= 3), (= x)
-                std::vector<ASNode> kids{rootNode.get_kids()}; 
-                if(kids.size() == 1){
-                    throw ParserError(tokens[start+3]);
-                }
-            }
-            
-           
+	
+	    //should only ever have kids if its an exp or var, one kid is a bad thing always
+           std::vector<ASNode> kids{rootNode.get_kids()};
+	   if(kids.size() == 1){
+		   throw ParserError(kids.front().get_pdata());
+	   }
             if(tokens[start+1].get_type() == TokenType::EQUAL){
-                 std::vector<ASNode> kids{rootNode.get_kids()};
-                
+		/*
                 if(kids.back().get_pdata().get_type() == TokenType::VAR){
                     //std::cout<<"THROW3"<<std::endl;
                     throw ParserError(kids.back().get_pdata());
                 }
-                
+		*/
+                //the variable could have value so maybe this isn't actually invalid
                 for(unsigned i{}; i < kids.size() - 1; i++){
                     if(kids.at(i).get_pdata().get_type() != TokenType::VAR){
                         //std::cout<<"THROW4"<<std::endl;
