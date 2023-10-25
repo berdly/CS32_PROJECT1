@@ -10,6 +10,8 @@
     std::vector<ASTree> statements{};
     std::string input;
     auto linecount= 1;
+
+    while(true){
     getline(std::cin, input);
         
         if (!input.empty()) {
@@ -18,6 +20,8 @@
 
         auto token_list{reader(input)};
         bool infix = true;
+
+    
         try{
             if(!token_list.empty()){
             ASTree tree(token_list, infix);
@@ -76,4 +80,6 @@
             return 3;
         }
     }
+
+ }
 
