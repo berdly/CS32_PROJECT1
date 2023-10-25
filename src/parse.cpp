@@ -34,6 +34,7 @@
          for(auto& token: tokens){
           token.change_line(linecount);
          }
+        }
         try{
             //if there are tokens, build tree
             if(!tokens.empty()){
