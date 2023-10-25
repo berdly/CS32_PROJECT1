@@ -31,6 +31,7 @@
         //std::cout<<input<<std::endl;
 
         auto token_lists{split(reader(fullinput))};
+  /*
         std::cout << fullinput << '\n';
         for(const auto& list: token_lists){
          for(const Token& token : list){
@@ -38,6 +39,7 @@
            }
           std::cout << '\n';
         }
+  */
         try{
             //if there are tokens, build tree
             if(!token_lists.empty()){
