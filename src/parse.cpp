@@ -29,7 +29,7 @@
         linecount++;
 
 
-        std::cout<<input<<std::endl;
+        //std::cout<<input<<std::endl;
 
         auto tokens{reader(input)};
 
@@ -72,7 +72,7 @@
             return 3;
         }
     }
-    
+
 
     try{
         ASGrove grove{statements};
