@@ -101,6 +101,13 @@ ASTree::ASNode ASTree::build(const std::vector<Token>& tokens, int start, int en
             for(const std::pair<int,int>& child_idx : child_idx_list){
                 rootNode.add_child(build(tokens, child_idx.first, child_idx.second)); 
             }
+	    if(tokens[start+1].get_type() == TokenType::EQUAL){
+                 for(int i{}; i < child_idx_list.size() - 1; i++){
+			 if(tokens.at(child_idx_list.at(i).first()).get_type() == TokenType::LPAR){
+				 throw ParserError{tokens.at(child_idx_list.at(i).first())};
+			 }
+		 }
+            }
 
             if((tokens[start+1].get_type() == TokenType::EXP and tokens[start+2].get_type() == TokenType::VAR) or tokens[start+1].get_type() == TokenType::EQUAL){ //deals with (+ x), (= 3), (= x)
                 std::vector<ASNode> kids{rootNode.get_kids()}; 
