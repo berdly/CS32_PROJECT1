@@ -24,8 +24,9 @@
     
         try{
             if(!token_list.empty()){
-            ASTree tree(token_list, true);
-                statements.push_back(tree);
+            ASGrove{ASTree(token_list, true)};
+            ASGrove.print();
+            ASGrove.eval();
                 
             }
             else{
@@ -54,7 +55,7 @@
         }
     
 
-
+   /*
     try{
         ASGrove grove{statements};
         for(size_t i = 0; i < statements.size();i++){
@@ -82,6 +83,6 @@
             return 3;
         }
     }
-
+*/
  }
 
