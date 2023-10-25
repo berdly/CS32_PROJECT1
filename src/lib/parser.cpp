@@ -22,7 +22,19 @@ std::vector<std::pair<int,int>> ASTree::get_child_idx(const std::vector<Token>& 
 
         switch(curr.get_type()){
             case TokenType::VAR:
+		if(pdepth == 0){
+                
+                child_idx.push_back(std::pair<int,int>(i,i));
+		    }
             case TokenType::CONST:
+		    if(parentT == TokenType::EQUAL){
+			if (child_idx.size() == 0){
+				throw ParserError{curr};
+			}
+			else if((tokens.at((child_idx.back().first)).get_type() == TokenType::CONST) || (tokens.at((child_idx.back().first)).get_type() == TokenType::LPAR)){
+				throw ParserError{curr};
+			}
+		}
 		    if(pdepth == 0){
                 
                 child_idx.push_back(std::pair<int,int>(i,i));
