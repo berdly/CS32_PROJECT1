@@ -18,6 +18,7 @@
         linecount = 0;
 
         getline(std::cin, line);
+        while(line != "\n"){
         if (!line.empty()) {
             input += line + "\n"; // Concatenating each line with a newline character
             //l = true;
@@ -26,6 +27,8 @@
             break;
         }
         linecount++;
+        getline(std::cin, line);
+        }
         //l = false;
         //std::cout<<input<<std::endl;
 
