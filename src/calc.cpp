@@ -24,9 +24,9 @@
     
         try{
             if(!token_list.empty()){
-            ASGrove{ASTree(token_list, true)};
-            ASGrove.print();
-            ASGrove.eval();
+            ASGrove grove{ASTree(token_list, true)};
+            grove.print();
+            grove.eval();
                 
             }
             else{
