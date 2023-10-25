@@ -14,7 +14,6 @@
     
     
      while (true) {
-        input.clear();
         
         getline(std::cin, input);
         
@@ -25,10 +24,10 @@
         if(std::cin.eof()){
             break;
         }
-        
+        input+=input;
         linecount++;
 
-
+     }
         //std::cout<<input<<std::endl;
 
         auto tokens{reader(input)};
@@ -71,7 +70,7 @@
             std::cout<<e.new_what()<<"\n";
             return 3;
         }
-    }
+    
 
 
     try{

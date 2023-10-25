@@ -19,7 +19,7 @@ int main() {
 
     // Parse the input and get the tokens.
     
-    std::vector<Token> tokens = reader(input,1);  
+    std::vector<Token> tokens = reader(input);  
     
     // Function to display the tokens with right-aligned columns.
     for (const Token& t : tokens) {

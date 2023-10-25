@@ -14,7 +14,7 @@
 
     try{
     
-    std::ifstream inFile("test.txt");
+    
 
     /* while(getline(inFile, line)){
     
