@@ -9,7 +9,7 @@
  int main(){
     std::vector<ASTree> statements{};
     std::string input;
-    int linecount{1};
+    //int linecount{1};
 
     while(true){
        getline(std::cin, input);
