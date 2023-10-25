@@ -8,7 +8,7 @@
 
  int main(){
     std::vector<ASTree> statements{};
-    std::string input, line;
+    std::string input;
     //bool l = false;  // Initialize l to false'
     int linecount{};
     
@@ -16,12 +16,12 @@
      while (true) {
         input.clear();
         
-        getline(std::cin, line);
+        getline(std::cin, input);
         
-        if (!line.empty()) {
-            input += line + "\n"; // Concatenating each line with a newline character
+        /* if (!input.empty()) {
+            input +="\n"; // Concatenating each line with a newline character
             //l = true;
-        }
+        } */
         if(std::cin.eof()){
             break;
         }
