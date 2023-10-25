@@ -34,7 +34,7 @@
         std::cout << fullinput << '\n';
         for(const auto& list: token_lists){
          for(const Token& token : list){
-          std::cout << token.get_text << ' ';
+          std::cout << token.get_text() << ' ';
            }
           std::cout << '\n';
         }
