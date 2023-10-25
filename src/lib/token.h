@@ -26,6 +26,7 @@ public:
   Token() : pcolumn{0}, pline{0}, ptext{""}, ptype{TokenType::ERR}{}
   int get_col() const { return this->pcolumn; };
   int get_line() const { return this->pline; };
+  void change_line(int line) { pline = line; };
   const std::string& get_text() const { return this->ptext; };
   TokenType get_type() const { return this->ptype; };
 };
