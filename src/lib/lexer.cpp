@@ -37,10 +37,8 @@ std::vector<std::vector<Token>> split(const std::vector<Token>& input){
                 break;
             case TokenType::EXP:
             case TokenType::EQUAL:
-		        break;
             case TokenType::ERR:
                 //std::cout<<"THROW9"<<std::endl;
-                throw ParserError(curr);
                 break;
         }
         if((i == (input.size() - 1)) && pdepth > 0){
