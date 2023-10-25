@@ -47,7 +47,7 @@ class IdentifierError: public std::exception{
         Token etoken;
         IdentifierError(Token token) : etoken{token} {}
       std::string new_what () const{
-        std::string msg{"Runtime Error: unknown Identifier "};
+        std::string msg{"Runtime Error: unknown identifier "};
         msg.append(this->etoken.get_text());
         return msg;
         
