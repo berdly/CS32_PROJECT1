@@ -42,7 +42,6 @@ std::vector<std::vector<Token>> split(const std::vector<Token>& input){
                 break;
             case TokenType::EXP:
             case TokenType::EQUAL:
-		if(tokens
             case TokenType::ERR:
                 //std::cout<<"THROW9"<<std::endl;
                 break;
