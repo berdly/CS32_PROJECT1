@@ -30,6 +30,10 @@
         //std::cout<<input<<std::endl;
 
         auto tokens{reader(input)};
+        if(linecount > 1){
+         for(auto& token: tokens){
+          token.change_line(linecount);
+         }
         try{
             //if there are tokens, build tree
             if(!tokens.empty()){
