@@ -12,16 +12,15 @@
     //bool l = false;  // Initialize l to false'
     int linecount{};
     
-    bool flag1 = 1;
+    
      while (true) {
         input.clear();
-        if(flag1){
-            break;
-        }
-        //linecount = 0;
-        bool flag = true;
+
         
-        while(flag){
+        //linecount = 0;
+        
+
+        while(!std::cin.eof()){
 
         getline(std::cin, line);
         
@@ -29,18 +28,12 @@
             input += line + "\n"; // Concatenating each line with a newline character
             //l = true;
         }
-        if (std::cin.eof()) {
-            flag1 = 0;
-            break;
-        }
+        
         linecount++;
-        getline(std::cin, line);
 
-        if(line == "\n"){
-            flag = false;
-           
+
         }
-        }
+        
         //l = false;
         //std::cout<<input<<std::endl;
 
@@ -83,6 +76,9 @@
             return 3;
         }
     }
+
+
+
 
      ASGrove grove{statements};
     for(size_t i = 0; i < statements.size();i++){
