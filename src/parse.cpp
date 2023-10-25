@@ -36,7 +36,7 @@
             //if there are tokens, build tree
             if(!token_lists.empty()){
                 for(const auto& list: token_lists){
-                     ASTree tree{list};
+                     ASTree tree(list);
                      statements.push_back(tree);
                 }
             }
