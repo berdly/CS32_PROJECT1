@@ -28,9 +28,9 @@
                 statements.push_back(tree);
                 
             }
-            /*else{
-                std::cout << "Unexpected token at line " << linecount+1 << " column 1: END\n";
-                return 2;
+            else{
+                //std::cout << "Unexpected token at line " << linecount+1 << " column 1: END\n";
+                return 0;
             }
          */
         }catch(const ParserError& e){
