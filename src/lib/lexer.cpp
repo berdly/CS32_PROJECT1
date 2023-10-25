@@ -3,6 +3,56 @@
 #include <cctype>
 #include <sstream>
 
+std::vector<std::vector<Token>> split(const std::vector<Token>& input){
+    int pdepth = 0;
+    std::vector<std::vector<Token>> statements{};
+    int parStart=0;
+    for(unsigned i{}; i < input.size(); i++){
+        Token curr = input.at(i);
+
+        switch(curr.get_type()){
+            case TokenType::VAR:
+		        if(pdepth == 0){
+                    statements.emplace_back({input.at(i)});
+		        }
+		        break;
+            case TokenType::CONST:
+		        if(pdepth == 0){
+                    statements.emplace_back({input.at(i)});
+		        }
+                break;
+
+            case TokenType::LPAR:
+                if(pdepth == 0){
+                parStart = i;
+                }
+                pdepth++;
+                break;
+            case TokenType::RPAR:
+                pdepth--;
+                if(pdepth == 0){
+                    statements.emplace_back(input.begin() + parstart, input.begin() + i);
+                }
+                else if(pdepth < 0){
+                    //there's an extra outer parentheses, current behavior is add it to last statement, can add arbitrary number to end of statement
+                    statements.back().push_back(input.at(i));
+                    pdepth = 0;
+                }
+                break;
+            case TokenType::EXP:
+            case TokenType::EQUAL:
+		        break;
+            case TokenType::ERR:
+                //std::cout<<"THROW9"<<std::endl;
+                throw ParserError(curr);
+                break;
+        }
+        if((i == (input.size() - 1)) && pdepth > 0){
+            statements.emplace_back(input.begin() + parstart, input.begin() + i);
+        }
+    }
+    return statements;
+}
 // Function to parse the input string and create tokens for each number and operand.
 std::vector<Token> reader(const std::string& input) {  // Change return type to vector
     std::vector<Token> tokens;  // Use vector instead of stack to store generated tokens
