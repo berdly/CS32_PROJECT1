@@ -11,6 +11,7 @@
     std::string input;
     //bool l = false;  // Initialize l to false'
     int linecount{};
+    std::string full_input;
     
     
      while (true) {
@@ -30,24 +31,19 @@
      }
         //std::cout<<input<<std::endl;
 
-        auto tokens{reader(input)};
-
-        /* if(linecount > 1){
-         for(auto& token: tokens){
-          token.change_line(linecount);
-         }
-        } */
-
+        auto token_lists{split(reader(input))};
         
         try{
             //if there are tokens, build tree
             if(!tokens.empty()){
-                ASTree tree{tokens};
-                statements.push_back(tree);
+                for(const auto& list: token_lists){
+                     ASTree tree{list};
+                     statements.push_back(tree);
+                }
             }
             else{
                 std::cout << "Unexpected token at line " << linecount+1 << " column 1: END\n";
-            return 2;
+                return 2;
             }
             }
         catch(const ParserError& e){
@@ -57,8 +53,7 @@
             std::cout << e.new_what() << '\n';
             }
             else{
-                //std::cout << "Unexpected token at line " << e.etoken.get_line() << " column " << e.etoken.get_col() + e.etoken.get_text().size() << ": END\n";
-              std::cout << e.new_what() << '\n';
+                std::cout << "Unexpected token at line " << e.etoken.get_line() << " column " << e.etoken.get_col() + e.etoken.get_text().size() << ": END\n";
             }
             return 2;
         }
