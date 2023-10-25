@@ -19,6 +19,7 @@ std::optional<double> ASGrove::search_var(const std::string& query){
 }
 
 double ASGrove::calc(){
+  
   if(place >= statements.size()){
 		  throw std::out_of_range("");
 	  }
@@ -29,13 +30,13 @@ double ASGrove::calc(){
 }
 
 double ASGrove::calcHelp(const ASTree::ASNode& root){
-      
+    
     double ret{}; // will be returned
     const auto& children{root.get_kids()};
     const Token& curr{root.get_pdata()};
     double val{};
     unsigned idx{};
-  
+    
     switch(curr.get_type()){
 
       case TokenType::EQUAL:
@@ -51,15 +52,17 @@ double ASGrove::calcHelp(const ASTree::ASNode& root){
             break;
 		
      case TokenType::EXP:
-		for(const auto& child: children){
-                    
+		    for(const auto& child: children){
+          
+            
             if(child.get_pdata().get_type() == TokenType::VAR){
 		    std::optional<double> value{this->search_var(child.get_pdata().get_text())};
+
 		    if(value.has_value()){
 			    val = *value;
 			    }
 		    else{
-			    throw ParserError(child.get_pdata());
+			    throw IdentifierError(child.get_pdata());
 			    }
                         
             }else{

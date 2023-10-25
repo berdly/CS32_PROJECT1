@@ -3,6 +3,57 @@
 #include <cctype>
 #include <sstream>
 
+std::vector<std::vector<Token>> split(const std::vector<Token>& input){
+    int pdepth = 0;
+    std::vector<std::vector<Token>> statements{};
+    int parStart=0;
+    for(unsigned i{}; i < input.size(); i++){
+        Token curr = input.at(i);
+
+        switch(curr.get_type()){
+            case TokenType::VAR:
+            case TokenType::CONST:
+		        if(pdepth == 0){
+                    statements.push_back(std::vector<Token>{input.at(i)});
+		        }
+                break;
+
+            case TokenType::LPAR:
+                if(pdepth == 0){
+                parStart = i;
+                }
+                pdepth++;
+                break;
+            case TokenType::RPAR:
+                pdepth--;
+                if(pdepth == 0){
+                    statements.emplace_back(input.begin() + parStart, input.begin() + i + 1);
+                }
+                else if(pdepth < 0){
+                    //there's an extra outer parentheses, current behavior is add it to last statement, can add arbitrary number to end of statement
+                    statements.back().push_back(input.at(i));
+                    pdepth = 0;
+                }
+                break;
+            case TokenType::EXP:
+            case TokenType::EQUAL:
+		if((i == 0) || (input.at(i - 1).get_type()) != TokenType::LPAR){
+			if(pdepth == 0){
+				parStart = i;
+			}
+			pdepth++;
+		}
+		break;
+            case TokenType::ERR:
+                //std::cout<<"THROW9"<<std::endl;
+                break;
+        }
+        if((i == (input.size() - 1)) && pdepth > 0){
+            statements.emplace_back(input.begin() + parStart, input.begin() + i + 1);
+        }
+    }
+    return statements;
+}
 // Function to parse the input string and create tokens for each number and operand.
 std::vector<Token> reader(const std::string& input) {  // Change return type to vector
     std::vector<Token> tokens;  // Use vector instead of stack to store generated tokens
@@ -10,7 +61,8 @@ std::vector<Token> reader(const std::string& input) {  // Change return type to 
     bool startsVar{false};
     // Temporary string to accumulate digits of a number.
     std::string currToken;
-    int column = 1, line = 1;
+    int column = 1;
+    int line = 1;
 
     for (size_t i = 0; i < input.size(); ++i) {
         char ch = input[i];
@@ -213,28 +265,5 @@ std::vector<Token> reader(const std::string& input) {  // Change return type to 
     if (!currToken.empty()) {
         tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::CONST));
     }
-
     return tokens;
 }
-
-/* Main function for testing.
-int main() {
-    std::string input;
-    int fline;
-
-    // Prompt the user for input.
-    std::cout << "Enter the expression: ";
-    std::getline(std::cin, input);
-
-    // Parse the input and get the tokens.
-    std::vector<Token> tokens = reader(input);  // Change to vector
-    
-    // Display the tokens.
-    // Use a range-based for loop to iterate over the vector
-    for (const Token& t : tokens) {
-        std::cout << t.get_line() << "  " << t.get_col() << "  " << t.get_text() << std::endl;
-        fline = t.get_line();
-    }
-    std::cout<<fline+1<<"   1  END";
-    return 1;
-}*/
