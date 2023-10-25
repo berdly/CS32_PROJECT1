@@ -15,7 +15,7 @@ std::vector<std::pair<int,int>> ASTree::get_child_idx(const std::vector<Token>& 
     */
     int pdepth = 0;
     std::vector<std::pair<int,int>> child_idx{};
-    
+    TokenType parentT{tokens.at(start - 1).get_type()};
     int parStart=0;
     for(int i = start; i <= end; i++){
         Token curr = tokens.at(i);
@@ -30,6 +30,13 @@ std::vector<std::pair<int,int>> ASTree::get_child_idx(const std::vector<Token>& 
                 break;
 
             case TokenType::LPAR:
+		if(parentT == TokenType::EQUAL){
+			if (child_idx.size() == 0){
+				throw ParserError{curr};
+			}
+			else if((tokens.at((child_idx.back().first)).get_type() == TokenType::CONST) || (tokens.at((child_idx.back().first)).get_type() == TokenType::LPAR)){
+				throw ParserError{curr};
+			}
                 if(pdepth == 0){
                 parStart = i;
                 
