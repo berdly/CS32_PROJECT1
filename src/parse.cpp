@@ -32,7 +32,7 @@
         //std::cout<<input<<std::endl;
 
         auto token_lists{split(reader(input))};
-        
+        std::cout << input << '\n';
         try{
             //if there are tokens, build tree
             if(!token_lists.empty()){
