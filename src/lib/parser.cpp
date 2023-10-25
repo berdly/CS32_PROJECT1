@@ -2,8 +2,12 @@
 #include "error.h"
 #include <stack>
 #include <iostream>
-ASTree::ASTree(const std::vector<Token>& tokens) {
+ASTree::ASTree(const std::vector<Token>& tokens, bool infix) {
+    if(infix){
+	    this->proot = this->infixBuild(tokens);
+    }else{
     this->proot = this->build(tokens, 0, tokens.size() - 1);
+    }
 }
 
 
