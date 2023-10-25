@@ -9,22 +9,22 @@
  int main(){
     std::vector<ASTree> statements{};
     std::string input;
-    auto linecount= 1;
+    int linecount{1};
 
     while(true){
-    getline(std::cin, input);
+       getline(std::cin, input);
         
         if (!input.empty()) {
             input +="\n"; // Concatenating each line with a newline character
         }
 
         auto token_list{reader(input)};
-        bool infix = true;
+
 
     
         try{
             if(!token_list.empty()){
-            ASTree tree(token_list, infix);
+            ASTree tree(token_list, true);
                 statements.push_back(tree);
                 
             }else{
