@@ -5,12 +5,22 @@
 #include "../src/lib/parser.h"
 #include "../src/lib/error.h"
 #include "../src/lib/grove.h"
+#include <fstream>
+#include <string>
 
  int main(){
     std::vector<ASTree> statements{};
-
+    //string line{};
 
     try{
+    
+    std::ifstream inFile("test.txt");
+
+    /* while(getline(inFile, line)){
+    
+
+    } */
+
     auto tokens1{reader("(+ 2 \n  < 3)")};
     //auto tokens2{reader("(+ 34 x 56)")};
     ASTree tree1{tokens1};
