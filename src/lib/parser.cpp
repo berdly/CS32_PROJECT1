@@ -1,5 +1,6 @@
 #include "parser.h"
 #include "error.h"
+#include <stack>
 #include <iostream>
 ASTree::ASTree(const std::vector<Token>& tokens) {
     this->proot = this->build(tokens, 0, tokens.size() - 1);
@@ -201,8 +202,8 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens)
         ....
     */
     std::stack<Token> t_stack;
-    std::stack<ASNode> n_stack;
-    std::stack<ASNode> swap;
+    std::stack<ASTree::ASNode> n_stack;
+    std::stack<ASTree::ASNode> swap;
 
     ASTree::ASNode rootNode;
     
@@ -238,7 +239,7 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens)
             case TokenType::EXP:
                 //if (precendense(temp.get_text()) > 0)
                 //{
-                    while ((!t_stack.empty() && t_stack.top().get_type() != TokenType::LPAR) && (precendense(t_stack.top().get_text()) >= precendense(temp.get_text())))
+                    while ((!t_stack.empty() && t_stack.top().get_type() != TokenType::LPAR) && (precedence(t_stack.top().get_text()) >= precedence(temp.get_text())))
                     {
                         rootNode = t_stack.top();
                         t_stack.pop();
@@ -277,7 +278,7 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens)
     return rootNode;
 }
 
-double ASTree::precendense(std::string text)
+double ASTree::precedence(std::string text)
 {
     double pVal;
 

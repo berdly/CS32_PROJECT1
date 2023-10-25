@@ -37,6 +37,8 @@ public:
   //double calc();
   //void print();
   const ASNode& getProot() const;
+  ASTree::ASNode buildInfix(const std::vector<Token>& tokens);
+  double precedence(std::string text);
 };
 
 #endif
