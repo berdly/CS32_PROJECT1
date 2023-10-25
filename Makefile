@@ -8,7 +8,7 @@ parser: parse
 lexer: lex
 	./lex
 
-parse: src/lib/error.h src/lib/lexer.cpp src/lib/lexer.h src/lib/parser.cpp src/lib/parser.h src/lib/token.h src/parse.cpp
+parse: src/lib/error.h src/lib/lexer.cpp src/lib/lexer.h src/lib/parser.cpp src/lib/parser.h src/lib/token.h src/parse.cpp src/lib/grove.h src/lib/grove.cpp
 	${CXX} $(CXXFLAGS)  $^ -o $@
 
 
