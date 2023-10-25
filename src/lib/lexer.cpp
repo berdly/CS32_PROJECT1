@@ -39,7 +39,7 @@ std::vector<std::vector<Token>> split(const std::vector<Token>& input){
             case TokenType::EQUAL:
 		if((i == 0) || (input.at(i - 1).get_type()) != TokenType::LPAR){
 			if(pdepth == 0){
-				parstart = i;
+				parStart = i;
 			}
 			pdepth++;
 		}
