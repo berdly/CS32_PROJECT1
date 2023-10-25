@@ -21,7 +21,7 @@
 
     } */
 
-    auto tokens1{reader("(+ 2 \n  < 3)",1)};
+    auto tokens1{reader("(+ 2 \n  < 3)")};
     //auto tokens2{reader("(+ 34 x 56)")};
     ASTree tree1{tokens1};
     //ASTree tree2{tokens2};
