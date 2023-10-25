@@ -18,10 +18,10 @@
         
         getline(std::cin, input);
         
-        /* if (!input.empty()) {
+        if (!input.empty()) {
             input +="\n"; // Concatenating each line with a newline character
             //l = true;
-        } */
+        }
         if(std::cin.eof()){
             break;
         }
