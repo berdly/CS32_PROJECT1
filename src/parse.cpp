@@ -22,10 +22,10 @@
             input +="\n"; // Concatenating each line with a newline character
             //l = true;
         }
+        fullinput+=input;
         if(std::cin.eof()){
             break;
         }
-        fullinput+=input;
         input.clear();
         linecount++;
      }
