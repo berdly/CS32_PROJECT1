@@ -12,7 +12,7 @@
     //bool l = false;  // Initialize l to false'
     int linecount{};
     
-
+    bool flag1 = 1;
      while (true) {
         input.clear();
         if(flag1){
@@ -20,7 +20,7 @@
         }
         //linecount = 0;
         bool flag = true;
-        bool flag1 = 1;
+        
         while(flag){
 
         getline(std::cin, line);
