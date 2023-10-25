@@ -11,7 +11,7 @@
     std::string input;
     //bool l = false;  // Initialize l to false'
     int linecount{};
-    std::string full_input{};
+    std::string fullinput{};
     
     
      while (true) {
