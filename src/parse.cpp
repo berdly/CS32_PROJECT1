@@ -27,6 +27,7 @@
         }
         fullinput+=input;
         input.clear();
+        linecount++;
      }
         //std::cout<<input<<std::endl;
 
