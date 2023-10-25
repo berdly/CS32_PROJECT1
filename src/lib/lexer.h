@@ -6,6 +6,6 @@
 #include <iostream>
 #include "token.h"
 
-std::vector<Token> reader(const std::string& input);
+std::vector<Token> reader(const std::string& input, int l);
 
 #endif

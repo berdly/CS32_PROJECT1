@@ -31,7 +31,7 @@
 
         //std::cout<<input<<std::endl;
 
-        auto tokens{reader(input)};
+        auto tokens{reader(input,linecount)};
 
         /* if(linecount > 1){
          for(auto& token: tokens){

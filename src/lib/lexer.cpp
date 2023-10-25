@@ -4,14 +4,14 @@
 #include <sstream>
 
 // Function to parse the input string and create tokens for each number and operand.
-std::vector<Token> reader(const std::string& input) {  // Change return type to vector
+std::vector<Token> reader(const std::string& input, int l) {  // Change return type to vector
     std::vector<Token> tokens;  // Use vector instead of stack to store generated tokens
     bool startsNum{false};
     bool startsVar{false};
     // Temporary string to accumulate digits of a number.
     std::string currToken;
     int column = 1;
-    int line = 1;
+    int line = l;
 
     for (size_t i = 0; i < input.size(); ++i) {
         char ch = input[i];
