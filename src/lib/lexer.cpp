@@ -12,10 +12,6 @@ std::vector<std::vector<Token>> split(const std::vector<Token>& input){
 
         switch(curr.get_type()){
             case TokenType::VAR:
-		        if(pdepth == 0){
-                    statements.emplace_back({input.at(i)});
-		        }
-		        break;
             case TokenType::CONST:
 		        if(pdepth == 0){
                     statements.emplace_back({input.at(i)});
