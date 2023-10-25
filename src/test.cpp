@@ -6,11 +6,11 @@
 #include "../src/lib/error.h"
 #include "../src/lib/grove.h"
 #include <fstream>
-#include <string>
+
 
  int main(){
     std::vector<ASTree> statements{};
-    //string line{};
+    std::string line{};
 
     try{
     
