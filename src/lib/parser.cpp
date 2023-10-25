@@ -37,6 +37,7 @@ std::vector<std::pair<int,int>> ASTree::get_child_idx(const std::vector<Token>& 
 			else if((tokens.at((child_idx.back().first)).get_type() == TokenType::CONST) || (tokens.at((child_idx.back().first)).get_type() == TokenType::LPAR)){
 				throw ParserError{curr};
 			}
+		}
                 if(pdepth == 0){
                 parStart = i;
                 
