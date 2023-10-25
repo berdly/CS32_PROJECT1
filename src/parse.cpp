@@ -18,7 +18,6 @@
         //linecount = 0;
         bool flag = true;
         
-
         while(flag){
 
         getline(std::cin, line);
@@ -40,9 +39,10 @@
         }
         }
         //l = false;
-        std::cout<<input<<std::endl;
+        //std::cout<<input<<std::endl;
 
         auto tokens{reader(input)};
+
         if(linecount > 1){
          for(auto& token: tokens){
           token.change_line(linecount);
