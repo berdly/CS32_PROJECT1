@@ -103,8 +103,8 @@ ASTree::ASNode ASTree::build(const std::vector<Token>& tokens, int start, int en
             }
 	    if(tokens[start+1].get_type() == TokenType::EQUAL){
                  for(unsigned i{}; i < child_idx_list.size() - 1; i++){
-			 if(tokens.at(child_idx_list.at(i).first()).get_type() == TokenType::LPAR){
-				 throw ParserError(tokens.at(child_idx_list.at(i).first()));
+			 if(tokens.at(child_idx_list.at(i).first).get_type() == TokenType::LPAR){
+				 throw ParserError(tokens.at(child_idx_list.at(i).first));
 			 }
 		 }
             }
