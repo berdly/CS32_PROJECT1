@@ -26,6 +26,7 @@ std::vector<std::pair<int,int>> ASTree::get_child_idx(const std::vector<Token>& 
                 
                 child_idx.push_back(std::pair<int,int>(i,i));
 		    }
+		break;
             case TokenType::CONST:
 		    if(parentT == TokenType::EQUAL){
 			if (child_idx.size() == 0){
