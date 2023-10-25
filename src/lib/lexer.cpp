@@ -14,7 +14,7 @@ std::vector<std::vector<Token>> split(const std::vector<Token>& input){
             case TokenType::VAR:
             case TokenType::CONST:
 		        if(pdepth == 0){
-                    statements.emplace_back({input.at(i)});
+                    statements.push_back(std::vector<Token>{input.at(i)});
 		        }
                 break;
 
@@ -27,7 +27,7 @@ std::vector<std::vector<Token>> split(const std::vector<Token>& input){
             case TokenType::RPAR:
                 pdepth--;
                 if(pdepth == 0){
-                    statements.emplace_back(input.begin() + parstart, input.begin() + i);
+                    statements.emplace_back(input.begin() + parStart, input.begin() + i);
                 }
                 else if(pdepth < 0){
                     //there's an extra outer parentheses, current behavior is add it to last statement, can add arbitrary number to end of statement
@@ -44,7 +44,7 @@ std::vector<std::vector<Token>> split(const std::vector<Token>& input){
                 break;
         }
         if((i == (input.size() - 1)) && pdepth > 0){
-            statements.emplace_back(input.begin() + parstart, input.begin() + i);
+            statements.emplace_back(input.begin() + parStart, input.begin() + i);
         }
     }
     return statements;
