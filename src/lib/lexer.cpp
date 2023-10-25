@@ -7,6 +7,11 @@ std::vector<std::vector<Token>> split(const std::vector<Token>& input){
     int pdepth = 0;
     std::vector<std::vector<Token>> statements{};
     int parStart=0;
+    std::cout << "Pre split";
+    for(const auto& token: input){
+        std::cout << token.get_text() << ' ';
+    }
+    std::cout<<'\n';
     for(unsigned i{}; i < input.size(); i++){
         Token curr = input.at(i);
 
@@ -37,6 +42,7 @@ std::vector<std::vector<Token>> split(const std::vector<Token>& input){
                 break;
             case TokenType::EXP:
             case TokenType::EQUAL:
+		if(tokens
             case TokenType::ERR:
                 //std::cout<<"THROW9"<<std::endl;
                 break;
