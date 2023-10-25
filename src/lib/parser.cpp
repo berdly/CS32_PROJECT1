@@ -235,11 +235,11 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens)
 
                 t_stack.pop();
                 break;
-            //case TokenType::VAR: // WIP
+            case TokenType::VAR: // WIP
             case TokenType::CONST:
                 n_stack.push(ASTree::ASNode{temp});
                 break;
-            //case TokenType::EQUAL: // WIP
+            case TokenType::EQUAL: // WIP
             case TokenType::EXP:
                 //if (precendense(temp.get_text()) > 0)
                 //{
