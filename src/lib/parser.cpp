@@ -192,3 +192,111 @@ const std::vector<ASTree::ASNode>& ASTree::ASNode::get_kids() const{
 const Token& ASTree::ASNode::get_pdata() const{
     return pdata;
 }
+
+ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens)
+{
+    /* Todo
+        Work on parser error, if an operand doesn't have a left const or right const or parentheses, then throw the error 
+        Work on not balanced parentheses, error. 
+        ....
+    */
+    std::stack<Token> t_stack;
+    std::stack<ASNode> n_stack;
+    std::stack<ASNode> swap;
+
+    ASTree::ASNode rootNode;
+    
+    for (int i = 0; i < tokens.size(); i++)
+    {
+        Token temp = tokens[i];
+
+        switch (temp.get_type()) {
+            case TokenType::LPAR:
+                t_stack.push(temp);
+                break;
+            case TokenType::RPAR:
+                while (!t_stack.empty() && t_stack.top().get_type() != TokenType::LPAR)
+                {
+                    rootNode = t_stack.top();
+                    t_stack.pop();
+                    swap.push(n_stack.top());
+                    n_stack.pop();
+                    rootNode.add_child(n_stack.top());
+                    n_stack.pop();
+                    rootNode.add_child(swap.top());
+                    swap.pop();
+                    n_stack.push(rootNode);
+                }
+
+                t_stack.pop();
+                break;
+            //case TokenType::VAR: // WIP
+            case TokenType::CONST:
+                n_stack.push(ASTree::ASNode{temp});
+                break;
+            //case TokenType::EQUAL: // WIP
+            case TokenType::EXP:
+                //if (precendense(temp.get_text()) > 0)
+                //{
+                    while ((!t_stack.empty() && t_stack.top().get_type() != TokenType::LPAR) && (precendense(t_stack.top().get_text()) >= precendense(temp.get_text())))
+                    {
+                        rootNode = t_stack.top();
+                        t_stack.pop();
+                        swap.push(n_stack.top());
+                        n_stack.pop();
+                        rootNode.add_child(n_stack.top());
+                        n_stack.pop();
+                        rootNode.add_child(swap.top());
+                        swap.pop();
+                        n_stack.push(rootNode);
+                    }
+                
+                    t_stack.push(temp);
+                    break;
+                //}
+            default:
+                throw ParserError(temp);
+        }
+    }
+
+    while (!t_stack.empty())
+    {
+        rootNode = t_stack.top();
+        t_stack.pop();
+        swap.push(n_stack.top());
+        n_stack.pop();
+        rootNode.add_child(n_stack.top());
+        n_stack.pop();
+        rootNode.add_child(swap.top());
+        swap.pop();
+        n_stack.push(rootNode);
+    }
+
+    rootNode = n_stack.top();
+    n_stack.pop();
+    return rootNode;
+}
+
+double ASTree::precendense(std::string text)
+{
+    double pVal;
+
+    if (text == "*" || text == "/")
+    {
+        pVal = 3;
+    }
+    else if (text == "+" || text == "-")
+    {
+        pVal = 2;
+    }
+    else if (text == "=")
+    {
+        pVal = 1;
+    }
+    else
+    {
+        pVal = 0;
+    }
+
+    return pVal;
+}
