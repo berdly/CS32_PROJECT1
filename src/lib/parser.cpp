@@ -4,7 +4,7 @@
 #include <iostream>
 ASTree::ASTree(const std::vector<Token>& tokens, bool infix) {
     if(infix){
-	    this->proot = this->infixBuild(tokens);
+	    this->proot = this->buildInfix(tokens);
     }else{
     this->proot = this->build(tokens, 0, tokens.size() - 1);
     }
