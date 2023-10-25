@@ -9,52 +9,25 @@
  int main(){
     std::vector<ASTree> statements{};
     std::string input;
-    //bool l = false;  // Initialize l to false'
-    int linecount{};
-    std::string fullinput{};
-    
-    
-     while (true) {
-        
-        getline(std::cin, input);
+    auto linecount= 1;
+    getline(std::cin, input);
         
         if (!input.empty()) {
             input +="\n"; // Concatenating each line with a newline character
-            //l = true;
         }
-        fullinput+=input;
-        if(std::cin.eof()){
-            break;
-        }
-        input.clear();
-        linecount++;
-     }
-        //std::cout<<input<<std::endl;
 
-        auto token_lists{split(reader(fullinput))};
-  /*
-        std::cout << fullinput << '\n';
-        for(const auto& list: token_lists){
-         for(const Token& token : list){
-          std::cout << token.get_text() << ' ';
-           }
-          std::cout << '\n';
-        }
-  */
+        auto token_list{reader(input)};
+        bool infix = true;
         try{
-            //if there are tokens, build tree
-            if(!token_lists.empty()){
-                for(const auto& list: token_lists){
-                     ASTree tree(list);
-                     statements.push_back(tree);
-                }
-            }
-            else{
+            if(!token_list.empty()){
+            ASTree tree(token_list, infix);
+                statements.push_back(tree);
+                
+            }else{
                 std::cout << "Unexpected token at line " << linecount+1 << " column 1: END\n";
                 return 2;
             }
-            }
-        catch(const ParserError& e){
+        }catch(const ParserError& e){
             //handles parser errors and displays error messages, else block is for early endings since the END token is not on the actual vector and must be imagined next to the final token
             if(e.etype == PErrType::NORM){
                 //std::cout<<"THORW 3";
