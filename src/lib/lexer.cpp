@@ -43,7 +43,7 @@ std::vector<std::vector<Token>> split(const std::vector<Token>& input){
 			}
 			pdepth++;
 		}
-			
+		break;
             case TokenType::ERR:
                 //std::cout<<"THROW9"<<std::endl;
                 break;
