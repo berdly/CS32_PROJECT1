@@ -37,6 +37,13 @@ std::vector<std::vector<Token>> split(const std::vector<Token>& input){
                 break;
             case TokenType::EXP:
             case TokenType::EQUAL:
+		if((i == 0) || (input.at(i - 1).get_type()) != TokenType::LPAR){
+			if(pdepth == 0){
+				parstart = i;
+			}
+			pdepth++;
+		}
+			
             case TokenType::ERR:
                 //std::cout<<"THROW9"<<std::endl;
                 break;
