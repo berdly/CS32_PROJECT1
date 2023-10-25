@@ -211,7 +211,7 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens)
 
     ASTree::ASNode rootNode;
     
-    for (int i = 0; i < tokens.size(); i++)
+    for (int i = 0; i < static_cast<int>(tokens.size()); i++)
     {
         Token temp = tokens[i];
 
