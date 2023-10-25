@@ -48,7 +48,8 @@
             std::cout << e.new_what() << '\n';
             }
             else{
-                std::cout << "Unexpected token at line " << e.etoken.get_line() << " column " << e.etoken.get_col() + e.etoken.get_text().size() << ": END\n";
+                //std::cout << "Unexpected token at line " << e.etoken.get_line() << " column " << e.etoken.get_col() + e.etoken.get_text().size() << ": END\n";
+              std::cout << e.new_what() << '\n';
             }
             return 2;
         }
