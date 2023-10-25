@@ -17,7 +17,7 @@
         input.clear();
         //linecount = 0;
         bool flag = true;
-        int flag1 = 0;
+        
 
         while(flag){
 
@@ -28,7 +28,7 @@
             //l = true;
         }
         if (std::cin.eof()) {
-            flag1 = 1;
+            
             break;
         }
         linecount++;
@@ -39,12 +39,8 @@
            
         }
         }
-
-        if(flag1){
-            break;
-        }
         //l = false;
-        //std::cout<<input<<std::endl;
+        std::cout<<input<<std::endl;
 
         auto tokens{reader(input)};
         if(linecount > 1){
