@@ -205,15 +205,15 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens)
         Work on not balanced parentheses, error. 
         ....
     */
-    std::stack<Token> t_stack;
-    std::stack<ASTree::ASNode> n_stack;
-    std::stack<ASTree::ASNode> swap;
+    std::stack<Token> t_stack{};
+    std::stack<ASTree::ASNode> n_stack{};
+    std::stack<ASTree::ASNode> swap{};
 
-    ASTree::ASNode rootNode;
+    ASTree::ASNode rootNode{};
     
-    for (int i = 0; i < static_cast<int>(tokens.size()); i++)
+    for (unsigned i{}; i < tokens.size(); i++)
     {
-        Token temp = tokens[i];
+        const Token& temp = tokens[i];
 
         switch (temp.get_type()) {
             case TokenType::LPAR:
