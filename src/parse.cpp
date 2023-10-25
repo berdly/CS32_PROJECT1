@@ -11,7 +11,7 @@
     std::string input;
     //bool l = false;  // Initialize l to false'
     int linecount{};
-    std::string full_input;
+    std::string full_input{};
     
     
      while (true) {
@@ -25,13 +25,12 @@
         if(std::cin.eof()){
             break;
         }
-        input+=input;
-        linecount++;
-
+        fullinput+=input;
+        input.clear();
      }
         //std::cout<<input<<std::endl;
 
-        auto token_lists{split(reader(input))};
+        auto token_lists{split(reader(fullinput))};
         std::cout << input << '\n';
         try{
             //if there are tokens, build tree
