@@ -17,6 +17,8 @@
         input.clear();
         //linecount = 0;
         bool flag = true;
+        int flag1 = 0;
+
         while(flag){
 
         getline(std::cin, line);
@@ -26,14 +28,20 @@
             //l = true;
         }
         if (std::cin.eof()) {
+            flag1 = 1;
             break;
         }
         linecount++;
         getline(std::cin, line);
+
         if(line == "\n"){
             flag = false;
            
         }
+        }
+
+        if(flag1){
+            break;
         }
         //l = false;
         //std::cout<<input<<std::endl;
