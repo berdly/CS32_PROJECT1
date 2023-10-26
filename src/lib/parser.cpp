@@ -204,7 +204,7 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, unsigned sta
 	    return ASTree::ASNode{tokens[start]};
     }
     if((tokens.at(start).get_type() == TokenType::LPAR) && (tokens.at(end).get_type() == TokenType::RPAR)){
-	if(start + 1 > end - 1)
+	if(end > 0)
 		start++;
 		end--;
     	}
