@@ -59,7 +59,7 @@ double ASGrove::calcHelp(const ASTree::ASNode& root){
 	    	if(idx ==0){ // if the child is the first of its siblings, set the return value to that childs value
 		   		ret = val;
 	   		}else{         
-		   		switch(root.get_pdata().get_text()[0]){ //math operations
+		   		switch(curr.get_text()[0]){ //math operations
 
 			case '*':
 			    ret *=val;
@@ -88,15 +88,15 @@ double ASGrove::calcHelp(const ASTree::ASNode& root){
             
     case TokenType::CONST:
             
-	    return std::stod(root.get_pdata().get_text()); // if the token is a constant, just return it casted as a double
+	    return std::stod(curr.get_text()); // if the token is a constant, just return it casted as a double
             break;
     case TokenType::VAR:
-	     value = this->search_var(curr.get_pdata().get_text());
+	     value = this->search_var(curr.get_text());
 	     if(value.has_value()){
 		 return *value;
 	     }
 	     else{
-		 throw IdentifierError(curr.get_pdata());
+		 throw IdentifierError(curr);
 	     }
     default:
             //throw ParserError(root.get_pdata());
