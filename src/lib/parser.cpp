@@ -208,6 +208,7 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens)
     std::stack<Token> t_stack{};
     std::stack<ASTree::ASNode> n_stack{};
     ASTree::ASNode swap{};
+    int pdepth{};
 
     ASTree::ASNode rootNode{};
     
@@ -218,6 +219,7 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens)
         switch (temp.get_type()) {
             case TokenType::LPAR:
                 t_stack.push(temp);
+		pdepth++;
                 break;
             case TokenType::RPAR:
                 while (!t_stack.empty() && t_stack.top().get_type() != TokenType::LPAR)
@@ -233,6 +235,10 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens)
                 }
 
                 t_stack.pop();
+		pdepth--;
+		if(pdepth < 0){
+			throw ParserError(tokens.at(i+1));
+		}
                 break;
             case TokenType::VAR: // WIP
             case TokenType::CONST:
