@@ -227,7 +227,7 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, unsigned sta
     {
         const Token& curr = tokens[i];
 
-        switch (temp.get_type()) {
+        switch (curr.get_type()) {
             case TokenType::LPAR:
 		pdepth++;
 		break;
@@ -260,7 +260,7 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, unsigned sta
 		}
                 break;
             case TokenType::EXP:
-                if((pdepth == 0) && (curr_prec > precedence(curr)){
+                if((pdepth == 0) && (curr_pres > precedence(curr.get_text()))){
 			curr_prec = precedence(curr);
 			lowest_priority = curr;
 			low_idx = i;
