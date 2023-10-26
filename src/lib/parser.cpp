@@ -293,83 +293,39 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens)
     return rootNode;
 }
 */
-ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens)
+ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, int start, int end)
 {
-    std::stack<Token> t_stack{};
-    std::stack<ASTree::ASNode> n_stack{};
-    ASTree::ASNode swap{};
+    if((start == end) && ((tokens[start].get_type() == TokenType::CONST) || (tokens[start].get_type() == TokenType::VAR)){
+	    return tokens[start];
+    }
+    Token lowest_priority{};
     int pdepth{};
 
-    ASTree::ASNode rootNode{};
-    
-    for (unsigned i{}; i < tokens.size(); i++)
+    for (unsigned i{start}; i <= end; i++)
     {
-        const Token& temp = tokens[i];
+        const Token& curr = tokens[i];
 
         switch (temp.get_type()) {
             case TokenType::LPAR:
-                t_stack.push(temp);
 		pdepth++;
-                break;
+		break;
             case TokenType::RPAR:
-                while (!t_stack.empty() && t_stack.top().get_type() != TokenType::LPAR)
-                {
-                    rootNode = t_stack.top();
-                    t_stack.pop();
-                    swap = n_stack.top();
-                    n_stack.pop();
-                    rootNode.add_child(n_stack.top());
-                    n_stack.pop();
-                    rootNode.add_child(swap);
-                    n_stack.push(rootNode);
-                }
-
-                t_stack.pop();
-		pdepth--;
-		
+  		pdepth--;
 		if(pdepth < 0){
-			throw ParserError(tokens.at(i+1));
-		}
-  
+			throw ParserError(tokens.at(i));
                 break;
-            case TokenType::VAR: // WIP
+            case TokenType::VAR:
             case TokenType::CONST:
-                n_stack.push(ASTree::ASNode{temp});
-                break;
+		break;
             case TokenType::EQUAL: // WIP
-		t_stack.push(temp);
-		/*
-		while ((!t_stack.empty() && t_stack.top().get_type() != TokenType::LPAR) && (precedence(t_stack.top().get_text()) >= precedence(temp.get_text())))
-                    {
-                        rootNode = t_stack.top();
-                        t_stack.pop();
-                        swap = n_stack.top();
-                        n_stack.pop();
-                        rootNode.add_child(n_stack.top());
-                        n_stack.pop();
-                        rootNode.add_child(swap);
-                        n_stack.push(rootNode);
-                    }
-                    */
-                    break;
+		if(pdepth == 0){
+			
+		}
+                break;
             case TokenType::EXP:
-                //if (precendense(temp.get_text()) > 0)
-                //{
-                    while ((!t_stack.empty() && t_stack.top().get_type() != TokenType::LPAR) && (precedence(t_stack.top().get_text()) >= precedence(temp.get_text())))
-                    {
-                        rootNode = t_stack.top();
-                        t_stack.pop();
-                        swap = n_stack.top();
-                        n_stack.pop();
-                        rootNode.add_child(n_stack.top());
-                        n_stack.pop();
-                        rootNode.add_child(swap);
-                        n_stack.push(rootNode);
-                    }
-                
-                    t_stack.push(temp);
-                    break;
-                //}
+                if((pdepth == 0) && (precedence(token){
+			
+		}
             default:
                 //throw ParserError(temp);
 		break;
