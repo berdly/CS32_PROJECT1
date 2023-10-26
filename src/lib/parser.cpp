@@ -261,10 +261,10 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, unsigned sta
                 break;
             case TokenType::EXP:
                 if((pdepth == 0) && (curr_pres > precedence(curr.get_text()))){
-			curr_prec = precedence(curr);
-			lowest_priority = curr;
+			curr_pres = precedence(curr.get_text());
 			low_idx = i;
 		}
+		break;
             default:
                 throw ParserError(curr);
 		break;
