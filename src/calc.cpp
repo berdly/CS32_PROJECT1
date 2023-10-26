@@ -10,7 +10,7 @@
     std::vector<ASTree> statements{};
     std::string input;
     //int linecount{1};
-
+    ASGrove grove{};
     while(true){
        getline(std::cin, input);
         
@@ -24,8 +24,8 @@
         
         try{
             if(!token_list.empty()){
-            ASGrove grove{ASTree(token_list, true)};
-            grove.print();
+            grove.add_tree(ASTree{token_list, true});
+            grove.print_curr();
             grove.calc();
             }
             else{
