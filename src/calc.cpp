@@ -21,7 +21,7 @@
         auto token_list{reader(input)};
 
 
-    
+        
         try{
             if(!token_list.empty()){
             ASGrove grove{ASTree(token_list, true)};
@@ -49,8 +49,8 @@
             return 3;
         }
         catch(const IdentifierError& e){
-            std::cout<<e.new_what()<<"\n";
-            return 3;
+            //std::cout<<e.new_what()<<"\n";
+            return 0;
         }
     
 
