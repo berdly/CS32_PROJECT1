@@ -204,7 +204,7 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, unsigned sta
 	    return ASTree::ASNode{tokens[start]};
     }
     if((tokens.at(start).get_type() == TokenType::LPAR) && (tokens.at(end).get_type() == TokenType::RPAR)){
-	if(end > 0)
+	if(end > 0){
 		start++;
 		end--;
     	}
@@ -235,6 +235,7 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, unsigned sta
   		pdepth--;
 		if(pdepth < 0){
 			throw ParserError(tokens.at(i));
+		}
                 break;
             case TokenType::VAR:
             case TokenType::CONST:
