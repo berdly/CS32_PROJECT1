@@ -296,10 +296,13 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens)
 ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, int start, int end)
 {
     if((start == end) && ((tokens[start].get_type() == TokenType::CONST) || (tokens[start].get_type() == TokenType::VAR)){
-	    return tokens[start];
+	    return ASTree::ASNode{tokens[start]};
     }
+    int curr_pres{100};
     Token lowest_priority{};
+    int low_idx{};
     int pdepth{};
+    ASTree::ASNode rootNode{};
 
     for (unsigned i{start}; i <= end; i++)
     {
@@ -319,12 +322,28 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, int start, i
 		break;
             case TokenType::EQUAL: // WIP
 		if(pdepth == 0){
-			
+			if((i > 0) && tokens.at(i - 1).get_type() != TokenType::VAR){
+				throw ParserError(curr);
+			}
+			ASTree::ASNode right_child{curr};
+			right_child.add_child(ASTree::ASNode{tokens.at(i - 1)});
+    			right_child.add_child(this->buildInfix(tokens, i + 1, end - 1));
+			if(i 
+			if((tokens.at(start).get_type() == TokenType::LPAR) && (tokens.at().get_type() == TokenType::RPAR)){
+				right_child.add_child(ASTree::ASNode{tokens.at(i - 1)});
+    				rootNode.add_child(this->buildInfix(tokens, i + 1, end - 1));
+    			}
+    			else{
+    				rootNode.add_child(this->buildInfix(tokens, start, i - 1));
+    				rootNode.add_child(this->buildInfix(tokens, i + 1, end));
+    			}
 		}
                 break;
             case TokenType::EXP:
-                if((pdepth == 0) && (precedence(token){
-			
+                if((pdepth == 0) && (curr_prec > precedence(curr)){
+			curr_prec = precedence(curr);
+			lowest_priority = curr;
+			low_idx = i;
 		}
             default:
                 //throw ParserError(temp);
@@ -332,24 +351,17 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, int start, i
         }
     }
 
-    while (!t_stack.empty())
-    {
-        rootNode = t_stack.top();
-        t_stack.pop();
-        swap = n_stack.top();
-        n_stack.pop();
-        rootNode.add_child(n_stack.top());
-        n_stack.pop();
-        rootNode.add_child(swap);
-        n_stack.push(rootNode);
+    if(curr_prec == 100){
+	    throw ParserError(tokens.at(end));
     }
-
-    rootNode = n_stack.top();
-	/*
-    for(;n_stack.empty(); n_stack.pop()){
-	    std::cout << n_stack.top().get_text();
+    if((tokens.at(start).get_type() == TokenType::LPAR) && (tokens.at(end).get_type() == TokenType::RPAR)){
+	rootNode.add_child(this->buildInfix(tokens, start + 1, low_idx - 1));
+    	rootNode.add_child(this->buildInfix(tokens, low_idx + 1, end - 1));
     }
-	*/
+    else{
+    	rootNode.add_child(this->buildInfix(tokens, start, low_idx - 1));
+    	rootNode.add_child(this->buildInfix(tokens, low_idx + 1, end));
+    }
     return rootNode;
 }
 
