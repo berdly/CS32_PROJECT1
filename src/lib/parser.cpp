@@ -207,7 +207,7 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens)
     */
     std::stack<Token> t_stack{};
     std::stack<ASTree::ASNode> n_stack{};
-    std::stack<ASTree::ASNode> swap{};
+    ASTree::ASNode swap{};
 
     ASTree::ASNode rootNode{};
     
@@ -224,12 +224,11 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens)
                 {
                     rootNode = t_stack.top();
                     t_stack.pop();
-                    swap.push(n_stack.top());
+                    swap = n_stack.top();
                     n_stack.pop();
                     rootNode.add_child(n_stack.top());
                     n_stack.pop();
-                    rootNode.add_child(swap.top());
-                    swap.pop();
+                    rootNode.add_child(swap);
                     n_stack.push(rootNode);
                 }
 
@@ -247,12 +246,11 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens)
                     {
                         rootNode = t_stack.top();
                         t_stack.pop();
-                        swap.push(n_stack.top());
+                        swap = n_stack.top();
                         n_stack.pop();
                         rootNode.add_child(n_stack.top());
                         n_stack.pop();
-                        rootNode.add_child(swap.top());
-                        swap.pop();
+                        rootNode.add_child(swap);
                         n_stack.push(rootNode);
                     }
                 
@@ -269,12 +267,11 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens)
     {
         rootNode = t_stack.top();
         t_stack.pop();
-        swap.push(n_stack.top());
+        swap = n_stack.top();
         n_stack.pop();
         rootNode.add_child(n_stack.top());
         n_stack.pop();
-        rootNode.add_child(swap.top());
-        swap.pop();
+        rootNode.add_child(swap);
         n_stack.push(rootNode);
     }
 
@@ -289,24 +286,16 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens)
 
 double ASTree::precedence(std::string text)
 {
-    double pVal;
-
-    if (text == "*" || text == "/")
-    {
-        pVal = 3;
+    switch(text[0]){
+	    case '*':
+	    case '/':
+	    	return 3;
+	    case '+':
+	    case '-':
+	        return 2;
+	    case '=':
+                return 1;
+	    default:
+	        return 0;
     }
-    else if (text == "+" || text == "-")
-    {
-        pVal = 2;
-    }
-    else if (text == "=")
-    {
-        pVal = 1;
-    }
-    else
-    {
-        pVal = 0;
-    }
-
-    return pVal;
 }
