@@ -299,10 +299,11 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, int start, i
 	    return ASTree::ASNode{tokens[start]};
     }
     int curr_pres{100};
-    Token lowest_priority{};
     int low_idx{};
     int pdepth{};
     ASTree::ASNode rootNode{};
+    bool eqRight{false};
+    ASTree::ASNode right_child{};
 
     for (unsigned i{start}; i <= end; i++)
     {
@@ -325,10 +326,15 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, int start, i
 			if((i <= 0) || tokens.at(i - 1).get_type() != TokenType::VAR){
 				throw ParserError(curr);
 			}
-			ASTree::ASNode right_child{curr};
+			right_child = curr;
 			right_child.add_child(ASTree::ASNode{tokens.at(i - 1)});
-			if(i
-    			right_child.add_child(this->buildInfix(tokens, i + 1, end - 1));
+			if(i > 1 && (tokens.at(i - 2).get_type() == TokenType::LPAR) && (tokens.at(end).get_type() == TokenType::RPAR)){
+				right_child.add_child(this->buildInfix(tokens, i + 1, end - 1));
+			}
+			else{
+				right_child.add_child(this->buildInfix(tokens, i + 1, end));
+			}
+			eqRight = true;
 		}
                 break;
             case TokenType::EXP:
@@ -338,7 +344,7 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, int start, i
 			low_idx = i;
 		}
             default:
-                //throw ParserError(temp);
+                throw ParserError(curr);
 		break;
         }
     }
@@ -346,13 +352,26 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, int start, i
     if(curr_prec == 100){
 	    throw ParserError(tokens.at(end));
     }
+	    
+    rootNode = ASTree::ASNode{tokens.at(low_idx)};
+	    
     if((tokens.at(start).get_type() == TokenType::LPAR) && (tokens.at(end).get_type() == TokenType::RPAR)){
 	rootNode.add_child(this->buildInfix(tokens, start + 1, low_idx - 1));
+	if(eqRight){
+		rootNode.add_child(right_child);
+	}
+	else{
     	rootNode.add_child(this->buildInfix(tokens, low_idx + 1, end - 1));
+	}
     }
     else{
     	rootNode.add_child(this->buildInfix(tokens, start, low_idx - 1));
+	if(eqRight){
+		rootNode.add_child(right_child);
+	}
+	else{
     	rootNode.add_child(this->buildInfix(tokens, low_idx + 1, end));
+	}
     }
     return rootNode;
 }
