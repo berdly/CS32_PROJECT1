@@ -200,7 +200,7 @@ const Token& ASTree::ASNode::get_pdata() const{
 
 ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, int start, int end)
 {
-    if((start == end) && ((tokens[start].get_type() == TokenType::CONST) || (tokens[start].get_type() == TokenType::VAR)){
+    if((start == end) && ((tokens[start].get_type() == TokenType::CONST) || (tokens[start].get_type() == TokenType::VAR))){
 	    return ASTree::ASNode{tokens[start]};
     }
     if((tokens.at(start).get_type() == TokenType::LPAR) && (tokens.at(end).get_type() == TokenType::RPAR)){
