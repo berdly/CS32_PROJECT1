@@ -26,7 +26,7 @@
             if(!token_list.empty()){
             ASGrove grove{ASTree(token_list, true)};
             grove.print();
-            grove.eval();
+            grove.calc();
             }
             else{
                 //std::cout << "Unexpected token at line " << linecount+1 << " column 1: END\n";
