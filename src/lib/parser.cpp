@@ -252,6 +252,9 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, int start, i
                 throw ParserError(curr);
 		break;
         }
+	if(eqRight){
+		break;
+	}
     }
 
     if(curr_prec == 100){
