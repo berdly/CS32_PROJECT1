@@ -1,5 +1,5 @@
 #include "grove.h"
-
+ASGrove::ASGrove() : statements{}, vars{}, place{} {}
 ASGrove::ASGrove(const std::vector<ASTree>& tree) : statements{tree}, vars{}, place{} {}
 ASGrove::ASGrove(const ASTree& tree) : statements(std::vector<ASTree>{tree}), vars{}, place{} {}
 
@@ -182,3 +182,6 @@ double ASGrove::calcHelp(const ASTree::ASNode& root){
 	}
   
   }
+void add_tree(const ASTree& tree){
+	statements.push_back(tree);
+}
