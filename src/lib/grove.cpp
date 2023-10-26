@@ -42,6 +42,7 @@ double ASGrove::calcHelp(const ASTree::ASNode& root){
 
       case TokenType::EQUAL:
             val = this->calcHelp(children.back());
+	    std::cout  << "in calcHelp()\n" << children.back().text() << '\n';
             for(size_t i{}; i < children.size() - 1 ; i++){
                   this->add_var(children.at(i).get_pdata().get_text(), val);
                     //set these children nodes to be lastVal... TODO...
