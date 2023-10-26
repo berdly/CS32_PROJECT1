@@ -46,7 +46,7 @@ double ASGrove::calcHelp(const ASTree::ASNode& root){
                   this->add_var(children.at(i).get_pdata().get_text(), val);
                     //set these children nodes to be lastVal... TODO...
                     //add to variables list
-                }
+            }
 
             return val;
 
