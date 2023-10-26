@@ -236,9 +236,11 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens)
 
                 t_stack.pop();
 		pdepth--;
+		    /*
 		if(pdepth < 0){
 			throw ParserError(tokens.at(i+1));
 		}
+  */
                 break;
             case TokenType::VAR: // WIP
             case TokenType::CONST:
