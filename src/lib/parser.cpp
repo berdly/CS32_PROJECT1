@@ -239,6 +239,21 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens)
                 n_stack.push(ASTree::ASNode{temp});
                 break;
             case TokenType::EQUAL: // WIP
+		t_stack.push(temp);
+		/*
+		while ((!t_stack.empty() && t_stack.top().get_type() != TokenType::LPAR) && (precedence(t_stack.top().get_text()) >= precedence(temp.get_text())))
+                    {
+                        rootNode = t_stack.top();
+                        t_stack.pop();
+                        swap = n_stack.top();
+                        n_stack.pop();
+                        rootNode.add_child(n_stack.top());
+                        n_stack.pop();
+                        rootNode.add_child(swap);
+                        n_stack.push(rootNode);
+                    }
+                    */
+                    break;
             case TokenType::EXP:
                 //if (precendense(temp.get_text()) > 0)
                 //{
