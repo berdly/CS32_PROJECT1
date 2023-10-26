@@ -91,12 +91,12 @@ double ASGrove::calcHelp(const ASTree::ASNode& root){
 	    return std::stod(root.get_pdata().get_text()); // if the token is a constant, just return it casted as a double
             break;
     case TokenType::VAR:
-	     value = this->search_var(child.get_pdata().get_text());
+	     value = this->search_var(curr.get_pdata().get_text());
 	     if(value.has_value()){
 		 return *value;
 	     }
 	     else{
-		 throw IdentifierError(child.get_pdata());
+		 throw IdentifierError(curr.get_pdata());
 	     }
     default:
             //throw ParserError(root.get_pdata());
