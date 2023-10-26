@@ -182,6 +182,6 @@ double ASGrove::calcHelp(const ASTree::ASNode& root){
 	}
   
   }
-void add_tree(const ASTree& tree){
-	statements.push_back(tree);
+void ASGrove::add_tree(const ASTree& tree){
+	this->statements.push_back(tree);
 }
