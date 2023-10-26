@@ -29,8 +29,8 @@
             grove.calc();
             }
             else{
-                std::cout << "Unexpected token at line " << 1 << " column 1: END\n";
-                return 3;
+                //std::cout << "Unexpected token at line " << 1 << " column 1: END\n";
+                return 0;
             }
         
         }catch(const ParserError& e){
