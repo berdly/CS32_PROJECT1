@@ -20,7 +20,7 @@
 
         auto token_list{reader(input)};
 
-
+        
         
         try{
             if(!token_list.empty()){
@@ -29,8 +29,8 @@
             grove.calc();
             }
             else{
-                //std::cout << "Unexpected token at line " << linecount+1 << " column 1: END\n";
-                return 0;
+                std::cout << "Unexpected token at line " << linecount+1 << " column 1: END\n";
+                return 3;
             }
         
         }catch(const ParserError& e){
@@ -49,8 +49,8 @@
             return 3;
         }
         catch(const IdentifierError& e){
-            //std::cout<<e.new_what()<<"\n";
-            return 0;
+            std::cout<<e.new_what()<<"\n";
+            return 3;
         }
     
 
