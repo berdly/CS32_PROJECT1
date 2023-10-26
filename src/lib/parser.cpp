@@ -204,12 +204,20 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, int start, i
     if((start == end) && ((tokens[start].get_type() == TokenType::CONST) || (tokens[start].get_type() == TokenType::VAR)){
 	    return ASTree::ASNode{tokens[start]};
     }
+    if((tokens.at(start).get_type() == TokenType::LPAR) && (tokens.at(end).get_type() == TokenType::RPAR)){
+	start++;
+	end--;
+    }
     int curr_pres{100};
     int low_idx{};
     int pdepth{};
     ASTree::ASNode rootNode{};
     bool eqRight{false};
     ASTree::ASNode right_child{};
+    if((tokens.at(start).get_type() == TokenType::LPAR) && (tokens.at(end).get_type() == TokenType::RPAR)){
+	start++;
+	end--;
+    }
 
     for (unsigned i{start}; i <= end; i++)
     {
@@ -263,24 +271,13 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, int start, i
     }
 	    
     rootNode = ASTree::ASNode{tokens.at(low_idx)};
-	    
-    if((tokens.at(start).get_type() == TokenType::LPAR) && (tokens.at(end).get_type() == TokenType::RPAR)){
-	rootNode.add_child(this->buildInfix(tokens, start + 1, low_idx - 1));
-	if(eqRight){
-		rootNode.add_child(right_child);
-	}
-	else{
-    	rootNode.add_child(this->buildInfix(tokens, low_idx + 1, end - 1));
-	}
+    rootNode.add_child(this->buildInfix(tokens, start, low_idx - 1));
+    if(eqRight){
+	rootNode.add_child(right_child);
     }
-    else{
-    	rootNode.add_child(this->buildInfix(tokens, start, low_idx - 1));
-	if(eqRight){
-		rootNode.add_child(right_child);
-	}
-	else{
+    else{  
     	rootNode.add_child(this->buildInfix(tokens, low_idx + 1, end));
-	}
+    }
     }
     return rootNode;
 }
@@ -297,6 +294,6 @@ double ASTree::precedence(std::string text)
 	    case '=':
                 return 1;
 	    default:
-	        return 0;
+	        return 100;
     }
 }
