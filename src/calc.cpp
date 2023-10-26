@@ -24,14 +24,9 @@
     
         try{
             if(!token_list.empty()){
-             for(const auto& token: token_list){
-              std::cout << token.get_text() << ' ';
-             }
-             std::cout << '\n';
             ASGrove grove{ASTree(token_list, true)};
             grove.print();
             grove.eval();
-                
             }
             else{
                 //std::cout << "Unexpected token at line " << linecount+1 << " column 1: END\n";
