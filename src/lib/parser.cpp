@@ -279,7 +279,11 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens)
     }
 
     rootNode = n_stack.top();
-    n_stack.pop();
+	/*
+    for(;n_stack.empty(); n_stack.pop()){
+	    std::cout << n_stack.top().get_text();
+    }
+	*/
     return rootNode;
 }
 
