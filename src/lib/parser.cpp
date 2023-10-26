@@ -260,7 +260,8 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens)
                     break;
                 //}
             default:
-                throw ParserError(temp);
+                //throw ParserError(temp);
+		break;
         }
     }
 
