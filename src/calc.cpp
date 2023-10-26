@@ -25,7 +25,7 @@
         try{
             if(!token_list.empty()){
             grove.add_tree(ASTree{token_list, true});
-            grove.print_curr();
+            grove.print();
             grove.calc();
             }
             else{
