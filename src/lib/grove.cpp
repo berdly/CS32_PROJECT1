@@ -36,6 +36,7 @@ double ASGrove::calcHelp(const ASTree::ASNode& root){
     const Token& curr{root.get_pdata()};
     double val{};
     unsigned idx{};
+    std::optional<double> value{};
     
     switch(curr.get_type()){
 
@@ -53,21 +54,7 @@ double ASGrove::calcHelp(const ASTree::ASNode& root){
 		
      case TokenType::EXP:
 		    for(const auto& child: children){
-          
-            
-            if(child.get_pdata().get_type() == TokenType::VAR){
-		    std::optional<double> value{this->search_var(child.get_pdata().get_text())};
-
-		    if(value.has_value()){
-			    val = *value;
-			    }
-		    else{
-			    throw IdentifierError(child.get_pdata());
-			    }
-                        
-            }else{
 		    val = this->calcHelp(child); // recursively obtains the value of a child, the children could be an expression or a constant
-            }
                                             
 	    	if(idx ==0){ // if the child is the first of its siblings, set the return value to that childs value
 		   		ret = val;
@@ -103,9 +90,16 @@ double ASGrove::calcHelp(const ASTree::ASNode& root){
             
 	    return std::stod(root.get_pdata().get_text()); // if the token is a constant, just return it casted as a double
             break;
-        
+    case TokenType::VAR:
+	     value = this->search_var(child.get_pdata().get_text());
+	     if(value.has_value()){
+		 return *value;
+	     }
+	     else{
+		 throw IdentifierError(child.get_pdata());
+	     }
     default:
-            throw ParserError(root.get_pdata());
+            //throw ParserError(root.get_pdata());
             break;
 
 		
