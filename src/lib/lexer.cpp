@@ -248,8 +248,8 @@ std::vector<Token> reader(const std::string& input, bool err) {  // Change retur
             default:
                 // If it's a digit, add to the current number.
                 if (isdigit(ch)) {
+                    isPer = false;
                     if(!(startsNum || startsVar)){
-                        isPer = false;
                         startsNum = true;
                     }
                     currToken += ch;
