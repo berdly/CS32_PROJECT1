@@ -55,7 +55,7 @@ std::vector<std::vector<Token>> split(const std::vector<Token>& input){
     return statements;
 }
 // Function to parse the input string and create tokens for each number and operand.
-std::vector<Token> reader(const std::string& input) {  // Change return type to vector
+std::vector<Token> reader(const std::string& input, bool exit) {  // Change return type to vector
     std::vector<Token> tokens;  // Use vector instead of stack to store generated tokens
     bool startsNum{false};
     bool startsVar{false};
