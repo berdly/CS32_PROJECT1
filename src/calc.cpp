@@ -27,7 +27,8 @@
        */
         
         try{
-            if(!token_list.empty()){
+            if((token_list.size() == 1) && token_list.at(0).get_type() == TokenType::ERR){}
+            else if(!token_list.empty()){
             grove.add_tree(ASTree{token_list, true});
             grove.print();
             grove.calc();
