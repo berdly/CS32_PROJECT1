@@ -17,7 +17,7 @@
         if (!input.empty()) {
             input +="\n"; // Concatenating each line with a newline character
         }
-        //std::cout << input << '\n';
+        std::cout << input << '\n';
         auto token_list{reader(input, false)};
         input.clear();
      /*
