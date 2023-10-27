@@ -235,6 +235,9 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, unsigned sta
     if((start == end) && ((tokens[start].get_type() == TokenType::CONST) || (tokens[start].get_type() == TokenType::VAR))){
 	    return ASTree::ASNode{tokens[start]};
     }
+    if((tokens.size() == 1) && tokens.at(0).get_type() == TokenType::LPAR){
+	    throw ParserError(tokens.at(0));
+    }
     
     int curr_pres{100};
     int low_idx{-1};
