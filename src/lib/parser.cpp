@@ -262,27 +262,14 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, unsigned sta
 		break;
             case TokenType::EQUAL: // WIP
 		if(pdepth == 0){
-			if((i <= 0) || tokens.at(i - 1).get_type() != TokenType::VAR){
-				throw ParserError(curr);
-			}
-			right_child = ASTree::ASNode{curr};
-			right_child.add_child(ASTree::ASNode{tokens.at(i - 1)});
-			if(i > 1 && (tokens.at(i - 2).get_type() == TokenType::LPAR) && (tokens.at(end).get_type() == TokenType::RPAR)){
-				if(end > 0){
-				right_child.add_child(this->buildInfix(tokens, i + 1, end - 1));
-				}
-				else{
-					throw ParserError(tokens.at(end));
+			if(curr_pres > precedence(curr.get_text())){
+				if(!((i > 0) || (tokens.at(i - 1).get_type() == TokenType::VAR))){
+					throw ParserError(tokens.at(i));
 				}
 			}
-			else{
-				right_child.add_child(this->buildInfix(tokens, i + 1, end));
+			curr_pres = precedence(curr.get_text());
+			low_idx = i;
 			}
-			if(curr_pres == 100){
-				return right_child;
-			}
-			eqRight = true;
-		}
                 break;
             case TokenType::EXP:
                 if((pdepth == 0) && (curr_pres >= precedence(curr.get_text()))){
@@ -294,9 +281,6 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, unsigned sta
                 throw ParserError(curr);
 		break;
         }
-	if(eqRight){
-		break;
-	}
     }
 
     if(curr_pres == 100){
