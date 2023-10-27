@@ -221,10 +221,6 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, unsigned sta
     ASTree::ASNode rootNode{};
     bool eqRight{false};
     ASTree::ASNode right_child{};
-    if((tokens.at(start).get_type() == TokenType::LPAR) && (tokens.at(end).get_type() == TokenType::RPAR)){
-	start++;
-	end--;
-    }
 
     for (unsigned i{start}; i <= end; i++)
     {
