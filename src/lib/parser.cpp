@@ -1,8 +1,10 @@
 
+
 #include "parser.h"
 #include "error.h"
 #include <stack>
 #include <iostream>
+#include <stdexcept>
 bool wrapped(const std::vector<Token>& tokens, unsigned start, unsigned end){
 	int pdepth{};
 	if(tokens.at(start).get_type() == TokenType::LPAR){
@@ -242,7 +244,7 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, unsigned sta
     ASTree::ASNode rootNode{};
     ASTree::ASNode right_child{};
 
-    //TokenType last{TokenType::ERR};
+    TokenType last{TokenType::ERR};
 
     for (unsigned i{start}; i <= end; i++)
     {
