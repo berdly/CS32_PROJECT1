@@ -2,10 +2,10 @@
 #include "error.h"
 #include <stack>
 #include <iostream>
-bool wrapped(const std::vector<Token>& tokens){
+bool wrapped(const std::vector<Token>& tokens, unsigned start, unsigned end){
 	int pdepth{};
-	if(tokens.at(0).get_type() == TokenType::LPAR){
-		for(unsigned i{1}; i < tokens.size(); i++){
+	if(tokens.at(start).get_type() == TokenType::LPAR){
+		for(unsigned i{start+ 1}; i <= end; i++){
 			if(tokens.at(i).get_type() == TokenType::LPAR){
 				pdepth++;
 			}
@@ -13,6 +13,7 @@ bool wrapped(const std::vector<Token>& tokens){
 				if(pdepth == 0){
 					return (i == tokens.size() - 1);
 				}
+				
 				else{
 					pdepth--;
 				}
@@ -29,7 +30,7 @@ ASTree::ASTree(const std::vector<Token>& tokens, bool infix) {
 	    throw ParserError(Token{});
     }
     if(infix){
-	    if(wrapped(tokens)){
+	    if(wrapped(tokens, 0, tokens.size() - 1)){
 	    this->proot = this->buildInfix(tokens, 1, tokens.size() - 2);
 	    }
 	    else{
