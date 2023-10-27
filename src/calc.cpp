@@ -17,13 +17,13 @@
         if (!input.empty()) {
             input +="\n"; // Concatenating each line with a newline character
         }
-
+/*
         auto token_list{reader(input)};
         for(const auto& token: token_list){
              std::cout << token.get_text() << ' ';
         }
         std::cout << '\n';
-        
+       */
         
         try{
             if(!token_list.empty()){
