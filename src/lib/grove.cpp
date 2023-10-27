@@ -76,7 +76,7 @@ Var ASGrove::calcHelp(const ASTree::ASNode& root){
      case TokenType::EXP:
 		    for(const auto& child: children){
 		    val = this->calcHelp(child); // recursively obtains the value of a child, the children could be an expression or a constant
-                                            
+                   
 	    	if(idx ==0){ // if the child is the first of its siblings, set the return value to that childs value
 		   		ret = val;
 	   		}else{
@@ -98,7 +98,23 @@ Var ASGrove::calcHelp(const ASTree::ASNode& root){
 			    }
 			    std::get<double>(ret) += std::get<double>(val);
                             break;
-                         default:
+			case '<':
+				if(curr.get_text()== "<="){
+					std::get<bool>(ret) = std::get<double>(ret) <= std::get<double>(val);
+				}else{
+					std::get<bool>(ret) = std::get<double>(ret) < std::get<double>(val);
+				}
+				break;
+			case '>':
+				if(curr.get_text()== ">="){
+					std::get<bool>(ret) = std::get<double>(ret) >= std::get<double>(val);
+				}else{
+					std::get<bool>(ret) = std::get<double>(ret) > std::get<double>(val);
+				}
+				break;
+			
+
+        	default:
                             break;
 		    }
 
@@ -107,8 +123,38 @@ Var ASGrove::calcHelp(const ASTree::ASNode& root){
 	   }
         return ret;
     case TokenType::LOG:
-		//do sick logical stuff!
-        break;
+		for(const auto& child: children){
+			val = this->calcHelp(child); // recursively obtains the value of a child, the children could be an expression or a constant
+                   
+	    	if(idx ==0){ // if the child is the first of its siblings, set the return value to that childs value
+		   		ret = val;
+	   		}else{
+				 
+		   		switch(curr.get_text()[0]){ //math operations
+
+			case '&':
+			    std::get<bool>(ret) = std::get<bool>(ret) & std::get<bool>(val);
+                            break;
+			case '|':
+			    std::get<bool>(ret) = std::get<bool>(ret) | std::get<bool>(val);
+                            break;
+			case '^':
+			   std::get<bool>(ret) = std::get<bool>(ret) ^ std::get<bool>(val);
+                            break;
+			case '=':
+				std::get<bool>(ret) = std::get<bool>(ret) == std::get<bool>(val);
+                            break;
+			case '!':
+				std::get<bool>(ret) = std::get<bool>(ret) != std::get<bool>(val);
+				break;
+        	default:
+                break;
+		    }
+
+		}
+		++idx;	
+	   }
+        return ret;
             
     case TokenType::CONST:
             
