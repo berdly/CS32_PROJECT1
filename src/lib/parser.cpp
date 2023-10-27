@@ -240,8 +240,9 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, unsigned sta
     int low_idx{};
     int pdepth{};
     ASTree::ASNode rootNode{};
-    bool eqRight{false};
     ASTree::ASNode right_child{};
+
+    TokenType last{TokenType::ERR};
 
     for (unsigned i{start}; i <= end; i++)
     {
@@ -301,10 +302,7 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, unsigned sta
 	    throw ParserError(tokens.at(end));
     }
 	
-    if(eqRight){
-	rootNode.add_child(right_child);
-    }
-    else if((tokens.at(low_idx + 1).get_type() == TokenType::LPAR) && (tokens.at(end).get_type() == TokenType::RPAR) && (end > 0)){  
+    if((tokens.at(low_idx + 1).get_type() == TokenType::LPAR) && (tokens.at(end).get_type() == TokenType::RPAR) && (end > 0)){  
     	rootNode.add_child(this->buildInfix(tokens, low_idx + 2, end - 1));
     }
     else{
