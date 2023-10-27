@@ -2,22 +2,6 @@
 #include "error.h"
 #include <stack>
 #include <iostream>
-ASTree::ASTree(const std::vector<Token>& tokens, bool infix) {
-    if(tokens.empty()){
-	    throw ParserError(Token{});
-    }
-    if(infix){
-	    if(wrapped(tokens)){
-	    this->proot = this->buildInfix(tokens, 1, tokens.size() - 2);
-	    }
-	    else{
-		    this->proot = this->buildInfix(tokens, 0, tokens.size() - 1);
-	    }
-    }else{
-    this->proot = this->build(tokens, 0, tokens.size() - 1);
-    }
-}
-
 bool wrapped(const std::vector<Token&> tokens){
 	int rparidx{};
 	int pdepth{};
@@ -38,6 +22,21 @@ bool wrapped(const std::vector<Token&> tokens){
 		return false;
 	}
 	return false;
+}
+ASTree::ASTree(const std::vector<Token>& tokens, bool infix) {
+    if(tokens.empty()){
+	    throw ParserError(Token{});
+    }
+    if(infix){
+	    if(wrapped(tokens)){
+	    this->proot = this->buildInfix(tokens, 1, tokens.size() - 2);
+	    }
+	    else{
+		    this->proot = this->buildInfix(tokens, 0, tokens.size() - 1);
+	    }
+    }else{
+    this->proot = this->build(tokens, 0, tokens.size() - 1);
+    }
 }
 
 
