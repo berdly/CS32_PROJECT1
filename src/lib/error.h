@@ -59,4 +59,16 @@ class IdentifierError: public std::exception{
 
 
 };
+
+class TypeError: public std::exception{
+        public:
+        Token etoken;
+        TypeError(Token token) : etoken{token} {}
+      std::string new_what () const{
+        std::string msg{"Runtime error: invalid operand type."};
+        msg.append(this->etoken.get_text());
+        return msg;
+        
+    }
+};
 #endif

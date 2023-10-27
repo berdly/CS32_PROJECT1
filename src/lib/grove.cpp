@@ -38,6 +38,11 @@ Var ASGrove::calc(){
 		vars = backup;
 		throw e;
 	}
+	catch(const TypeError& e){
+		++place;
+		vars = backup;
+		throw e;
+	}
 	if(std::get<double>(ret)){
     std::cout<<std::get<double>(ret)<<std::endl;
 	}
@@ -76,7 +81,10 @@ Var ASGrove::calcHelp(const ASTree::ASNode& root){
      case TokenType::EXP:
 		    for(const auto& child: children){
 		    val = this->calcHelp(child); // recursively obtains the value of a child, the children could be an expression or a constant
-                   
+            
+			if(!std::get<double>(val)){
+				throw TypeError(child.get_pdata());
+			}
 	    	if(idx ==0){ // if the child is the first of its siblings, set the return value to that childs value
 		   		ret = val;
 	   		}else{
@@ -125,7 +133,10 @@ Var ASGrove::calcHelp(const ASTree::ASNode& root){
     case TokenType::LOG:
 		for(const auto& child: children){
 			val = this->calcHelp(child); // recursively obtains the value of a child, the children could be an expression or a constant
-                   
+            
+			if(!std::get<bool>(val)){
+				throw TypeError(child.get_pdata());
+			}
 	    	if(idx ==0){ // if the child is the first of its siblings, set the return value to that childs value
 		   		ret = val;
 	   		}else{
