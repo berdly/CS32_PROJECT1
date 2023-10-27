@@ -320,7 +320,7 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, unsigned sta
         }
     }
 
-    if((curr_pres == 100) || low_idx == end){
+    if((curr_pres == 100) || low_idx == static_cast<int>(end)){
 	    throw ParserError(tokens.at(end));
     }
 
