@@ -7,7 +7,6 @@
 #include "../src/lib/grove.h"
 
  int main(){
-    std::vector<ASTree> statements{};
     std::string input;
     //int linecount{1};
     ASGrove grove{};
@@ -56,8 +55,11 @@
             //return 3;
         }
         catch(const IdentifierError& e){
-            std::cout<<e.new_what()<<"\n";
+            std::cout<<e.new_what()<<'\n';
             //return 3;
+        }
+        catch(const std::out_range& e){
+            std::cout << e.what() << '\n';
         }
     
 
