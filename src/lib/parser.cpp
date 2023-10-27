@@ -7,10 +7,37 @@ ASTree::ASTree(const std::vector<Token>& tokens, bool infix) {
 	    throw ParserError(Token{});
     }
     if(infix){
-	    this->proot = this->buildInfix(tokens, 0, tokens.size() - 1);
+	    if(wrapped(tokens)){
+	    this->proot = this->buildInfix(tokens, 1, tokens.size() - 2);
+	    }
+	    else{
+		    this->proot = this->buildInfix(tokens, 0, tokens.size() - 1);
+	    }
     }else{
     this->proot = this->build(tokens, 0, tokens.size() - 1);
     }
+}
+
+bool wrapped(const std::vector<Token&> tokens){
+	int rparidx{};
+	int pdepth{};
+	if(tokens.at(0).get_type() == TokenType::LPAR){
+		for(unsigned i{1}; i < tokens.size(); i++){
+			if(tokens.at(i).get_type() == TokenType::LPAR){
+				pdepth++;
+			}
+			else if(tokens.at(i).get_type() == TokenType::RPAR){
+				if(pdepth == 0){
+					return (i == tokens.size() - 1);
+				else{
+					pdepth--;
+				}
+		}
+	}
+	else{
+		return false;
+	}
+	return false;
 }
 
 
