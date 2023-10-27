@@ -223,6 +223,9 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, unsigned sta
 		pdepth++;
 		break;
             case TokenType::RPAR:
+		if((i == end) && whole_pars && (pdepth == 1)){
+			end_pars = true;
+		}
   		pdepth--;
 		if(pdepth < 0){
 			throw ParserError(tokens.at(i));
@@ -275,18 +278,26 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, unsigned sta
     }
 	    
     rootNode = ASTree::ASNode{tokens.at(low_idx)};
-    if(low_idx > 0){
+    if((tokens.at(start).get_type() == TokenType::LPAR && tokens.at(low_idx - 1).get_type() == TokenType::RPAR) && (low_idx > 1)){
+    		rootNode.add_child(this->buildInfix(tokens, start + 1, low_idx - 2));
+    }
+    else if(low_idx > 0){
     	rootNode.add_child(this->buildInfix(tokens, start, low_idx - 1));
     }
     else{
 	    throw ParserError(tokens.at(end));
     }
+	
     if(eqRight){
 	rootNode.add_child(right_child);
     }
-    else{  
-    	rootNode.add_child(this->buildInfix(tokens, low_idx + 1, end));
+    else if((tokens.at(low_idx + 1).get_type() == TokenType::LPAR) && (tokens.at(end).get_type() == TokenType::RPAR) && (end > 0)){  
+    	rootNode.add_child(this->buildInfix(tokens, low_idx + 2, end - 1));
     }
+    else{
+	    rootNode.add_child(this->buildInfix(tokens, low_idx + 1, end));
+    }
+	
     return rootNode;
 }
 
