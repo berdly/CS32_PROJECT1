@@ -48,15 +48,15 @@
             else{
                 std::cout << "Unexpected token at line " << e.etoken.get_line() << " column " << e.etoken.get_col() + e.etoken.get_text().size() << ": END\n";
             }
-            return 2;
+            //return 2;
         }
         catch(const ZeroDivision&){
             std::cout << "Runtime error: division by zero." << '\n';
-            return 3;
+            //return 3;
         }
         catch(const IdentifierError& e){
             std::cout<<e.new_what()<<"\n";
-            return 3;
+            //return 3;
         }
     
 
