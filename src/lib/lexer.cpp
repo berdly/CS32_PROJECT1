@@ -152,24 +152,44 @@ std::vector<Token> reader(const std::string& input, bool exit) {  // Change retu
                 if(startsVar){
                    std::cout << "Syntax error on line " << line << " column " << column << "." << std::endl;
                    currToken.clear();
+		   if(exit){
                    exit(1);
+		   }
+		   else{
+			   return std::vector<Token>{};
+		   }
                 }
                 if (currToken.find('.') != std::string::npos) {
                    std::cout << "Syntax error on line " << line << " column " << column << "." << std::endl;
                    currToken.clear();
+		   if(exit){
                    exit(1);
+		   }
+		   else{
+			   return std::vector<Token>{};
+		   }
                 }
                 // Check for trailing decimals.
                 else if (i + 1 == input.size() || isspace(input[i + 1]) || input[i + 1] == '\n') {
                     std::cout << "Syntax error on line " << line << " column " << column+1 << "." << std::endl;
                     currToken.clear();
-                    exit(1);
+                    if(exit){
+                   exit(1);
+		   }
+		   else{
+			   return std::vector<Token>{};
+		   }
                }
                 // Check for leading decimals.
                else if (currToken.empty()) {
                    std::cout << "Syntax error on line " << line << " column " << column << "." << std::endl;
                    currToken.clear();
+                   if(exit){
                    exit(1);
+		   }
+		   else{
+			   return std::vector<Token>{};
+		   }
                } else {
                    currToken += ch;
                 }
@@ -229,14 +249,24 @@ std::vector<Token> reader(const std::string& input, bool exit) {  // Change retu
                     if(startsNum){
                         std::cout<<"Syntax error on line "<< line <<" column " << column << "." << std::endl;
                         currToken.clear();
-                        exit(1);
+                        if(exit){
+                   exit(1);
+		   }
+		   else{
+			   return std::vector<Token>{};
+		   }
                     }
                     currToken += ch;
                 }
                 else if (!isspace(ch)) {
                     std::cout<<"Syntax error on line "<< line <<" column " << column << "." << std::endl;
                     currToken.clear();
-                    exit(1);
+                    if(exit){
+                   exit(1);
+		   }
+		   else{
+			   return std::vector<Token>{};
+		   }
                 }
 
                 if(isspace(ch)){
