@@ -297,7 +297,6 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, unsigned sta
 				low_idx = i;
 			}
 		}
-		last = TokenType::CONST;
                 break;
             case TokenType::EXP:
                 if((pdepth == 0) && (curr_pres >= precedence(curr.get_text()))){
