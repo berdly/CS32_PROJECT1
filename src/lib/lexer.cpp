@@ -59,6 +59,7 @@ std::vector<Token> reader(const std::string& input, bool err) {  // Change retur
     std::vector<Token> tokens;  // Use vector instead of stack to store generated tokens
     bool startsNum{false};
     bool startsVar{false};
+    bool startsPer{false};
     // Temporary string to accumulate digits of a number.
     std::string currToken;
     int column = 1;
@@ -76,6 +77,16 @@ std::vector<Token> reader(const std::string& input, bool err) {  // Change retur
             case '*':
             case '/':
                 // If there's an accumulated number, create a token for it.
+                if(startsPer){
+                   std::cout << "Syntax error on line " << line << " column " << column << "." << std::endl;
+                   currToken.clear();
+		   if(err){
+                   exit(1);
+		   }
+		   else{
+			   return std::vector<Token>{Token{0,0,"",TokenType::ERR}};
+		   }
+                }                
                 if (!currToken.empty()) {
                 if(startsVar){
                     tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::VAR));
@@ -149,6 +160,7 @@ std::vector<Token> reader(const std::string& input, bool err) {  // Change retur
             // For decimal points.
             case '.':
                 // Check for multiple decimal points in the current number.
+                startsPer = true;
                 if(startsVar){
                    std::cout << "Syntax error on line " << line << " column " << column << "." << std::endl;
                    currToken.clear();
@@ -238,6 +250,7 @@ std::vector<Token> reader(const std::string& input, bool err) {  // Change retur
                 if (isdigit(ch)) {
                     if(!(startsNum || startsVar)){
                         startsNum = true;
+                        startsPer = false;
                     }
                     currToken += ch;
                 } 
