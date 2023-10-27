@@ -242,7 +242,7 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, unsigned sta
     ASTree::ASNode rootNode{};
     ASTree::ASNode right_child{};
 
-    TokenType last{TokenType::ERR};
+    //TokenType last{TokenType::ERR};
 
     for (unsigned i{start}; i <= end; i++)
     {
