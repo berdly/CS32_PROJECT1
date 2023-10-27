@@ -38,7 +38,13 @@ Var ASGrove::calc(){
 		vars = backup;
 		throw e;
 	}
-    std::cout<<ret<<std::endl;
+	if(std::get<double>(ret)){
+    std::cout<<std::get<double>(ret)<<std::endl;
+	}
+	else if(std::get<bool>(ret)){
+    std::cout<<std::get<bool>(ret)<<std::endl;
+	}
+
 	  ++place;
     return ret; //should return final value of tree and update variables but only once
 }
@@ -74,40 +80,42 @@ Var ASGrove::calcHelp(const ASTree::ASNode& root){
 	    	if(idx ==0){ // if the child is the first of its siblings, set the return value to that childs value
 		   		ret = val;
 	   		}else{
-         
+				 
 		   		switch(curr.get_text()[0]){ //math operations
 
 			case '*':
-			    ret *=val;
+			    std::get<double>(ret) *= std::get<double>(val);
                             break;
 			case '+':
-			    ret += val;
+			    std::get<double>(ret) += std::get<double>(val);
                             break;
 			case '-':
-			    ret -= val;
+			    std::get<double>(ret) -= std::get<double>(val);
                             break;
 			case '/':
-			    if(val == 0){
+			    if(std::get<double>(val) == 0){
 				throw ZeroDivision{};
 			    }
-			    ret /= val;
+			    std::get<double>(ret) += std::get<double>(val);
                             break;
                          default:
                             break;
 		    }
+
 		}
 		++idx;	
 	   }
         return ret;
-    
-           
+    case TokenType::LOG:
+		//do sick logical stuff!
+        break;
             
     case TokenType::CONST:
             
 	    return std::stod(curr.get_text()); // if the token is a constant, just return it casted as a double
             break;
     case TokenType::VAR:
-	     value = this->search_var(curr.get_text());
+	     auto value = this->search_var(curr.get_text()); //added this auto - might not work as intended
 	     if(value.has_value()){
 		 return *value;
 	     }
