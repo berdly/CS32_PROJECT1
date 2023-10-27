@@ -4,13 +4,13 @@ ASGrove::ASGrove() : statements{}, vars{}, place{} {}
 ASGrove::ASGrove(const std::vector<ASTree>& tree) : statements{tree}, vars{}, place{} {}
 ASGrove::ASGrove(const ASTree& tree) : statements(std::vector<ASTree>{tree}), vars{}, place{} {}
 
-double ASGrove::eval(){
+Var ASGrove::eval(){
   
-      double val = calc();
+      Var val = calc();
       return val;
 }
 
-void ASGrove::add_var(const std::string& name, double val){
+void ASGrove::add_var(const std::string& name, Var val){
   vars[name] = val;
 }
 
@@ -19,8 +19,8 @@ std::optional<Var> ASGrove::search_var(const std::string& query){
    return (value == vars.end()) ? std::optional<Var>{} : std::optional<Var>{value->second};
 }
 
-double ASGrove::calc(){
-  double ret{};
+Var ASGrove::calc(){
+  Var ret{};
   auto backup{vars};
   if(place >= statements.size()){
 		  throw std::out_of_range("");
@@ -43,14 +43,14 @@ double ASGrove::calc(){
     return ret; //should return final value of tree and update variables but only once
 }
 
-double ASGrove::calcHelp(const ASTree::ASNode& root){
+Var ASGrove::calcHelp(const ASTree::ASNode& root){
     
-    double ret{}; // will be returned
+    Var ret{}; // will be returned
     const auto& children{root.get_kids()};
     const Token& curr{root.get_pdata()};
-    double val{};
+    Var val{};
     unsigned idx{};
-    std::optional<double> value{};
+    Var value{};
     
     switch(curr.get_type()){
 
@@ -73,7 +73,8 @@ double ASGrove::calcHelp(const ASTree::ASNode& root){
                                             
 	    	if(idx ==0){ // if the child is the first of its siblings, set the return value to that childs value
 		   		ret = val;
-	   		}else{         
+	   		}else{
+         
 		   		switch(curr.get_text()[0]){ //math operations
 
 			case '*':
