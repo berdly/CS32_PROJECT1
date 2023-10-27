@@ -27,9 +27,9 @@ double ASGrove::calc(){
 	try{
 	  ret = calcHelp(statements.at(place).getProot());
 	}
-	catch(const ZeroDivisionError&){
+	catch(const ZeroDivision&){
 		++place;
-		throw ZeroDivisionError{};
+		throw ZeroDivision{};
 	}
 	catch(const IdentifierError& e){
 		++place;
