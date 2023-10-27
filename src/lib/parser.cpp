@@ -305,7 +305,7 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, unsigned sta
 			}
 			
 			last = TokenType::EXP;
-			if((curr_pres >= precedence(curr.get_text())){
+			if(curr_pres >= precedence(curr.get_text())){
 				if(i <= 0){
 					throw ParserError(curr);
 				}
