@@ -1,5 +1,3 @@
-
-
 #include "parser.h"
 #include "error.h"
 #include <stack>
@@ -290,7 +288,7 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, unsigned sta
 			last = TokenType::EXP;
    			
 			if(curr_pres > precedence(curr.get_text())){
-				if((i <= 0) || (tokens.at(i - 1).get_type() != TokenType::VAR)){
+				if(!((i > 0) || (tokens.at(i - 1).get_type() == TokenType::VAR))){
 					throw ParserError(tokens.at(i));
 				}
 				curr_pres = precedence(curr.get_text());
@@ -299,19 +297,19 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, unsigned sta
 		}
                 break;
             case TokenType::EXP:
-                if(pdepth == 0){
+                if((pdepth == 0) && (curr_pres >= precedence(curr.get_text()))){
+			
 			if(last == TokenType::EXP){
 				throw ParserError(curr);
 			}
 			
 			last = TokenType::EXP;
-			if(curr_pres >= precedence(curr.get_text())){
-				if(i <= 0){
-					throw ParserError(curr);
-				}
-				curr_pres = precedence(curr.get_text());
-				low_idx = i;
+			
+			if(i <= 0){
+				throw ParserError(curr);
 			}
+			curr_pres = precedence(curr.get_text());
+			low_idx = i;
 		}
 		break;
             default:
@@ -320,8 +318,11 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, unsigned sta
         }
     }
 
-    if((curr_pres == 100) || low_idx == static_cast<int>(end)){
+    if(curr_pres == 100){
 	    throw ParserError(tokens.at(end));
+    }
+    if(low_idx == static_cast<int>(end)){
+	    throw ParserError(tokens.at(end), PErrType::END);
     }
 
     rootNode = ASTree::ASNode{tokens.at(low_idx)};
@@ -360,3 +361,4 @@ double ASTree::precedence(std::string text)
 	        return 100;
     }
 }
+
