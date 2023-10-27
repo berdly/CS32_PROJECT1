@@ -2,7 +2,7 @@
 #include "error.h"
 #include <stack>
 #include <iostream>
-bool wrapped(const std::vector<Token&> tokens){
+bool wrapped(const std::vector<Token>& tokens){
 	int rparidx{};
 	int pdepth{};
 	if(tokens.at(0).get_type() == TokenType::LPAR){
