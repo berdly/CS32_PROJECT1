@@ -13,10 +13,12 @@ bool wrapped(const std::vector<Token&> tokens){
 			else if(tokens.at(i).get_type() == TokenType::RPAR){
 				if(pdepth == 0){
 					return (i == tokens.size() - 1);
+				}
 				else{
 					pdepth--;
 				}
 		}
+	}
 	}
 	else{
 		return false;
