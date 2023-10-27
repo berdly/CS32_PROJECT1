@@ -283,7 +283,12 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, unsigned sta
     }
 	    
     rootNode = ASTree::ASNode{tokens.at(low_idx)};
-    rootNode.add_child(this->buildInfix(tokens, start, low_idx - 1));
+    if(low_idx > 0){
+    	rootNode.add_child(this->buildInfix(tokens, start, low_idx - 1));
+    }
+    else{
+	    throw ParserError(tokens.at(end));
+    }
     if(eqRight){
 	rootNode.add_child(right_child);
     }
