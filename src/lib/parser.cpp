@@ -244,7 +244,7 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, unsigned sta
     ASTree::ASNode rootNode{};
     ASTree::ASNode right_child{};
 
-    //TokenType last{TokenType::ERR};
+    TokenType last{TokenType::EXP};
 
     for (unsigned i{start}; i <= end; i++)
     {
@@ -252,6 +252,12 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, unsigned sta
 
         switch (curr.get_type()) {
             case TokenType::LPAR:
+		if(pdepth == 0){
+			if(last != TokenType::EXP){
+				throw ParserError(curr);
+			}
+			last = TokenType::CONST;
+		}
 		pdepth++;
 		break;
             case TokenType::RPAR:
@@ -262,9 +268,19 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, unsigned sta
                 break;
             case TokenType::VAR:
             case TokenType::CONST:
+		if(pdepth == 0){
+			if(last != TokenType::EXP){
+				throw ParserError(curr);
+			}
+			last = TokenType::CONST;
+		}
 		break;
             case TokenType::EQUAL: // WIP
 		if(pdepth == 0){
+			if(last != TokenType::EXP){
+				throw ParserError(curr);
+			}
+			last = TokenType::EXP;
 			if(curr_pres > precedence(curr.get_text())){
 				if(!((i > 0) || (tokens.at(i - 1).get_type() == TokenType::VAR))){
 					throw ParserError(tokens.at(i));
@@ -273,9 +289,14 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, unsigned sta
 				low_idx = i;
 			}
 		}
+		last = TokenType::CONST;
                 break;
             case TokenType::EXP:
                 if((pdepth == 0) && (curr_pres >= precedence(curr.get_text()))){
+			if(last != TokenType::EXP){
+				throw ParserError(curr);
+			}
+			last = TokenType::EXP;
 			if(i <= 0){
 				throw ParserError(curr);
 			}
