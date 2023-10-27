@@ -19,7 +19,10 @@
         }
 
         auto token_list{reader(input)};
-
+        for(const auto& token: token_list){
+             std::cout << token.get_text() << ' ';
+        }
+        std::cout << '\n';
         
         
         try{
