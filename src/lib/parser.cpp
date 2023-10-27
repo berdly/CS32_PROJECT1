@@ -247,7 +247,12 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, unsigned sta
 			right_child = ASTree::ASNode{curr};
 			right_child.add_child(ASTree::ASNode{tokens.at(i - 1)});
 			if(i > 1 && (tokens.at(i - 2).get_type() == TokenType::LPAR) && (tokens.at(end).get_type() == TokenType::RPAR)){
+				if(end > 0){
 				right_child.add_child(this->buildInfix(tokens, i + 1, end - 1));
+				}
+				else{
+					throw ParserError(tokens.at(end));
+				}
 			}
 			else{
 				right_child.add_child(this->buildInfix(tokens, i + 1, end));
