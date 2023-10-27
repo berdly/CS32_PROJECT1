@@ -171,7 +171,7 @@ std::vector<Token> reader(const std::string& input, bool err) {  // Change retur
                 }
                 // Check for trailing decimals.
                 else if (i + 1 == input.size() || isspace(input[i + 1]) || input[i + 1] == '\n') {
-                    std::cout << "Syntax error on line " << line << " column " << column+1 << "." << std::endl;
+                    std::cout << "Syntax error on line " << line << " column " << column << "." << std::endl;
                     currToken.clear();
                     if(err){
                    exit(1);
