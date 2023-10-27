@@ -19,12 +19,12 @@ std::optional<double> ASGrove::search_var(const std::string& query){
 }
 
 double ASGrove::calc(){
-  
+  double ret{};
   if(place >= statements.size()){
 		  throw std::out_of_range("");
 	  }
 	try{
-	  double ret{calcHelp(statements.at(place).getProot())};
+	  ret = calcHelp(statements.at(place).getProot());
 	}
 	catch(const ZeroDivisionError&){
 		++place;
