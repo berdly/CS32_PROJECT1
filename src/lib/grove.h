@@ -1,7 +1,6 @@
 #ifndef GROVE_H
 #define GROVE_H
 
-
 #include "parser.h"
 #include <vector>
 #include <map>
@@ -43,6 +42,7 @@ public:
   ASGrove(const std::vector<ASTree>&);
   ASGrove(const ASTree&);
   ASGrove();
+  const std::map<std::string, Var>& show_vars() const;
   virtual double eval();
   virtual double calc();
   void add_tree(const ASTree&);
@@ -56,7 +56,7 @@ class IfGrove: public ASGrove{
   public:
   double eval() override;
   double calc() override;
-  void print() override;
+  void print() const override;
 }
 class WhileGrove: public ASGrove{
   ASTree conditional;
@@ -64,7 +64,7 @@ class WhileGrove: public ASGrove{
   public:
   double eval() override;
   double calc() override;
-  void print() override;
+  void print() const override;
 }
 
 #endif
