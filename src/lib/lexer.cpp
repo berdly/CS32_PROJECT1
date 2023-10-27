@@ -55,7 +55,7 @@ std::vector<std::vector<Token>> split(const std::vector<Token>& input){
     return statements;
 }
 // Function to parse the input string and create tokens for each number and operand.
-std::vector<Token> reader(const std::string& input, bool exit) {  // Change return type to vector
+std::vector<Token> reader(const std::string& input, bool err) {  // Change return type to vector
     std::vector<Token> tokens;  // Use vector instead of stack to store generated tokens
     bool startsNum{false};
     bool startsVar{false};
@@ -152,43 +152,43 @@ std::vector<Token> reader(const std::string& input, bool exit) {  // Change retu
                 if(startsVar){
                    std::cout << "Syntax error on line " << line << " column " << column << "." << std::endl;
                    currToken.clear();
-		   if(exit){
+		   if(err){
                    exit(1);
 		   }
 		   else{
-			   return std::vector<Token>{};
+			   return std::vector<Token>{Token{0,0,"",TokenType::ERR}};
 		   }
                 }
                 if (currToken.find('.') != std::string::npos) {
                    std::cout << "Syntax error on line " << line << " column " << column << "." << std::endl;
                    currToken.clear();
-		   if(exit){
+		   if(err){
                    exit(1);
 		   }
 		   else{
-			   return std::vector<Token>{};
+			   return std::vector<Token>{Token{0,0,"",TokenType::ERR}};
 		   }
                 }
                 // Check for trailing decimals.
                 else if (i + 1 == input.size() || isspace(input[i + 1]) || input[i + 1] == '\n') {
                     std::cout << "Syntax error on line " << line << " column " << column+1 << "." << std::endl;
                     currToken.clear();
-                    if(exit){
+                    if(err){
                    exit(1);
 		   }
 		   else{
-			   return std::vector<Token>{};
+			   return std::vector<Token>{Token{0,0,"",TokenType::ERR}};
 		   }
                }
                 // Check for leading decimals.
                else if (currToken.empty()) {
                    std::cout << "Syntax error on line " << line << " column " << column << "." << std::endl;
                    currToken.clear();
-                   if(exit){
+                   if(err){
                    exit(1);
 		   }
 		   else{
-			   return std::vector<Token>{};
+			   return std::vector<Token>{Token{0,0,"",TokenType::ERR}};
 		   }
                } else {
                    currToken += ch;
@@ -249,11 +249,11 @@ std::vector<Token> reader(const std::string& input, bool exit) {  // Change retu
                     if(startsNum){
                         std::cout<<"Syntax error on line "<< line <<" column " << column << "." << std::endl;
                         currToken.clear();
-                        if(exit){
+                        if(err){
                    exit(1);
 		   }
 		   else{
-			   return std::vector<Token>{};
+			   return std::vector<Token>{Token{0,0,"",TokenType::ERR}};
 		   }
                     }
                     currToken += ch;
@@ -261,11 +261,11 @@ std::vector<Token> reader(const std::string& input, bool exit) {  // Change retu
                 else if (!isspace(ch)) {
                     std::cout<<"Syntax error on line "<< line <<" column " << column << "." << std::endl;
                     currToken.clear();
-                    if(exit){
+                    if(err){
                    exit(1);
 		   }
 		   else{
-			   return std::vector<Token>{};
+			   return std::vector<Token>{Token{0,0,"",TokenType::ERR}};
 		   }
                 }
 
