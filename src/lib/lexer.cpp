@@ -82,7 +82,9 @@ std::vector<Token> reader(const std::string& input, bool err) {  // Change retur
                 if (!currToken.empty()) {
                 if(startsVar){
                     if((currToken == "while") || (currToken == "if") || (currToken == "print") || (currToken == "else")){
-                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::STMNT));
+                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::KW));
+                    }else if((currToken == "true") || (currToken == "false")){
+                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::BOOL));
                     }else{
                     tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::VAR));
                     }
@@ -115,7 +117,9 @@ std::vector<Token> reader(const std::string& input, bool err) {  // Change retur
                 if (!currToken.empty()) {
                 if(startsVar){
                     if((currToken == "while") || (currToken == "if") || (currToken == "print") || (currToken == "else")){
-                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::STMNT));
+                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::KW));
+                    }else if((currToken == "true") || (currToken == "false")){
+                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::BOOL));
                     }else{
                     tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::VAR));
                     }
@@ -138,7 +142,9 @@ std::vector<Token> reader(const std::string& input, bool err) {  // Change retur
                  if (!currToken.empty()) {
                 if(startsVar){
                     if((currToken == "while") || (currToken == "if") || (currToken == "print") || (currToken == "else")){
-                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::STMNT));
+                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::KW));
+                    }else if((currToken == "true") || (currToken == "false")){
+                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::BOOL));
                     }else{
                     tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::VAR));
                     }
@@ -160,7 +166,9 @@ std::vector<Token> reader(const std::string& input, bool err) {  // Change retur
                 if (!currToken.empty()) {
                 if(startsVar){
                     if((currToken == "while") || (currToken == "if") || (currToken == "print") || (currToken == "else")){
-                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::STMNT));
+                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::KW));
+                    }else if((currToken == "true") || (currToken == "false")){
+                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::BOOL));
                     }else{
                     tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::VAR));
                     }
@@ -181,7 +189,9 @@ std::vector<Token> reader(const std::string& input, bool err) {  // Change retur
                 if (!currToken.empty()) {
                 if(startsVar){
                     if((currToken == "while") || (currToken == "if") || (currToken == "print") || (currToken == "else")){
-                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::STMNT));
+                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::KW));
+                    }else if((currToken == "true") || (currToken == "false")){
+                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::BOOL));
                     }else{
                     tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::VAR));
                     }
@@ -203,7 +213,9 @@ std::vector<Token> reader(const std::string& input, bool err) {  // Change retur
                 if (!currToken.empty()) {
                 if(startsVar){
                     if((currToken == "while") || (currToken == "if") || (currToken == "print") || (currToken == "else")){
-                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::STMNT));
+                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::KW));
+                    }else if((currToken == "true") || (currToken == "false")){
+                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::BOOL));
                     }else{
                     tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::VAR));
                     }
@@ -275,7 +287,9 @@ std::vector<Token> reader(const std::string& input, bool err) {  // Change retur
             if (!currToken.empty()) {
                 if(startsVar){
                     if((currToken == "while") || (currToken == "if") || (currToken == "print") || (currToken == "else")){
-                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::STMNT));
+                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::KW));
+                    }else if((currToken == "true") || (currToken == "false")){
+                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::BOOL));
                     }else{
                     tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::VAR));
                     }
@@ -298,7 +312,9 @@ std::vector<Token> reader(const std::string& input, bool err) {  // Change retur
                 if (!currToken.empty()) {
                 if(startsVar){
                     if((currToken == "while") || (currToken == "if") || (currToken == "print") || (currToken == "else")){
-                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::STMNT));
+                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::KW));
+                    }else if((currToken == "true") || (currToken == "false")){
+                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::BOOL));
                     }else{
                     tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::VAR));
                     }
@@ -357,7 +373,9 @@ std::vector<Token> reader(const std::string& input, bool err) {  // Change retur
                     if (!currToken.empty()) {
                 if(startsVar){
                     if((currToken == "while") || (currToken == "if") || (currToken == "print") || (currToken == "else")){
-                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::STMNT));
+                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::KW));
+                    }else if((currToken == "true") || (currToken == "false")){
+                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::BOOL));
                     }else{
                     tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::VAR));
                     }

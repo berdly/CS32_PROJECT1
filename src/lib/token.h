@@ -14,7 +14,7 @@ enum class TokenType{
   LPAR,
   RPAR,
   ERR,
-  STMNT,
+  KW,
   LOG,
   BOOL,
   LBRACE,
