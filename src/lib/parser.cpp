@@ -262,7 +262,7 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, unsigned sta
 		break;
             case TokenType::EQUAL: // WIP
 		if(pdepth == 0){
-			if(curr_pres > precedence(curr.get_text())){
+			if(curr_pres >= precedence(curr.get_text())){
 				if(!((i > 0) || (tokens.at(i - 1).get_type() == TokenType::VAR))){
 					throw ParserError(tokens.at(i));
 				}
