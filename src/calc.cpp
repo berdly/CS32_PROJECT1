@@ -18,7 +18,7 @@
             input +="\n"; // Concatenating each line with a newline character
         }
 
-        auto token_list{reader(input)};
+        auto token_list{reader(input, false)};
      /*
         for(const auto& token: token_list){
              std::cout << token.get_text() << ' ';
