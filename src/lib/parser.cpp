@@ -254,7 +254,7 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, unsigned sta
             case TokenType::LPAR:
 		if(pdepth == 0){
 			
-			if(last != TokenType::EXP){
+			if(last != TokenType::CONST){
 				throw ParserError(curr);
 			}
 			last = TokenType::CONST;
@@ -272,7 +272,7 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, unsigned sta
             case TokenType::CONST:
 		if(pdepth == 0){
 			
-			if(last != TokenType::EXP){
+			if(last != TokenType::CONST){
 				throw ParserError(curr);
 			}
 			
