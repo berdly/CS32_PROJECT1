@@ -58,7 +58,7 @@
             std::cout<<e.new_what()<<'\n';
             //return 3;
         }
-        catch(const std::out_range& e){
+        catch(const std::out_of_range& e){
             std::cout << e.what() << '\n';
         }
     
