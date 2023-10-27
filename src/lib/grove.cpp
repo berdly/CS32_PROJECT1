@@ -21,6 +21,7 @@ std::optional<double> ASGrove::search_var(const std::string& query){
 
 double ASGrove::calc(){
   double ret{};
+  auto backup{vars};
   if(place >= statements.size()){
 		  throw std::out_of_range("");
 	  }
@@ -29,10 +30,12 @@ double ASGrove::calc(){
 	}
 	catch(const ZeroDivision&){
 		++place;
+		vars = backup;
 		throw ZeroDivision{};
 	}
 	catch(const IdentifierError& e){
 		++place;
+		vars = backup;
 		throw e;
 	}
     std::cout<<ret<<std::endl;
