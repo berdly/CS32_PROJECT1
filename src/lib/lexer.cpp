@@ -249,6 +249,7 @@ std::vector<Token> reader(const std::string& input, bool err) {  // Change retur
                 // If it's a digit, add to the current number.
                 if (isdigit(ch)) {
                     if(!(startsNum || startsVar)){
+                        isPer = false;
                         startsNum = true;
                     }
                     currToken += ch;
@@ -257,6 +258,7 @@ std::vector<Token> reader(const std::string& input, bool err) {  // Change retur
                 else if(isalpha(ch) || ch == '_'){
                     if(!(startsNum || startsVar)){
                         startsVar = true;
+                        isPer = false;
                     }
                     if(startsNum){
                         std::cout<<"Syntax error on line "<< line <<" column " << column << "." << std::endl;
