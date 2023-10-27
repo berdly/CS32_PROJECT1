@@ -265,6 +265,9 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, unsigned sta
 		break;
             case TokenType::RPAR:
   		pdepth--;
+		if(last == TokenType::EXP){
+			throw ParserError(tokens.at(i));
+		}
 		if(pdepth < 0){
 			throw ParserError(tokens.at(i));
 			pdepth++;
