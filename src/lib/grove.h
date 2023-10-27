@@ -17,7 +17,7 @@ class SuperGrove{
   unsigned place;
 
   void add_var(const std::string& name, double val);
-  std::optional<double> search_var(const std::string& query);
+  std::optional<Var> search_var(const std::string& query);
   double calcHelp(const ASTree::ASNode&);
   void printHelp(const ASTree::ASNode&) const;
 public:
@@ -28,14 +28,14 @@ public:
   void add_tree(const ASTree&);
   void print() const;
 };
-}
+
 class ASGrove{
   std::vector<ASTree> statements;
   std::map<std::string, Var> vars;
   unsigned place; //how many trees have been executed
 
   void add_var(const std::string& name, double val);
-  std::optional<double> search_var(const std::string& query);
+  std::optional<Var> search_var(const std::string& query);
   virtual double calcHelp(const ASTree::ASNode&);
   virtual void printHelp(const ASTree::ASNode&) const;
 public:
@@ -52,12 +52,12 @@ class IfGrove: public ASGrove{
   std::vector<ASTree> conditionals;
   std::vector<ASGrove> elifs;
   unsigned elif_place;
-  IfGrove()// wip
+  IfGrove();// wip
   public:
   double eval() override;
   double calc() override;
   void print() const override;
-}
+};
 class WhileGrove: public ASGrove{
   ASTree conditional;
   WhileGrove(const std::vector<ASTree>&, const ASTree&);
@@ -65,7 +65,7 @@ class WhileGrove: public ASGrove{
   double eval() override;
   double calc() override;
   void print() const override;
-}
+};
 
 #endif
 

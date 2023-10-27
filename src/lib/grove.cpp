@@ -14,9 +14,9 @@ void ASGrove::add_var(const std::string& name, double val){
   vars[name] = val;
 }
 
-std::optional<double> ASGrove::search_var(const std::string& query){
+std::optional<Var> ASGrove::search_var(const std::string& query){
    auto value{vars.find(query)};//map iterator type
-   return (value == vars.end()) ? std::optional<double>{} : std::optional<double>{value->second};
+   return (value == vars.end()) ? std::optional<Var>{} : std::optional<Var>{value->second};
 }
 
 double ASGrove::calc(){
