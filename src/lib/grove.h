@@ -9,25 +9,64 @@
 #include "error.h"
 #include <stdexcept>
 #include <iostream>
+#include <variant>
+typedef std::variant<double, bool> Var;
 
-class ASGrove{
-  std::vector<ASTree> statements;
-  std::map<std::string, double> vars;
-  unsigned place; //how many trees have been executed
+class SuperGrove{
+  std::vector<ASGrove*> subgroves;
+  std::map<std::string, Var> vars;
+  unsigned place;
 
   void add_var(const std::string& name, double val);
   std::optional<double> search_var(const std::string& query);
   double calcHelp(const ASTree::ASNode&);
   void printHelp(const ASTree::ASNode&) const;
 public:
-  ASGrove(const std::vector<ASTree>&);
-  ASGrove(const ASTree&);
-  ASGrove();
-  double eval();
-  double calc();
+  SuperGrove(const std::vector<ASGrove*>&);
+  SuperGrove(const std::vector<ASTree>&);
+  virtual double eval();
+  virtual double calc();
   void add_tree(const ASTree&);
   void print() const;
 };
+}
+class ASGrove{
+  std::vector<ASTree> statements;
+  std::map<std::string, Var> vars;
+  unsigned place; //how many trees have been executed
+
+  void add_var(const std::string& name, double val);
+  std::optional<double> search_var(const std::string& query);
+  virtual double calcHelp(const ASTree::ASNode&);
+  virtual void printHelp(const ASTree::ASNode&) const;
+public:
+  ASGrove(const std::vector<ASTree>&);
+  ASGrove(const ASTree&);
+  ASGrove();
+  virtual double eval();
+  virtual double calc();
+  void add_tree(const ASTree&);
+  virtual void print() const;
+};
+class IfGrove: public ASGrove{
+  std::vector<ASTree> conditionals;
+  std::vector<ASGrove> elifs;
+  unsigned elif_place;
+  IfGrove()// wip
+  public:
+  double eval() override;
+  double calc() override;
+  void print() override;
+}
+class WhileGrove: public ASGrove{
+  ASTree conditional;
+  WhileGrove(const std::vector<ASTree>&, const ASTree&);
+  public:
+  double eval() override;
+  double calc() override;
+  void print() override;
+}
+
 #endif
 
 
