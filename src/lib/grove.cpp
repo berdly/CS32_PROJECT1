@@ -23,7 +23,17 @@ double ASGrove::calc(){
   if(place >= statements.size()){
 		  throw std::out_of_range("");
 	  }
+	try{
 	  double ret{calcHelp(statements.at(place).getProot())};
+	}
+	catch(const ZeroDivisionError&){
+		++place;
+		throw ZeroDivisionError{};
+	}
+	catch(const IdentifierError& e){
+		++place;
+		throw e;
+	}
     std::cout<<ret<<std::endl;
 	  ++place;
     return ret; //should return final value of tree and update variables but only once
