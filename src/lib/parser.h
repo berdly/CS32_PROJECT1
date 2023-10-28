@@ -30,7 +30,7 @@ private:
   ASNode proot;
   ASNode build(const std::vector<Token>& tokens, int start, int end);
   std::vector<std::pair<int,int>> get_child_idx(const std::vector<Token>& tokens, int start, int end);
-  ASTree::ASNode buildInfix(const std::vector<Token>&, unsigned, unsigned);
+  ASTree::ASNode buildInfix(const std::vector<Token>&, unsigned, unsigned, bool);
   double precedence(std::string text);
 
 public:
