@@ -25,16 +25,43 @@ Var ASGrove::calc(){
   auto backup{vars};
   if(place >= statements.size()){
 		  throw std::out_of_range("");
-	  }
+  }
+  ASTree* tree{statements.at(place)};
+  StatementTree* statement;
 	try{
 	switch(types.at(place){
 		case TreeTypes::EXP:
-			ret = calcHelp(statements.at(place)->getProot());
+			ret = calcHelp(tree->getProot());
 			break;
 		}
 		case TreeTypes::IF:
-			ret = calcHelp(statements.at(place)->getProot());
-			if(holds_alternative<bool>(ret
+			ret = calcHelp(tree->getProot());
+			if(!holds_alternative<bool>(ret)){
+				throw TypeError{statements.at(place).getProot()};
+			}
+			else if{std::get<bool>(ret)){
+				statement = dynamic_cast<StatementTree*>(tree);
+				statement->body.eval();
+				this->update_existing(statement->body.show_vars());
+			}
+		case TreeTypes::WHILE:
+		while(true){
+			ret = calcHelp(tree->getProot());
+			if(!holds_alternative<bool>(ret)){
+				throw TypeError{statements.at(place).getProot()};
+			}
+			else if{std::get<bool>(ret)){
+				statement = dynamic_cast<StatementTree*>(tree);
+				statement->body.eval();
+				this->update_existing(statement->body.show_vars());
+				statement->body.reset();
+			}
+			else{
+				break;
+			}
+		}
+		}
+				
 	}
 	  ret = calcHelp(statements.at(place).getProot());
 	}
