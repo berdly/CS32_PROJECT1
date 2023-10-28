@@ -5,9 +5,14 @@ ASGrove::ASGrove() : statements{}, vars{}, place{} {}
 ASGrove::ASGrove(const std::vector<ASTree>& tree) : statements{tree}, vars{}, place{} {}
 ASGrove::ASGrove(const ASTree& tree) : statements(std::vector<ASTree>{tree}), vars{}, place{} {}
 
+void ASGrove::reset(){
+	place = 0;
+}
 Var ASGrove::eval(){
-  
-      Var val = calc();
+      Var val{};
+      while(place < statements.size()){
+      	val = calc();
+      }
       return val;
 }
 
