@@ -11,26 +11,15 @@
 #include <variant>
 typedef std::variant<double, bool> Var;
 
-class SuperGrove{
-  std::vector<ASGrove*> subgroves;
-  std::map<std::string, Var> vars;
-  unsigned place;
-
-  void add_var(const std::string& name, double val);
-  std::optional<Var> search_var(const std::string& query);
-  double calcHelp(const ASTree::ASNode&);
-  void printHelp(const ASTree::ASNode&) const;
-public:
-  SuperGrove(const std::vector<ASGrove*>&);
-  SuperGrove(const std::vector<ASTree>&);
-  virtual Var eval();
-  virtual Var calc();
-  void add_tree(const ASTree&);
-  void print() const;
-};
+enum class TreeType{
+EXP;
+IF;
+WHILE;
+}
 
 class ASGrove{
-  std::vector<ASTree> statements;
+  std::vector<ASTree*> statements;
+  std::vector<TreeType> types;
   std::map<std::string, Var> vars;
   unsigned place; //how many trees have been executed
 
@@ -39,65 +28,12 @@ class ASGrove{
   virtual Var calcHelp(const ASTree::ASNode&);
   virtual void printHelp(const ASTree::ASNode&) const;
 public:
-  ASGrove(const std::vector<ASTree>&);
-  ASGrove(const ASTree&);
-  ASGrove();
+  ASGrove(std::vector<std:::vector<Token>>);
   const std::map<std::string, Var>& show_vars() const;
-  virtual Var eval();
-  virtual Var calc();
-  void add_tree(const ASTree&);
+  Var eval();
+  Var calc();
+  void add_tree(ASTree*);
   virtual void print() const;
-};
-class IfGrove: public ASGrove{
-  std::vector<ASTree> conditionals;
-  std::vector<ASGrove> elifs;
-  unsigned elif_place;
-  IfGrove();// wip
-  public:
-  Var eval() override;
-  Var calc() override;
-  void print() const override;
-};
-class WhileGrove: public ASGrove{
-  ASTree conditional;
-  WhileGrove(const std::vector<ASTree>&, const ASTree&);
-  public:
-  Var eval() override;
-  Var calc() override;
-  void print() const override;
 };
 
 #endif
-
-
-
-
-/*
-#include <typeinfo>
-#include <typeid>
-#include <any>
-#include <optional>
-
-//for later, exploration into implementing a version of grove which can hold variables of ARBITRARY TYPE:)
-//having trouble with building a nice way to revert the data from std::any to the original type without knowing manually entering the original type
-//if anyone has any ideas lmk
-
-class VarDict{
-  std::map<std::string, std::pair<std::any, std::type_index>> dict;
-  
-  template<class T>
-  void add(const std::string& name, const T& data); 
-  std::pair<std::any, std::type_index> access(const std::string& 
-}
-template<class ReturnType>
-class ASGrove{
-  static std::set<std::type_index> valid_types;
-  std::vector<ASTree> statements;
-  VarDict variables;
-  
-  std::optional<ReturnType> step();
-  public:
-  ReturnType eval();
-  std::map<std::string, double> getVariables();
-};
-*/
