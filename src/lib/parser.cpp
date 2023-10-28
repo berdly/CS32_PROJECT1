@@ -333,7 +333,7 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, unsigned sta
     }
     
     rootNode = ASTree::ASNode{tokens.at(low_idx)};
-    if((tokens.at(start).get_type() == TokenType::LPAR && tokens.at(low_idx - 1).get_type() == TokenType::RPAR) && (low_idx > 1)){
+    if((low_idx > 1) && wrapped(tokens, start, low_idx - 1)){
     		rootNode.add_child(this->buildInfix(tokens, start + 1, low_idx - 2));
     }
     else if(low_idx > 0){
@@ -343,7 +343,7 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, unsigned sta
 	    throw ParserError(tokens.at(end));
     }
 	
-    if((tokens.at(low_idx + 1).get_type() == TokenType::LPAR) && (tokens.at(end).get_type() == TokenType::RPAR) && (end > 0)){  
+    if((end > 0) && wrapped(tokens, low_idx + 1, end)){  
     	rootNode.add_child(this->buildInfix(tokens, low_idx + 2, end - 1));
     }
     else{
