@@ -20,9 +20,13 @@ std::optional<Var> ASGrove::search_var(const std::string& query){
    if(value == vars.end()){
 	   if(parent){
 		   value = parent->show_vars().find(query);
+		   return (value == parent->show_vars().end()) ? std::optional<Var>{} : std::optional<Var>{value->second};
 	   }
+	   return std::optional<Var>{};
    }
-   return (value == vars.end()) ? std::optional<Var>{} : std::optional<Var>{value->second};
+   else{
+	   return std::optional<Var>{value->second};
+   }
 }
 
 Var ASGrove::calc(){
