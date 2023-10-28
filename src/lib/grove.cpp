@@ -27,6 +27,15 @@ Var ASGrove::calc(){
 		  throw std::out_of_range("");
 	  }
 	try{
+	switch(types.at(place){
+		case TreeTypes::EXP:
+			ret = calcHelp(statements.at(place)->getProot());
+			break;
+		}
+		case TreeTypes::IF:
+			ret = calcHelp(statements.at(place)->getProot());
+			if(holds_alternative<bool>(ret
+	}
 	  ret = calcHelp(statements.at(place).getProot());
 	}
 	catch(const ZeroDivision&){
