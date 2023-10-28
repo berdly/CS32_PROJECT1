@@ -25,8 +25,8 @@ class ASGrove{
 
   void add_var(const std::string& name, Var val);
   std::optional<Var> search_var(const std::string& query);
-  virtual Var calcHelp(const ASTree::ASNode&);
-  virtual void printHelp(const ASTree::ASNode&) const;
+  Var calcHelp(const ASTree::ASNode&);
+  void printHelp(const ASTree::ASNode&) const;
 public:
   ASGrove(std::vector<std:::vector<Token>>);
   const std::map<std::string, Var>& show_vars() const;
