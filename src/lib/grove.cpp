@@ -41,6 +41,9 @@ Var ASGrove::calc(){
 		  throw std::out_of_range("");
   }
   ASTree* tree{statements.at(place)};
+  if(!tree){
+	  throw std::runtime_error("BAD GROVE");
+  }
   StatementTree* statement;
 	try{
 	switch(types.at(place){
