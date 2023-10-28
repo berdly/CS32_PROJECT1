@@ -330,7 +330,7 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, unsigned sta
 	    	throw ParserError(tokens.at(end), PErrType::END);
 	     }
 	     else{
-		throw ParserError(tokens.at(end);
+		throw ParserError(tokens.at(end));
 	     }
     }
     if(curr_pres == 100){
