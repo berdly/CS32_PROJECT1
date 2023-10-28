@@ -35,13 +35,9 @@ public:
   ASTree(const std::vector<Token>& tokens, bool infix = true);
   const ASNode& getProot() const;
 };
-class IfTree: public ASTree{
-  ASGrove ifbody;
-  IfTree(const std::vector<Token>& conditional, const ASGrove& body) : ASTree{conditional}, ifbody{body} {}
-}
-class IfTree: public ASTree{
-  ASGrove ifbody;
-  IfTree(const std::vector<Token>& conditional, const ASGrove& body) : ASTree{conditional}, ifbody{body} {}
-}
+class StatementTree: public ASTree{
+  ASGrove body;
+  IfTree(const std::vector<Token>& conditional, const ASGrove& block) : ASTree{conditional}, body{block} {}
+};
 
 #endif
