@@ -1,5 +1,6 @@
 #include "grove.h"
 #include "error.h"
+#include <cmath>
 ASGrove::ASGrove() : statements{}, vars{}, place{} {}
 ASGrove::ASGrove(const std::vector<ASTree>& tree) : statements{tree}, vars{}, place{} {}
 ASGrove::ASGrove(const ASTree& tree) : statements(std::vector<ASTree>{tree}), vars{}, place{} {}
@@ -43,10 +44,10 @@ Var ASGrove::calc(){
 		vars = backup;
 		throw e;
 	}
-	if(std::get<double>(ret)){
+	if(std::holds_alternative<double>(ret)){
     std::cout<<std::get<double>(ret)<<std::endl;
 	}
-	else if(std::get<bool>(ret)){
+	else if(std::holds_alternative<bool>(ret)){
     std::cout<<std::get<bool>(ret)<<std::endl;
 	}
 
@@ -79,45 +80,49 @@ Var ASGrove::calcHelp(const ASTree::ASNode& root){
             break;
 		
      case TokenType::EXP:
-		    for(const auto& child: children){
+	        ret = 0.0
+		for(const auto& child: children){
 		    val = this->calcHelp(child); // recursively obtains the value of a child, the children could be an expression or a constant
             
-			if(!std::get<double>(val)){
+			if(!(std::holds_alternative<double>(val) || std::holds_alternative<double>(ret))){
 				throw TypeError(child.get_pdata());
 			}
 	    	if(idx ==0){ // if the child is the first of its siblings, set the return value to that childs value
 		   		ret = val;
 	   		}else{
 				 
-		   		switch(curr.get_text()[0]){ //math operations
+		   switch(curr.get_text()[0]){ //math operations
 
 			case '*':
-			    std::get<double>(ret) *= std::get<double>(val);
+			    ret = std::get<double>(ret) * std::get<double>(val);
                             break;
 			case '+':
-			    std::get<double>(ret) += std::get<double>(val);
+			    ret = std::get<double>(ret) + std::get<double>(val);
                             break;
 			case '-':
-			    std::get<double>(ret) -= std::get<double>(val);
+			    ret = std::get<double>(ret) - std::get<double>(val);
                             break;
 			case '/':
 			    if(std::get<double>(val) == 0){
 				throw ZeroDivision{};
 			    }
-			    std::get<double>(ret) += std::get<double>(val);
+			    ret = std::get<double>(ret) / std::get<double>(val);
                             break;
+			case '%':
+			    ret = std::fmod(std::get<double>(ret), std::get<double>(val));
+			    break;
 			case '<':
 				if(curr.get_text()== "<="){
-					std::get<bool>(ret) = std::get<double>(ret) <= std::get<double>(val);
+					ret = std::get<double>(ret) <= std::get<double>(val);
 				}else{
-					std::get<bool>(ret) = std::get<double>(ret) < std::get<double>(val);
+					ret = std::get<double>(ret) < std::get<double>(val);
 				}
 				break;
 			case '>':
 				if(curr.get_text()== ">="){
-					std::get<bool>(ret) = std::get<double>(ret) >= std::get<double>(val);
+					ret = std::get<double>(ret) >= std::get<double>(val);
 				}else{
-					std::get<bool>(ret) = std::get<double>(ret) > std::get<double>(val);
+					ret = std::get<double>(ret) > std::get<double>(val);
 				}
 				break;
 			
@@ -134,7 +139,7 @@ Var ASGrove::calcHelp(const ASTree::ASNode& root){
 		for(const auto& child: children){
 			val = this->calcHelp(child); // recursively obtains the value of a child, the children could be an expression or a constant
             
-			if(!std::get<bool>(val)){
+			if(!(std::holds_alternative<bool>(val)||std::holds_alternative<bool>(ret))){
 				throw TypeError(child.get_pdata());
 			}
 	    	if(idx ==0){ // if the child is the first of its siblings, set the return value to that childs value
@@ -144,19 +149,19 @@ Var ASGrove::calcHelp(const ASTree::ASNode& root){
 		   		switch(curr.get_text()[0]){ //math operations
 
 			case '&':
-			    std::get<bool>(ret) = std::get<bool>(ret) & std::get<bool>(val);
+			    ret = std::get<bool>(ret) & std::get<bool>(val);
                             break;
 			case '|':
-			    std::get<bool>(ret) = std::get<bool>(ret) | std::get<bool>(val);
+			    ret = std::get<bool>(ret) | std::get<bool>(val);
                             break;
 			case '^':
-			   std::get<bool>(ret) = std::get<bool>(ret) ^ std::get<bool>(val);
+			    ret = std::get<bool>(ret) ^ std::get<bool>(val);
                             break;
 			case '=':
-				std::get<bool>(ret) = std::get<bool>(ret) == std::get<bool>(val);
+			    ret = std::get<bool>(ret) == std::get<bool>(val);
                             break;
 			case '!':
-				std::get<bool>(ret) = std::get<bool>(ret) != std::get<bool>(val);
+			    ret = std::get<bool>(ret) != std::get<bool>(val);
 				break;
         	default:
                 break;
@@ -168,9 +173,9 @@ Var ASGrove::calcHelp(const ASTree::ASNode& root){
         return ret;
             
     case TokenType::CONST:
-            
 	    return std::stod(curr.get_text()); // if the token is a constant, just return it casted as a double
-            break;
+    case TokenType::BOOL:
+	    return curr.get_text()[0] == 't';
     case TokenType::VAR:
 	     auto value = this->search_var(curr.get_text()); //added this auto - might not work as intended
 	     if(value.has_value()){
@@ -185,7 +190,7 @@ Var ASGrove::calcHelp(const ASTree::ASNode& root){
 
 		
 	}
-    return -1.0;
+    return Var{};
 
   }
 
