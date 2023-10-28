@@ -22,17 +22,20 @@ class ASGrove{
   std::vector<TreeType> types;
   std::map<std::string, Var> vars;
   unsigned place; //how many trees have been executed
+  std::optional<ASGrove*> parent;
 
   void add_var(const std::string& name, Var val);
   std::optional<Var> search_var(const std::string& query);
   Var calcHelp(const ASTree::ASNode&);
   void printHelp(const ASTree::ASNode&) const;
+  
 public:
-  ASGrove(std::vector<std:::vector<Token>>);
+  ASGrove(std::vector<std:::vector<Token>>, ASGrove* owner = nullptr);
   const std::map<std::string, Var>& show_vars() const;
   Var eval();
   Var calc();
   void add_tree(ASTree*);
+  void reset();
   virtual void print() const;
 };
 
