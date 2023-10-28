@@ -22,8 +22,6 @@ public:
    //tree shouldn't have variable val
     
     const std::vector<ASNode>& get_kids() const;
-    static std::vector<Token> infix_tokens(const std::vector<Token>& tokens); // Infix Function
-    static int get_operator_precedence(TokenType type);  // Infix Function Helper for Precedence
   };
 
 private:
@@ -34,8 +32,12 @@ private:
   double precedence(std::string text);
 
 public:
-  ASTree(const std::vector<Token>& tokens, bool infix = false);
+  ASTree(const std::vector<Token>& tokens, bool infix = true);
   const ASNode& getProot() const;
 };
+class IfTree: public ASTree{
+  
+  IfTree(const std::vector<Token>&
+}
 
 #endif
