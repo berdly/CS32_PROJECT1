@@ -37,7 +37,7 @@ public:
 };
 class StatementTree: public ASTree{
   ASGrove body;
-  IfTree(const std::vector<Token>& conditional, const ASGrove& block) : ASTree{conditional}, body{block} {}
+  StatementTree(const std::vector<Token>& conditional, const ASGrove& block) : ASTree{conditional}, body{block} {}
 };
 
 #endif
