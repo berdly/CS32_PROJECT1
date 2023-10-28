@@ -12,10 +12,10 @@
 typedef std::variant<double, bool> Var;
 
 enum class TreeType{
-EXP;
-IF;
-WHILE;
-}
+EXP,
+IF,
+WHILE,
+};
 
 class ASGrove{
   std::vector<ASTree*> statements;
