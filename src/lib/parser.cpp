@@ -327,7 +327,7 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, unsigned sta
 
      if(low_idx == static_cast<int>(end) || (pdepth > 0)){
 	     if(trimmed){
-	    	throw ParserError(tokens.at(end));
+	    	throw ParserError(tokens.at(end+1));
 	     }
 	     else{
 		throw ParserError(tokens.at(end), PErrType::END);
