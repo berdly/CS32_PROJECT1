@@ -325,11 +325,11 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, unsigned sta
         }
     }
 
+     if(low_idx == static_cast<int>(end) || (pdepth > 0)){
+	    throw ParserError(tokens.at(end), PErrType::END);
+    }
     if(curr_pres == 100){
 	    throw ParserError(tokens.at(end));
-    }
-    if(low_idx == static_cast<int>(end) || (pdepth > 0)){
-	    throw ParserError(tokens.at(end), PErrType::END);
     }
     
     rootNode = ASTree::ASNode{tokens.at(low_idx)};
