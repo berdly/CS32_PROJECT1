@@ -32,10 +32,10 @@ ASTree::ASTree(const std::vector<Token>& tokens, bool infix) {
     }
     if(infix){
 	    if(wrapped(tokens, 0, tokens.size() - 1)){
-	    this->proot = this->buildInfix(tokens, 1, tokens.size() - 2);
+	    this->proot = this->buildInfix(tokens, 1, tokens.size() - 2, true);
 	    }
 	    else{
-		    this->proot = this->buildInfix(tokens, 0, tokens.size() - 1);
+		    this->proot = this->buildInfix(tokens, 0, tokens.size() - 1, false);
 	    }
     }else{
     this->proot = this->build(tokens, 0, tokens.size() - 1);
@@ -230,7 +230,7 @@ const Token& ASTree::ASNode::get_pdata() const{
     return pdata;
 }
 
-ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, unsigned start, unsigned end)
+ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, unsigned start, unsigned end, bool trimmed)
 {
     if((start == end) && ((tokens[start].get_type() == TokenType::CONST) || (tokens[start].get_type() == TokenType::VAR))){
 	    return ASTree::ASNode{tokens[start]};
@@ -326,7 +326,12 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, unsigned sta
     }
 
      if(low_idx == static_cast<int>(end) || (pdepth > 0)){
-	    throw ParserError(tokens.at(end), PErrType::END);
+	     if(trimmed){
+	    	throw ParserError(tokens.at(end), PErrType::END);
+	     }
+	     else{
+		throw ParserError(tokens.at(end);
+	     }
     }
     if(curr_pres == 100){
 	    throw ParserError(tokens.at(end));
@@ -334,20 +339,20 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, unsigned sta
     
     rootNode = ASTree::ASNode{tokens.at(low_idx)};
     if((low_idx > 1) && wrapped(tokens, start, low_idx - 1)){
-    		rootNode.add_child(this->buildInfix(tokens, start + 1, low_idx - 2));
+    		rootNode.add_child(this->buildInfix(tokens, start + 1, low_idx - 2, true));
     }
     else if(low_idx > 0){
-    	rootNode.add_child(this->buildInfix(tokens, start, low_idx - 1));
+    	rootNode.add_child(this->buildInfix(tokens, start, low_idx - 1, false));
     }
     else{
 	    throw ParserError(tokens.at(end));
     }
 	
     if((end > 0) && wrapped(tokens, low_idx + 1, end)){  
-    	rootNode.add_child(this->buildInfix(tokens, low_idx + 2, end - 1));
+    	rootNode.add_child(this->buildInfix(tokens, low_idx + 2, end - 1, true));
     }
     else{
-	    rootNode.add_child(this->buildInfix(tokens, low_idx + 1, end));
+	    rootNode.add_child(this->buildInfix(tokens, low_idx + 1, end, false));
     }
 	
     return rootNode;
