@@ -4,7 +4,7 @@
 #include <vector>
 #include <utility>
 #include "token.h"
-
+#include "grove.h"
 class ASTree{
 public:
   class ASNode{
@@ -36,8 +36,12 @@ public:
   const ASNode& getProot() const;
 };
 class IfTree: public ASTree{
-  
-  IfTree(const std::vector<Token>&
+  ASGrove ifbody;
+  IfTree(const std::vector<Token>& conditional, const ASGrove& body) : ASTree{conditional}, ifbody{body} {}
+}
+class IfTree: public ASTree{
+  ASGrove ifbody;
+  IfTree(const std::vector<Token>& conditional, const ASGrove& body) : ASTree{conditional}, ifbody{body} {}
 }
 
 #endif
