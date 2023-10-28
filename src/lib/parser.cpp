@@ -275,6 +275,7 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, unsigned sta
                 break;
             case TokenType::VAR:
             case TokenType::CONST:
+	    case TokenType::BOOL:
 		if(pdepth == 0){
 			
 			if(last == TokenType::CONST){
@@ -303,6 +304,7 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, unsigned sta
 			}
 		}
                 break;
+	    case TokenType::LOG:
             case TokenType::EXP:
                 if(pdepth == 0){
 			if(last == TokenType::EXP){
