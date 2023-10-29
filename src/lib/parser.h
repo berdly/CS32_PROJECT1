@@ -33,7 +33,8 @@ private:
 
 
 public:
-  ASTree(const std::vector<Token>& tokens, unsigned start = 0, unsigned end = 0, bool infix = true);
+  ASTree(const std::vector<Token>& tokens, unsigned start, unsigned end, bool infix = true);
+  ASTree(const std::vector<Token>& tokens, bool infix = true);
   const ASNode& getProot() const;
 };
 

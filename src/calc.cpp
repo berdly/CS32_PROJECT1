@@ -30,7 +30,7 @@
              std::cout << token.get_text() << ' ';
             }
             std::cout << '\n';
-            grove.add_tree(new ASTree{token_list, 0, 0, true});
+            grove.add_tree(new ASTree{token_list});
             grove.print();
             grove.calc();
             }

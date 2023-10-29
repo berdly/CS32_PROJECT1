@@ -5,6 +5,9 @@
 #include <stdexcept>
 bool wrapped(const std::vector<Token>& tokens, unsigned start, unsigned end){
 	int pdepth{};
+	if(tokens.empty()){
+		return false;
+	}
 	if(tokens.at(start).get_type() == TokenType::LPAR){
 		for(unsigned i{start+ 1}; i <= end; i++){
 			if(tokens.at(i).get_type() == TokenType::LPAR){
@@ -27,9 +30,6 @@ bool wrapped(const std::vector<Token>& tokens, unsigned start, unsigned end){
 	return false;
 }
 ASTree::ASTree(const std::vector<Token>& tokens, unsigned start, unsigned end, bool infix) {
-    if(end == 0){
-	    end = tokens.size() - 1;
-    }
     if(tokens.empty()){
 	    throw ParserError(Token{});
     }
@@ -44,6 +44,7 @@ ASTree::ASTree(const std::vector<Token>& tokens, unsigned start, unsigned end, b
     this->proot = this->build(tokens, 0, tokens.size() - 1);
     }
 }
+ASTree::ASTree(const std::vector<Token>& tokens, bool infix) : ASTree{tokens, 0, tokens.size() - 1, infix} {}
 
 
 std::vector<std::pair<int,int>> ASTree::get_child_idx(const std::vector<Token>& tokens, int start, int end){
