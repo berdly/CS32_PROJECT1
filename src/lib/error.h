@@ -52,12 +52,6 @@ class IdentifierError: public std::exception{
         return msg;
         
     }
-
-
-
-
-
-
 };
 
 class TypeError: public std::exception{
@@ -71,4 +65,5 @@ class TypeError: public std::exception{
         
     }
 };
+class NotImplemented: public std::exception {}
 #endif
