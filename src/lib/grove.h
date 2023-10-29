@@ -44,7 +44,7 @@ public:
 class StatementTree: public ASTree{
   public:
   ASGrove body;
-  StatementTree(ASTree conditional, ASGrove block) : ASTree{conditional}, body{block} {}
+  StatementTree(const ASTree& conditional, const ASGrove& block) : ASTree{conditional}, body{block} {}
 };
 
 #endif
