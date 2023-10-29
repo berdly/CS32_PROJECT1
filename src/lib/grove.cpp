@@ -41,7 +41,7 @@ ASGrove(std::vector<std:::vector<Token>> commands, ASGrove* owner): statements{}
 				else if(command.back() != TokenType::RBRACE){
 					throw ParserError{command.back(), PErrType::END};
 				}
-				statements.push_back(new StatementTree{ASTree{command, 2, command_end - 1}, ASGrove{split(command, command_end + 2, command.size() - 1), this}})
+				statements.push_back(new StatementTree{ASTree{command, 2, command_end - 1}, ASGrove{split(command, command_end + 2, command.size() - 1), this}});
 				if(command.front().get_text() == "if"){
 					types.push_back(TreeType::IF);
 				}
