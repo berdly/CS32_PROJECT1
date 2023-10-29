@@ -36,7 +36,11 @@
             std::cout << e.new_what() << '\n';
             }
             else{
-                std::cout << "Unexpected token at line " << e.etoken.get_line() << " column " << e.etoken.get_col() + e.etoken.get_text().size() + 1<< ": END\n";
+                unsigned extra{}
+                if(input.back() == ' '){
+                  extra++;
+                }
+                std::cout << "Unexpected token at line " << e.etoken.get_line() << " column " << e.etoken.get_col() + e.etoken.get_text().size() + extra << ": END\n";
             }
         }
         catch(const ZeroDivision&){
