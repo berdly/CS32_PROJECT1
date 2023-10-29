@@ -44,7 +44,7 @@ ASTree::ASTree(const std::vector<Token>& tokens, unsigned start, unsigned end, b
     this->proot = this->build(tokens, 0, tokens.size() - 1);
     }
 }
-ASTree::ASTree(const std::vector<Token>& tokens, bool infix) : ASTree{tokens, 0, tokens.size() - 1, infix} {}
+ASTree::ASTree(const std::vector<Token>& tokens, bool infix) : ASTree{tokens, 0, static_cast<unsigned>(tokens.size() - 1), infix} {}
 
 
 std::vector<std::pair<int,int>> ASTree::get_child_idx(const std::vector<Token>& tokens, int start, int end){
