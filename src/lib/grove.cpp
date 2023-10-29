@@ -181,6 +181,7 @@ Var ASGrove::calcHelp(const ASTree::ASNode& root){
     Var val{};
     unsigned idx{};
     Var value{};
+	std::optional<Var> possible_val{};
     
     switch(curr.get_type()){
 
@@ -293,9 +294,9 @@ Var ASGrove::calcHelp(const ASTree::ASNode& root){
     case TokenType::BOOL:
 	    return curr.get_text()[0] == 't';
     case TokenType::VAR:
-	     auto value = this->search_var(curr.get_text()); //added this auto - might not work as intended
-	     if(value.has_value()){
-		 return *value;
+	     possible_val = this->search_var(curr.get_text()); //added this auto - might not work as intended
+	     if(possible_val.has_value()){
+		 return *possible_val;
 	     }
 	     else{
 		 throw IdentifierError(curr);
