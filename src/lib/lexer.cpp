@@ -304,17 +304,7 @@ std::vector<Token> reader(const std::string& input, bool err) {  // Change retur
         }
         column++;
     }
-    const Token& last{tokens.back()};
-    std::string str{last.get_text()};
-    for(int i{static_cast<int>(input.size()-1)}; i > 0; i--){
-	if(!isspace(input[i])){
-		for(unsigned j{}; j < (input.size() - 1 - static_cast<unsigned>(i)); j++){
-			str.push_back(' ');
-		}
-		tokens.back() = Token(last.get_col(), last.get_line(), str, last.get_type());
-		break;
-	}
-    }
+    
     // If there's any remaining number, create a token for it.
     if (!currToken.empty()) {
         tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::CONST));
