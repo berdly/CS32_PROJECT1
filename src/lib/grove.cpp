@@ -10,15 +10,6 @@ ASGrove(std::vector<std:::vector<Token>> commands, ASGrove* owner): statements{}
 		int conditon_end{};
 		switch(command.front().get_type())
 			case TokenType::KW:
-				if(command.front().get_text() == "if"){
-					types.push_back(TreeType::IF);
-				}
-				else if(command.front().get_text() == "while"){
-					types.push_back(TreeType::WHILE);
-				}
-				else{
-					throw ParserError(command.front());
-				}
 				if(command.at(1).get_type() != TokenType::LPAR){
 					throw ParserError(command.at(1));
 				}
@@ -50,7 +41,17 @@ ASGrove(std::vector<std:::vector<Token>> commands, ASGrove* owner): statements{}
 				else if(command.back() != TokenType::RBRACE){
 					throw ParserError{command.back(), PErrType::END};
 				}
-				statements.push_back(new StatementTree{std::vector<Token>{command.begin()+2, command.begin() + command_end}, ASGrove{split(std::vector<Token>{command.begin()+command_end+1, ) 
+				statements.push_back(new StatementTree{ASTree{tokens, 0, command_end - 1}, ASGrove{split(std::vector<Token>{command.begin()+command_end+1, command.end()})}})
+				if(command.front().get_text() == "if"){
+					types.push_back(TreeType::IF);
+				}
+				else if(command.front().get_text() == "while"){
+					types.push_back(TreeType::WHILE);
+				}
+				else{
+					throw ParserError(command.front());
+				}
+				break;
 			}
 		}
 	}
