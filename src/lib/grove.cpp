@@ -171,7 +171,7 @@ Var ASGrove::calc(){
     std::cout<<std::get<bool>(ret)<<std::endl;
 	}
 
-	  ++place;
+	++place;
     return ret; //should return final value of tree and update variables but only once
 }
 
