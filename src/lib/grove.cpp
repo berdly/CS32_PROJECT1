@@ -58,7 +58,18 @@ ASGrove(std::vector<std:::vector<Token>> commands, ASGrove* owner): statements{}
 		}
 	}
 }
-
+ASGrove::~ASGrove(){
+	int idx{};
+	for(ASTree* tree: statements){
+		if(statements.at(idx) == TreeType::EXP){
+			delete tree;
+		}
+		else{
+			StatementTree* state{dynamic_cast<StatementTree*>(tree)};
+			delete state;
+		}
+	}
+}
 void ASGrove::reset(){
 	place = 0;
 }
