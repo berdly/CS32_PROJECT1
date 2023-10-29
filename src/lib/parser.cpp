@@ -26,16 +26,19 @@ bool wrapped(const std::vector<Token>& tokens, unsigned start, unsigned end){
 	}
 	return false;
 }
-ASTree::ASTree(const std::vector<Token>& tokens, bool infix) {
+ASTree::ASTree(const std::vector<Token>& tokens, unsigned start, unsigned end, bool infix) {
+    if(end == 0){
+	    end = tokens.size() - 1;
+    }
     if(tokens.empty()){
 	    throw ParserError(Token{});
     }
     if(infix){
-	    if(wrapped(tokens, 0, tokens.size() - 1)){
-	    this->proot = this->buildInfix(tokens, 1, tokens.size() - 2, true);
+	    if(wrapped(tokens, start, end)){
+	    this->proot = this->buildInfix(tokens, start + 1, end - 1, true);
 	    }
 	    else{
-		    this->proot = this->buildInfix(tokens, 0, tokens.size() - 1, false);
+		    this->proot = this->buildInfix(tokens, start, end, false);
 	    }
     }else{
     this->proot = this->build(tokens, 0, tokens.size() - 1);
@@ -143,7 +146,7 @@ ASTree::ASNode ASTree::build(const std::vector<Token>& tokens, int start, int en
             //we know it should be an operand
             
 
-            if(tokens[start+1].get_type() != TokenType::EXP and tokens[start+1].get_type() != TokenType::EQUAL){
+            if((tokens[start+1].get_type() != TokenType::EXP) && tokens[start+1].get_type() != TokenType::EQUAL){
                 //std::cout<<"THROW9"<<std::endl;
                 throw ParserError(tokens[start+1]);
             }
@@ -167,7 +170,7 @@ ASTree::ASNode ASTree::build(const std::vector<Token>& tokens, int start, int en
 		 }
             }
 
-            if((tokens[start+1].get_type() == TokenType::EXP and tokens[start+2].get_type() == TokenType::VAR) or tokens[start+1].get_type() == TokenType::EQUAL){ //deals with (+ x), (= 3), (= x)
+            if((tokens[start+1].get_type() == TokenType::EXP && tokens[start+2].get_type() == TokenType::VAR) || tokens[start+1].get_type() == TokenType::EQUAL){ //deals with (+ x), (= 3), (= x)
                 std::vector<ASNode> kids{rootNode.get_kids()}; 
                 if(kids.size() == 1){
                     throw ParserError(tokens[start+3]);
@@ -275,6 +278,7 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, unsigned sta
                 break;
             case TokenType::VAR:
             case TokenType::CONST:
+	    case TokenType::BOOL:
 		if(pdepth == 0){
 			
 			if(last == TokenType::CONST){
@@ -303,6 +307,7 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, unsigned sta
 			}
 		}
                 break;
+	    case TokenType::LOG:
             case TokenType::EXP:
                 if(pdepth == 0){
 			if(last == TokenType::EXP){
@@ -358,19 +363,35 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, unsigned sta
     return rootNode;
 }
 
-double ASTree::precedence(std::string text)
+int ASTree::precedence(const std::string& text)
 {
     switch(text[0]){
 	    case '*':
 	    case '/':
-	    	return 3;
+	    case '%':
+	    	return 7;
 	    case '+':
 	    case '-':
-	        return 2;
+	        return 6;
+	    case '>':
+	    case '<':
+	    	return 5;
+	    case '!':
 	    case '=':
-                return 1;
+		if((text.size() > 1) && (text[1] == '=')){
+		return 4;
+		}
+		else{
+                return 0;
+		}
+	    	break;
+	    case '&':
+	    	return 3;
+	    case '^':
+	    	return 2;
+	    case '|':
+	    	return 1;
 	    default:
 	        return 100;
     }
 }
-

@@ -14,6 +14,11 @@ enum class TokenType{
   LPAR,
   RPAR,
   ERR,
+  KW,
+  LOG,
+  BOOL,
+  LBRACE,
+  RBRACE,
 };
 //contains all information needed about a given token, including what kind of value it is through the ptype member, also has accessors
 class Token{
