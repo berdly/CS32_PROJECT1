@@ -387,3 +387,5 @@ Var ASGrove::calcHelp(const ASTree::ASNode& root){
 void ASGrove::add_tree(ASTree* tree){
 	this->statements.push_back(tree);
 }
+
+const std::map<std::string, Var>& ASGrove::show_vars() { return vars; } 
