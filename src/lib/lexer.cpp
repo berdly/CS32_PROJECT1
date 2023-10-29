@@ -396,7 +396,7 @@ std::vector<Token> reader(const std::string& input, bool err) {  // Change retur
         }
         column++;
     }
-
+    
     // If there's any remaining number, create a token for it.
     if (!currToken.empty()) {
         tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::CONST));

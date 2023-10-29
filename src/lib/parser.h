@@ -31,6 +31,7 @@ private:
   ASTree::ASNode buildInfix(const std::vector<Token>&, unsigned, unsigned, bool);
   int precedence(const std::string& text);
 
+
 public:
   ASTree(const std::vector<Token>& tokens, unsigned start = 0, unsigned end = 0, bool infix = true);
   const ASNode& getProot() const;
