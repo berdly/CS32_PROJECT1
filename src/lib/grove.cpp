@@ -1,15 +1,16 @@
 #include "grove.h"
 #include "error.h"
 #include <cmath>
-ASGrove::ASGrove() : statements{}, types{}, vars{}, place{} {}
+#include "lexer.h"
+ASGrove::ASGrove() : statements{}, types{}, vars{}, place{}, parent{nullptr} {}
 //ASGrove::ASGrove(const std::vector<ASTree>& tree) : statements{tree}, vars{}, place{} {}
 //ASGrove::ASGrove(const ASTree& tree) : statements(std::vector<ASTree>{tree}), vars{}, types{}, place{} {}
-ASGrove(std::vector<std:::vector<Token>> commands, unsigned start, unsigned end, ASGrove* owner): statements{}, types{}, vars{}, place{} {
+ASGrove::ASGrove(std::vector<std::vector<Token>> commands, unsigned start, unsigned end, ASGrove* owner): statements{}, types{}, vars{}, place{}, parent{owner}{
 	//needs to be changed to normal number for loop using start and end
 	for(const auto& command : commands){
 		int pdepth{1};
-		int conditon_end{};
-		switch(command.front().get_type())
+		int condition_end{};
+		switch(command.front().get_type()){
 			case TokenType::KW:
 				if(command.at(1).get_type() != TokenType::LPAR){
 					throw ParserError(command.at(1));
@@ -19,7 +20,7 @@ ASGrove(std::vector<std:::vector<Token>> commands, unsigned start, unsigned end,
 						case TokenType::LPAR:
 							pdepth++;
 							break;
-						case TokenType::RPAR
+						case TokenType::RPAR:
 							pdepth--;
 							if(pdepth < 0){
 								throw ParserError(command.at(i));
@@ -39,10 +40,10 @@ ASGrove(std::vector<std:::vector<Token>> commands, unsigned start, unsigned end,
 				if(command.at(condition_end + 1).get_type() != TokenType::LBRACE){
 					throw ParserError{command.at(condition_end + 1)};
 				}
-				else if(command.back() != TokenType::RBRACE){
+				else if(command.back().get_type() != TokenType::RBRACE){
 					throw ParserError{command.back(), PErrType::END};
 				}
-				statements.push_back(new StatementTree{ASTree{command, 2, command_end - 1}, ASGrove{split(command, command_end + 2, command.size() - 1), this}});
+				statements.push_back(new StatementTree{ASTree{command, static_cast<unsigned>(2), static_cast<unsigned>(condition_end - 1)}, ASGrove{split(command, condition_end + 2, command.size() - 1), 0,0,this}});
 				if(command.front().get_text() == "if"){
 					types.push_back(TreeType::IF);
 				}
@@ -53,22 +54,22 @@ ASGrove(std::vector<std:::vector<Token>> commands, unsigned start, unsigned end,
 					throw ParserError(command.front());
 				}
 				break;
-			default:
+				default:
 				statements.push_back(new ASTree{command});
 			}
 		}
 	}
-}
 ASGrove::~ASGrove(){
 	int idx{};
 	for(ASTree* tree: statements){
-		if(statements.at(idx) == TreeType::EXP){
+		if(types.at(idx) == TreeType::EXP){
 			delete tree;
 		}
 		else{
 			StatementTree* state{dynamic_cast<StatementTree*>(tree)};
 			delete state;
 		}
+		idx++;
 	}
 }
 void ASGrove::reset(){
@@ -90,8 +91,8 @@ std::optional<Var> ASGrove::search_var(const std::string& query){
    auto value{vars.find(query)};//map iterator type
    if(value == vars.end()){
 	   if(parent){
-		   value = parent->show_vars().find(query);
-		   return (value == parent->show_vars().end()) ? std::optional<Var>{} : std::optional<Var>{value->second};
+		   auto pval{parent->show_vars().find(query)};
+		   return (pval == parent->show_vars().end()) ? std::optional<Var>{} : std::optional<Var>{pval->second};
 	   }
 	   return std::optional<Var>{};
    }
@@ -113,13 +114,13 @@ Var ASGrove::calc(){
   StatementTree* statement;
 	try{
 	switch(types.at(place)){
-		case TreeTypes::EXP:
+		case TreeType::EXP:
 			ret = calcHelp(tree->getProot());
 			break;
-		case TreeTypes::IF:
+		case TreeType::IF:
 			ret = calcHelp(tree->getProot());
-			if(!holds_alternative<bool>(ret)){
-				throw TypeError{statements.at(place)->getProot()};
+			if(!std::holds_alternative<bool>(ret)){
+				throw TypeError{statements.at(place)->getProot().get_pdata()};
 			}
 			else if(std::get<bool>(ret)){
 				statement = dynamic_cast<StatementTree*>(tree);
@@ -127,23 +128,23 @@ Var ASGrove::calc(){
 				this->update_existing(statement->body.show_vars());
 			}
 			break;
-		case TreeTypes::WHILE:
-		while(true){
-			ret = calcHelp(tree->getProot());
-			if(!holds_alternative<bool>(ret)){
-				throw TypeError{statements.at(place)->getProot()};
+		case TreeType::WHILE:
+			while(true){
+				ret = calcHelp(tree->getProot());
+				if(!std::holds_alternative<bool>(ret)){
+					throw TypeError{statements.at(place)->getProot()};
+				}
+				else if(std::get<bool>(ret)){
+					statement = dynamic_cast<StatementTree*>(tree);
+					statement->body.eval();
+					this->update_existing(statement->body.show_vars());
+					statement->body.reset();
+				}
+				else{
+					break;
+				}
 			}
-			else if(std::get<bool>(ret)){
-				statement = dynamic_cast<StatementTree*>(tree);
-				statement->body.eval();
-				this->update_existing(statement->body.show_vars());
-				statement->body.reset();
-			}
-			else{
-				break;
-			}
-		}
-		break;
+			break;
 		}
 	}
 	catch(const ZeroDivision&){
@@ -197,7 +198,7 @@ Var ASGrove::calcHelp(const ASTree::ASNode& root){
             break;
 		
      case TokenType::EXP:
-	        ret = 0.0
+	    ret = 0.0;
 		for(const auto& child: children){
 		    val = this->calcHelp(child); // recursively obtains the value of a child, the children could be an expression or a constant
             
@@ -389,4 +390,5 @@ void ASGrove::add_tree(ASTree* tree){
 	this->statements.push_back(tree);
 }
 
-const std::map<std::string, Var>& ASGrove::show_vars() const { return vars; } 
+const std::map<std::string, Var>& ASGrove::show_vars() const { return vars; }
+void ASGrove::update_existing(const std::map<std::string, Var>&) {}

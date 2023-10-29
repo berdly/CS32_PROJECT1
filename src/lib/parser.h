@@ -28,16 +28,16 @@ private:
   ASNode proot;
   ASNode build(const std::vector<Token>& tokens, int start, int end);
   std::vector<std::pair<int,int>> get_child_idx(const std::vector<Token>& tokens, int start, int end);
-  ASTree::ASNode buildInfix(const std::vector<Token>&, unsigned, unsigned);
-  double precedence(std::string text);
+  ASTree::ASNode buildInfix(const std::vector<Token>&, unsigned, unsigned, bool);
+  int precedence(const std::string& text);
 
 public:
-  ASTree(const std::vector<Token>& tokens, bool infix = true);
+  ASTree(const std::vector<Token>& tokens, unsigned start = 0, unsigned end = 0, bool infix = true);
   const ASNode& getProot() const;
 };
 class StatementTree: public ASTree{
   ASGrove body;
-  StatementTree(const std::vector<Token>& conditional, const ASGrove& block) : ASTree{conditional}, body{block} {}
+  StatementTree(ASTree conditional, ASGrove block) : ASTree{conditional}, body{block} {}
 };
 
 #endif
