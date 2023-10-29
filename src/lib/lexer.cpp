@@ -6,7 +6,7 @@
 std::vector<std::vector<Token>> split(const std::vector<Token>& input, unsigned start, unsigned end){
     int pdepth = 0;
     std::vector<std::vector<Token>> statements{};
-    int parStart{start};
+    unsigned parStart{start};
     for(unsigned i{start}; i <= end; i++){
         Token curr = input.at(i);
 
