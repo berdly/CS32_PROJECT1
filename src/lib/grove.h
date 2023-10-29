@@ -31,6 +31,7 @@ class ASGrove{
   
 public:
   ASGrove(std::vector<std:::vector<Token>> commands, unsigned start = 0, unsigned end = 0, ASGrove* owner = nullptr);
+  ~ASGrove();
   const std::map<std::string, Var>& show_vars() const;
   Var eval();
   Var calc();
