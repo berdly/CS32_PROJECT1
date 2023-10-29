@@ -388,4 +388,4 @@ void ASGrove::add_tree(ASTree* tree){
 	this->statements.push_back(tree);
 }
 
-const std::map<std::string, Var>& ASGrove::show_vars() { return vars; } 
+const std::map<std::string, Var>& ASGrove::show_vars() const { return vars; } 
