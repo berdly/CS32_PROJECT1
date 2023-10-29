@@ -307,7 +307,7 @@ std::vector<Token> reader(const std::string& input, bool err) {  // Change retur
     const Token& last{tokens.back()};
     std::string str{last.get_text()};
     for(int i{static_cast<int>(input.size()-1)}; i > 0; i--){
-	if(!isspace(input[i]){
+	if(!isspace(input[i])){
 		for(int j; j <= i; j++){
 			str.push_back(' ');
 		}
