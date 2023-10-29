@@ -38,7 +38,7 @@ public:
   const std::map<std::string, Var>& show_vars() const;
   Var eval();
   Var calc();
-  void add_tree(ASTree*);
+  void add_tree(ASTree* tree, TreeType type = TreeType::EXP);
   void reset();
   void print() const;
 };

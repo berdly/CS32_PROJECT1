@@ -57,6 +57,7 @@ ASGrove::ASGrove(std::vector<std::vector<Token>> commands, unsigned start, unsig
 				default:
 				statements.push_back(new ASTree{commands.at(i)});
 				types.push_back(TreeType::EXP);
+				break;
 			}
 		}
 	}
@@ -386,8 +387,9 @@ Var ASGrove::calcHelp(const ASTree::ASNode& root){
 	}
   
   }
-void ASGrove::add_tree(ASTree* tree){
+void ASGrove::add_tree(ASTree* tree, TreeType type){
 	this->statements.push_back(tree);
+	this->types.push_back(type);
 }
 
 const std::map<std::string, Var>& ASGrove::show_vars() const { return vars; }
