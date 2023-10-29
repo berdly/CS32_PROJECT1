@@ -26,16 +26,19 @@ bool wrapped(const std::vector<Token>& tokens, unsigned start, unsigned end){
 	}
 	return false;
 }
-ASTree::ASTree(const std::vector<Token>& tokens, bool infix) {
+ASTree::ASTree(const std::vector<Token>& tokens, unsigned start, unsigned end, bool infix) {
+    if(end == 0){
+	    end = tokens.size() - 1;
+    }
     if(tokens.empty()){
 	    throw ParserError(Token{});
     }
     if(infix){
-	    if(wrapped(tokens, 0, tokens.size() - 1)){
-	    this->proot = this->buildInfix(tokens, 1, tokens.size() - 2, true);
+	    if(wrapped(tokens, start, end)){
+	    this->proot = this->buildInfix(tokens, start + 1, end - 1, true);
 	    }
 	    else{
-		    this->proot = this->buildInfix(tokens, 0, tokens.size() - 1, false);
+		    this->proot = this->buildInfix(tokens, start, end, false);
 	    }
     }else{
     this->proot = this->build(tokens, 0, tokens.size() - 1);
