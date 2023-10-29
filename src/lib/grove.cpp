@@ -43,7 +43,7 @@ ASGrove::ASGrove(std::vector<std::vector<Token>> commands, unsigned start, unsig
 				else if(commands.at(i).back().get_type() != TokenType::RBRACE){
 					throw ParserError{commands.at(i).back(), PErrType::END};
 				}
-				statements.push_back(new StatementTree{ASTree{commands.at(i), static_cast<unsigned>(2), static_cast<unsigned>(condition_end - 1)}, ASGrove{split(commands.at(i), condition_end + 2, commands.at(i).size() - 1), 0,0,this}});
+				statements.push_back(new StatementTree{ASTree{commands.at(i), static_cast<unsigned>(2), static_cast<unsigned>(condition_end - 1)}, ASGrove{split_infix(commands.at(i), condition_end + 2, commands.at(i).size() - 1), 0,0,this}});
 				if(commands.at(i).front().get_text() == "if"){
 					types.push_back(TreeType::IF);
 				}
@@ -393,4 +393,4 @@ void ASGrove::add_tree(ASTree* tree, TreeType type){
 }
 
 const std::map<std::string, Var>& ASGrove::show_vars() const { return vars; }
-void ASGrove::update_existing(const std::map<std::string, Var>&) {}
+void ASGrove::update_existing(const std::map<std::string, Var>&) {throw NotImplemented{""};}
