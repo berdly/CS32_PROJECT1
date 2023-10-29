@@ -56,6 +56,7 @@ ASGrove::ASGrove(std::vector<std::vector<Token>> commands, unsigned start, unsig
 				break;
 				default:
 				statements.push_back(new ASTree{commands.at(i)});
+				types.push_back(TreeType::EXP);
 			}
 		}
 	}

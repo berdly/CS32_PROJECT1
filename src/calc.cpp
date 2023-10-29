@@ -28,10 +28,6 @@
         try{
             if((token_list.size() == 1) && token_list.at(0).get_type() == TokenType::ERR){}
             else if(!token_list.empty()){
-            for(const auto& token: token_list){
-             std::cout << token.get_text() << ' ';
-            }
-            std::cout << '\n';
             grove.add_tree(new ASTree{token_list});
             grove.print();
             grove.calc();
