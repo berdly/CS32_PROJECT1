@@ -37,7 +37,7 @@ public:
   Var calc();
   void add_tree(ASTree*);
   void reset();
-  virtual void print() const;
+  void print() const;
 };
 
 #endif
