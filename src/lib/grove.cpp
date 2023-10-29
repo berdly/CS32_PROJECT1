@@ -313,7 +313,7 @@ Var ASGrove::calcHelp(const ASTree::ASNode& root){
 
   void ASGrove::print() const {
 	 
-      		printHelp(statements.at(place).getProot());
+      	  printHelp(statements.at(place)->getProot());
           std::cout<<std::endl;
           
   }
