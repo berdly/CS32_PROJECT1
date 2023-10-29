@@ -122,6 +122,9 @@ std::vector<std::pair<int,int>> ASTree::get_child_idx(const std::vector<Token>& 
                 //std::cout<<"THROW9"<<std::endl;
                 throw ParserError(curr);
                 break;
+			default:
+				throw ParserError(curr);
+				break;
         }
         //currend++;
     }
