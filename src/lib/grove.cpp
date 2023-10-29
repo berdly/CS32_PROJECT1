@@ -1,10 +1,11 @@
 #include "grove.h"
 #include "error.h"
 #include <cmath>
-ASGrove::ASGrove() : statements{}, vars{}, types{}, place{} {}
+ASGrove::ASGrove() : statements{}, types{}, vars{}, place{} {}
 //ASGrove::ASGrove(const std::vector<ASTree>& tree) : statements{tree}, vars{}, place{} {}
 //ASGrove::ASGrove(const ASTree& tree) : statements(std::vector<ASTree>{tree}), vars{}, types{}, place{} {}
-ASGrove(std::vector<std:::vector<Token>> commands, ASGrove* owner): statements{}, vars{}, types{}, place{} {
+ASGrove(std::vector<std:::vector<Token>> commands, unsigned start, unsigned end, ASGrove* owner): statements{}, types{}, vars{}, place{} {
+	//needs to be changed to normal number for loop using start and end
 	for(const auto& command : commands){
 		int pdepth{1};
 		int conditon_end{};
