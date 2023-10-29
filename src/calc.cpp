@@ -8,6 +8,7 @@
 
  int main(){
     std::string input;
+    std::string one_back;
     ASGrove grove{};
     while(true){
        getline(std::cin, input);
@@ -17,6 +18,9 @@
         }
      
         auto token_list{reader(input, false)};
+        if(!input.empty()){
+          one_back = input;
+        }
         input.clear(); // Clearing previous inputs for a new tree to be created
         
         try{
@@ -36,8 +40,8 @@
             std::cout << e.new_what() << '\n';
             }
             else{
-                unsigned extra{}
-                if(input.back() == ' '){
+                unsigned extra{};
+                if(one_back.at(one_back.size() - 2) == ' '){
                   extra++;
                 }
                 std::cout << "Unexpected token at line " << e.etoken.get_line() << " column " << e.etoken.get_col() + e.etoken.get_text().size() + extra << ": END\n";
