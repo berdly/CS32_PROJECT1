@@ -36,9 +36,6 @@ public:
   ASTree(const std::vector<Token>& tokens, unsigned start = 0, unsigned end = 0, bool infix = true);
   const ASNode& getProot() const;
 };
-class StatementTree: public ASTree{
-  ASGrove body;
-  StatementTree(ASTree conditional, ASGrove block) : ASTree{conditional}, body{block} {}
-};
+
 
 #endif

@@ -41,5 +41,10 @@ public:
   void reset();
   void print() const;
 };
+class StatementTree: public ASTree{
+  public:
+  ASGrove body;
+  StatementTree(ASTree conditional, ASGrove block) : ASTree{conditional}, body{block} {}
+};
 
 #endif

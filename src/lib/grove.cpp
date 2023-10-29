@@ -66,7 +66,7 @@ ASGrove::~ASGrove(){
 			delete tree;
 		}
 		else{
-			StatementTree* state{dynamic_cast<StatementTree*>(tree)};
+			StatementTree* state{static_cast<StatementTree*>(tree)};
 			delete state;
 		}
 		idx++;
@@ -123,7 +123,7 @@ Var ASGrove::calc(){
 				throw TypeError{statements.at(place)->getProot().get_pdata()};
 			}
 			else if(std::get<bool>(ret)){
-				statement = dynamic_cast<StatementTree*>(tree);
+				statement = static_cast<StatementTree*>(tree);
 				statement->body.eval();
 				this->update_existing(statement->body.show_vars());
 			}
@@ -132,10 +132,10 @@ Var ASGrove::calc(){
 			while(true){
 				ret = calcHelp(tree->getProot());
 				if(!std::holds_alternative<bool>(ret)){
-					throw TypeError{statements.at(place)->getProot()};
+					throw TypeError{statements.at(place)->getProot().get_pdata()};
 				}
 				else if(std::get<bool>(ret)){
-					statement = dynamic_cast<StatementTree*>(tree);
+					statement = static_cast<StatementTree*>(tree);
 					statement->body.eval();
 					this->update_existing(statement->body.show_vars());
 					statement->body.reset();
@@ -246,11 +246,11 @@ Var ASGrove::calcHelp(const ASTree::ASNode& root){
                             break;
 		    }
 		}
+		++idx;
 
 	}
-		++idx;	
-}
         	return ret;
+
     case TokenType::LOG:
 		for(const auto& child: children){
 			val = this->calcHelp(child); // recursively obtains the value of a child, the children could be an expression or a constant
@@ -265,13 +265,13 @@ Var ASGrove::calcHelp(const ASTree::ASNode& root){
 		   		switch(curr.get_text()[0]){ //math operations
 
 			case '&':
-			    ret = std::get<bool>(ret) & std::get<bool>(val);
+			    ret = std::get<bool>(ret) && std::get<bool>(val);
                             break;
 			case '|':
-			    ret = std::get<bool>(ret) | std::get<bool>(val);
+			    ret = std::get<bool>(ret) || std::get<bool>(val);
                             break;
 			case '^':
-			    ret = std::get<bool>(ret) ^ std::get<bool>(val);
+			    ret = (std::get<bool>(ret) ? std::get<bool>(val) : !(std::get<bool>(val)));
                             break;
 			case '=':
 			    ret = std::get<bool>(ret) == std::get<bool>(val);
