@@ -41,7 +41,7 @@ ASGrove(std::vector<std:::vector<Token>> commands, ASGrove* owner): statements{}
 				else if(command.back() != TokenType::RBRACE){
 					throw ParserError{command.back(), PErrType::END};
 				}
-				statements.push_back(new StatementTree{ASTree{tokens, 0, command_end - 1}, ASGrove{split(std::vector<Token>{command.begin()+command_end+1, command.end()})}})
+				statements.push_back(new StatementTree{ASTree{tokens, 2, command_end - 1}, ASGrove{split(std::vector<Token>{command.begin()+command_end+1, command.end()})}})
 				if(command.front().get_text() == "if"){
 					types.push_back(TreeType::IF);
 				}
@@ -52,6 +52,8 @@ ASGrove(std::vector<std:::vector<Token>> commands, ASGrove* owner): statements{}
 					throw ParserError(command.front());
 				}
 				break;
+			default:
+				statements.push_back(new ASTree{command});
 			}
 		}
 	}
