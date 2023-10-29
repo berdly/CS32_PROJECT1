@@ -244,14 +244,15 @@ Var ASGrove::calcHelp(const ASTree::ASNode& root){
 				break;
 			
 
-        	default:
+        		default:
                             break;
 		    }
-
 		}
+
+	}
 		++idx;	
-	   }
-        return ret;
+}
+        	return ret;
     case TokenType::LOG:
 		for(const auto& child: children){
 			val = this->calcHelp(child); // recursively obtains the value of a child, the children could be an expression or a constant
@@ -287,7 +288,7 @@ Var ASGrove::calcHelp(const ASTree::ASNode& root){
 		}
 		++idx;	
 	   }
-        return ret;
+        	return ret;
             
     case TokenType::CONST:
 	    return std::stod(curr.get_text()); // if the token is a constant, just return it casted as a double
