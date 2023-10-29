@@ -8,5 +8,5 @@
 
 std::vector<Token> reader(const std::string& input, bool err = true);
 std::vector<std::vector<Token>> split(const std::vector<Token>& input, unsigned start=0, unsigned end=0);
-std::vector<std::vector<Token>> split_infix(const std::vector<Token>& input, unsigned start=0, unsigned end=0)
+std::vector<std::vector<Token>> split_infix(const std::vector<Token>& input, unsigned start=0, unsigned end=0);
 #endif
