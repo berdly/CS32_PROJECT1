@@ -4,7 +4,7 @@
 ASGrove::ASGrove() : statements{}, vars{}, types{}, place{} {}
 //ASGrove::ASGrove(const std::vector<ASTree>& tree) : statements{tree}, vars{}, place{} {}
 //ASGrove::ASGrove(const ASTree& tree) : statements(std::vector<ASTree>{tree}), vars{}, types{}, place{} {}
-ASGrove(std::vector<std:::vector<Token>> commands, ASGrove* owner): statements{}, vars{}, place{} {
+ASGrove(std::vector<std:::vector<Token>> commands, ASGrove* owner): statements{}, vars{}, types{}, place{} {
 	for(const auto& command : commands){
 		int pdepth{1};
 		int conditon_end{};
@@ -104,24 +104,24 @@ Var ASGrove::calc(){
 		case TreeTypes::EXP:
 			ret = calcHelp(tree->getProot());
 			break;
-		}
 		case TreeTypes::IF:
 			ret = calcHelp(tree->getProot());
 			if(!holds_alternative<bool>(ret)){
-				throw TypeError{statements.at(place).getProot()};
+				throw TypeError{statements.at(place)->getProot()};
 			}
-			else if{std::get<bool>(ret)){
+			else if(std::get<bool>(ret)){
 				statement = dynamic_cast<StatementTree*>(tree);
 				statement->body.eval();
 				this->update_existing(statement->body.show_vars());
 			}
+			break;
 		case TreeTypes::WHILE:
 		while(true){
 			ret = calcHelp(tree->getProot());
 			if(!holds_alternative<bool>(ret)){
-				throw TypeError{statements.at(place).getProot()};
+				throw TypeError{statements.at(place)->getProot()};
 			}
-			else if{std::get<bool>(ret)){
+			else if(std::get<bool>(ret)){
 				statement = dynamic_cast<StatementTree*>(tree);
 				statement->body.eval();
 				this->update_existing(statement->body.show_vars());
@@ -131,10 +131,8 @@ Var ASGrove::calc(){
 				break;
 			}
 		}
+		break;
 		}
-				
-	}
-	  ret = calcHelp(statements.at(place).getProot());
 	}
 	catch(const ZeroDivision&){
 		++place;
