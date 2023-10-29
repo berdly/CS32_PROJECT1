@@ -372,6 +372,6 @@ Var ASGrove::calcHelp(const ASTree::ASNode& root){
 	}
   
   }
-void ASGrove::add_tree(const ASTree& tree){
+void ASGrove::add_tree(ASTree* tree){
 	this->statements.push_back(tree);
 }
