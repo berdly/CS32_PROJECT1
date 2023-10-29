@@ -11,14 +11,13 @@
     std::string one_back;
     ASGrove grove{};
     while(true){
-       /*
+       
        getline(std::cin, input);
         
         if (!input.empty()) {
             input +="\n"; // Concatenating each line with a newline character
         }
-        */
-        input = "x = 2 + 2";
+        
         auto token_list{reader(input, false)};
         if(!input.empty()){
           one_back = input;
