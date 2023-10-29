@@ -3,7 +3,58 @@
 #include <cmath>
 ASGrove::ASGrove() : statements{}, vars{}, place{} {}
 ASGrove::ASGrove(const std::vector<ASTree>& tree) : statements{tree}, vars{}, place{} {}
-ASGrove::ASGrove(const ASTree& tree) : statements(std::vector<ASTree>{tree}), vars{}, place{} {}
+ASGrove::ASGrove(const ASTree& tree) : statements(std::vector<ASTree>{tree}), vars{}, types{}, place{} {}
+ASGrove(std::vector<std:::vector<Token>> commands, ASGrove* owner): statements{}, vars{}, place{} {
+	for(const auto& command : commands){
+		int pdepth{1};
+		int conditon_end{};
+		switch(command.front().get_type())
+			case TokenType::KW:
+				if(command.front().get_text() == "if"){
+					types.push_back(TreeType::IF);
+				}
+				else if(command.front().get_text() == "while"){
+					types.push_back(TreeType::WHILE);
+				}
+				else{
+					throw ParserError(command.front());
+				}
+				if(command.at(1).get_type() != TokenType::LPAR){
+					throw ParserError(command.at(1));
+				}
+				for(unsigned i{2}; i < command.size() - 2; i++){
+					switch(command.at(i).get_type()){
+						case TokenType::LPAR:
+							pdepth++;
+							break;
+						case TokenType::RPAR
+							pdepth--;
+							if(pdepth < 0){
+								throw ParserError(command.at(i));
+							}
+							break;
+						default:
+							break;
+					}
+					if(pdepth == 0){
+						condition_end = i;
+						break;
+					}
+				}
+				if(pdepth > 0){
+					throw ParserError{command.back(), PErrType::END};
+				}
+				if(command.at(condition_end + 1).get_type() != TokenType::LBRACE){
+					throw ParserError{command.at(condition_end + 1)};
+				}
+				else if(command.back() != TokenType::RBRACE){
+					throw ParserError{command.back(), PErrType::END};
+				}
+				statements.push_back(new StatementTree{std::vector<Token>{command.begin()+2, command.begin() + command_end}, ASGrove{split(std::vector<Token>{command.begin()+command_end+1, ) 
+			}
+		}
+	}
+}
 
 void ASGrove::reset(){
 	place = 0;
