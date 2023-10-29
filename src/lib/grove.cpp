@@ -112,7 +112,7 @@ Var ASGrove::calc(){
   }
   StatementTree* statement;
 	try{
-	switch(types.at(place){
+	switch(types.at(place)){
 		case TreeTypes::EXP:
 			ret = calcHelp(tree->getProot());
 			break;
