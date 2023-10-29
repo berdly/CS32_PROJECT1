@@ -30,7 +30,7 @@ class ASGrove{
   void printHelp(const ASTree::ASNode&) const;
   
 public:
-  ASGrove(std::vector<std:::vector<Token>>, ASGrove* owner = nullptr);
+  ASGrove(std::vector<std:::vector<Token>> commands, unsigned start = 0, unsigned end = 0, ASGrove* owner = nullptr);
   const std::map<std::string, Var>& show_vars() const;
   Var eval();
   Var calc();
