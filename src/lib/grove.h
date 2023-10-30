@@ -43,9 +43,13 @@ public:
   void print() const;
 };
 class StatementTree: public ASTree{
-  public:
+  private:
   ASGrove body;
+  StatementTree* next;
+  public:
   StatementTree(const ASTree& conditional, const ASGrove& block) : ASTree{conditional}, body{block} {}
+  const ASGrove& get_body() { return body; }
+  const StatementTree* get_next() { return next; }
 };
 
 #endif
