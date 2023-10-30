@@ -12,6 +12,21 @@ ASGrove::ASGrove(std::vector<std::vector<Token>> commands, unsigned start, unsig
 		int condition_end{};
 		switch(commands.at(i).front().get_type()){
 			case TokenType::KW:
+				if(commands.at(i).front().get_text() == "if"){
+					types.push_back(TreeType::IF);
+				}
+				else if(commands.at(i).front().get_text() == "while"){
+					types.push_back(TreeType::WHILE);
+				}
+				else if(commands.at(i).front().get_text() == "print"){
+					types.push_back(TreeType::PRINT);
+					statements.push_back(new ASTree{commands.at(i), 1, commands.at(i).size() - 1});
+					break;
+				}
+				else{
+					throw ParserError(commands.at(i).front());
+				}
+
 				if(commands.at(i).at(1).get_type() != TokenType::LPAR){
 					throw ParserError(commands.at(i).at(1));
 				}
@@ -44,15 +59,7 @@ ASGrove::ASGrove(std::vector<std::vector<Token>> commands, unsigned start, unsig
 					throw ParserError{commands.at(i).back(), PErrType::END};
 				}
 				statements.push_back(new StatementTree{ASTree{commands.at(i), static_cast<unsigned>(2), static_cast<unsigned>(condition_end - 1)}, ASGrove{split_infix(commands.at(i), condition_end + 2, commands.at(i).size() - 1), 0,0,this}});
-				if(commands.at(i).front().get_text() == "if"){
-					types.push_back(TreeType::IF);
-				}
-				else if(commands.at(i).front().get_text() == "while"){
-					types.push_back(TreeType::WHILE);
-				}
-				else{
-					throw ParserError(commands.at(i).front());
-				}
+
 				break;
 				default:
 				statements.push_back(new ASTree{commands.at(i)});
@@ -82,7 +89,7 @@ void ASGrove::reset(){
 Var ASGrove::eval(){
       Var val{};
       while(place < statements.size()){
-      	val = calc();
+      	val = calc(false);
       }
       return val;
 }
@@ -105,7 +112,7 @@ std::optional<Var> ASGrove::search_var(const std::string& query) const{
    }
 }
 
-Var ASGrove::calc(){
+Var ASGrove::calc(bool print){
   Var ret{};
   auto backup{vars};
   if(place >= statements.size()){
@@ -150,6 +157,14 @@ Var ASGrove::calc(){
 			}
 			break;
 		}
+		if(print || types.at(place) == TreeType::PRINT){
+			if(std::holds_alternative<double>(ret)){
+				std::cout<<std::get<double>(ret)<<std::endl;
+			}
+			else if(std::holds_alternative<bool>(ret)){
+				std::cout<<std::get<bool>(ret)<<std::endl;
+			}
+			}
 	}
 	catch(const ZeroDivision&){
 		++place;
@@ -165,12 +180,6 @@ Var ASGrove::calc(){
 		++place;
 		vars = backup;
 		throw e;
-	}
-	if(std::holds_alternative<double>(ret)){
-    std::cout<<std::get<double>(ret)<<std::endl;
-	}
-	else if(std::holds_alternative<bool>(ret)){
-    std::cout<<std::get<bool>(ret)<<std::endl;
 	}
 
 	++place;

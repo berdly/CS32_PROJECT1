@@ -15,6 +15,7 @@ enum class TreeType{
 EXP,
 IF,
 WHILE,
+PRINT,
 };
 
 class ASGrove{
@@ -37,7 +38,7 @@ public:
   void update_existing(const std::map<std::string, Var>&);
   const std::map<std::string, Var>& show_vars() const;
   Var eval();
-  Var calc();
+  Var calc(bool print = true);
   void add_tree(ASTree* tree, TreeType type = TreeType::EXP);
   void reset();
   void print() const;
