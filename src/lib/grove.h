@@ -22,7 +22,7 @@ class ASGrove{
   std::vector<TreeType> types;
   std::map<std::string, Var> vars;
   unsigned place; //how many trees have been executed
-  ASGrove* parent;
+  const ASGrove* parent;
 
   void add_var(const std::string& name, Var val);
   std::optional<Var> search_var(const std::string& query) const;
@@ -48,7 +48,7 @@ class StatementTree: public ASTree{
   StatementTree* next;
   public:
   StatementTree(const ASTree& conditional, const ASGrove& block) : ASTree{conditional}, body{block} {}
-  const ASGrove& get_body() const { return body; }
+  ASGrove& get_body() { return body; }
   const StatementTree* get_next() const { return next; }
 };
 
