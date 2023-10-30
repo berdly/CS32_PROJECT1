@@ -393,4 +393,4 @@ void ASGrove::add_tree(ASTree* tree, TreeType type){
 }
 
 const std::map<std::string, Var>& ASGrove::show_vars() const { return vars; }
-void ASGrove::update_existing(const std::map<std::string, Var>&) {throw NotImplemented{""};}
+void ASGrove::update_existing(const std::map<std::string, Var>&) {throw NotImplemented{};}
