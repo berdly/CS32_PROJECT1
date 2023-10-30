@@ -125,13 +125,14 @@ Var ASGrove::calc(bool print){
   StatementTree* statement;
 	try{
 	switch(types.at(place)){
+		case TreeType::PRINT:
 		case TreeType::EXP:
 			ret = calcHelp(tree->getProot());
 			break;
 		case TreeType::IF:
 			ret = calcHelp(tree->getProot());
 			if(!std::holds_alternative<bool>(ret)){
-				throw TypeError{statements.at(place)->getProot().get_pdata()};
+				throw ConditionalError{};
 			}
 			else if(std::get<bool>(ret)){
 				statement = static_cast<StatementTree*>(tree);
@@ -143,7 +144,7 @@ Var ASGrove::calc(bool print){
 			while(true){
 				ret = calcHelp(tree->getProot());
 				if(!std::holds_alternative<bool>(ret)){
-					throw TypeError{statements.at(place)->getProot().get_pdata()};
+					throw ConditionalError{};
 				}
 				else if(std::get<bool>(ret)){
 					statement = static_cast<StatementTree*>(tree);
@@ -164,7 +165,7 @@ Var ASGrove::calc(bool print){
 			else if(std::holds_alternative<bool>(ret)){
 				std::cout<<std::get<bool>(ret)<<std::endl;
 			}
-			}
+		}
 	}
 	catch(const ZeroDivision&){
 		++place;
