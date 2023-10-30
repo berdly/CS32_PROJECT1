@@ -91,7 +91,7 @@ void ASGrove::add_var(const std::string& name, Var val){
   vars[name] = val;
 }
 
-std::optional<Var> ASGrove::search_var(const std::string& query){
+std::optional<Var> ASGrove::search_var(const std::string& query) const{
    auto value{vars.find(query)};//map iterator type
    if(value == vars.end()){
 	   if(parent){
