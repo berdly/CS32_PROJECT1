@@ -25,7 +25,7 @@ class ASGrove{
   ASGrove* parent;
 
   void add_var(const std::string& name, Var val);
-  std::optional<Var> search_var(const std::string& query);
+  std::optional<Var> search_var(const std::string& query) const;
   Var calcHelp(const ASTree::ASNode&);
   void printHelp(const ASTree::ASNode&) const;
   
@@ -48,8 +48,8 @@ class StatementTree: public ASTree{
   StatementTree* next;
   public:
   StatementTree(const ASTree& conditional, const ASGrove& block) : ASTree{conditional}, body{block} {}
-  const ASGrove& get_body() { return body; }
-  const StatementTree* get_next() { return next; }
+  const ASGrove& get_body() const { return body; }
+  const StatementTree* get_next() const { return next; }
 };
 
 #endif
