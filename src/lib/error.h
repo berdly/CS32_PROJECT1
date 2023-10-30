@@ -65,5 +65,5 @@ class TypeError: public std::exception{
         
     }
 };
-class NotImplemented: public std::exception {}
+class NotImplemented: public std::exception {};
 #endif
