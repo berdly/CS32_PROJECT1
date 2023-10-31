@@ -199,7 +199,7 @@ Var ASGrove::calcHelp(const ASTree::ASNode& root){
     
     switch(curr.get_type()){
 
-      case TokenType::EQUAL:
+      case TokenType::ASSIGN:
             val = this->calcHelp(children.back());
             for(size_t i{}; i < children.size() - 1 ; i++){
                   this->add_var(children.at(i).get_pdata().get_text(), val);
@@ -336,7 +336,7 @@ Var ASGrove::calcHelp(const ASTree::ASNode& root){
 
     switch(root.get_pdata().get_type()){
     
-    	case TokenType::EQUAL:
+    	case TokenType::ASSIGN:
 		case TokenType::EXP: //checks the token type - if it is an expression, more recursion needs to be done on the children of the expression
 			std::cout << '(';
 			for(size_t i =0; i < root.get_kids().size();i++){ //loops through all children of the current node being examined
