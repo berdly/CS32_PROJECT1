@@ -93,7 +93,7 @@ std::vector<std::vector<Token>> split_infix(const std::vector<Token>& input, uns
                 }
                 break;
             default:
-                if(last == TokenType::ERR || in_statement || bdepth ==){
+                if(last == TokenType::ERR || in_statement || bdepth == 7){
                     return {}; //placeholder
                 }
                 throw ParserError(input.at(i));
