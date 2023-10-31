@@ -73,7 +73,7 @@ ASGrove::ASGrove(std::vector<std::vector<Token>> commands, ASGrove* owner): ASGr
 ASGrove::~ASGrove(){
 	int idx{};
 	for(ASTree* tree: statements){
-		if(types.at(idx) == TreeType::EXP || types.at(idx == TreeType::PRINT){
+		if(types.at(idx) == TreeType::EXP || types.at(idx) == TreeType::PRINT){
 			delete tree;
 		}
 		else{
@@ -336,7 +336,7 @@ Var ASGrove::calcHelp(const ASTree::ASNode& root){
 
     switch(root.get_pdata().get_type()){
     
-    case TokenType::EQUAL:
+    	case TokenType::EQUAL:
 		case TokenType::EXP: //checks the token type - if it is an expression, more recursion needs to be done on the children of the expression
 			std::cout << '(';
 			for(size_t i =0; i < root.get_kids().size();i++){ //loops through all children of the current node being examined
@@ -371,6 +371,24 @@ Var ASGrove::calcHelp(const ASTree::ASNode& root){
 							std::cout << " / ";
                             break;
 
+						case '<':
+							if(root.get_pdata().get_text()== "<="){
+								std:: cout<< " <= ";
+							}else{
+								std::cout<<" < ";
+							}
+                            break;
+						
+						case '>':
+
+							if(root.get_pdata().get_text()== ">="){
+								std:: cout<< " >= ";
+							}else{
+								std::cout<< " > ";
+							}
+                            break;
+						
+
                         default:
                             break;
 
@@ -380,8 +398,46 @@ Var ASGrove::calcHelp(const ASTree::ASNode& root){
 
 			}
             break;
+		case TokenType::LOG: //checks the token type - if it is an expression, more recursion needs to be done on the children of the expression
+			std::cout << '(';
+			for(size_t i =0; i < root.get_kids().size();i++){ //loops through all children of the current node being examined
+				  printHelp(root.get_kids().at(i)); //recursive call
 
-		
+				if(i == root.get_kids().size() - 1){
+					std::cout << ')'; // if it is the last node in a child list, print a ')'
+				}
+				else{
+					switch(root.get_pdata().get_text()[0]){ // if it isnt at the end of the list print the operator
+				
+            			case '&':
+              				std::cout<< " & ";
+              				break;
+              
+						case '|':
+						
+							std::cout << " | ";
+                            break;
+
+						case '^':
+							std::cout<< " ^ ";
+						
+						case '=':
+							std::cout << " == ";
+                            break;
+
+						case '!':
+							std::cout << " != ";
+                            break;
+
+                        default:
+                            break;
+
+					}
+
+				}
+
+			}
+		case TokenType::BOOL:
 	    case TokenType::CONST: //if the current token is just a constant, there is no more recursion, just print the constant
 		    std::cout<<std::stod(root.get_pdata().get_text());
             break;
