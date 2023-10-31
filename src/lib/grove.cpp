@@ -538,3 +538,8 @@ void StatementTree::push_back(StatementTree* child){
 		next = child;
 	}
 }
+StatementTree::~StatementTree(){
+	if(next){
+		delete next;
+	}
+}
