@@ -69,7 +69,7 @@ std::vector<std::pair<int,int>> ASTree::get_child_idx(const std::vector<Token>& 
 		    }
 		break;
             case TokenType::CONST:
-		    if(parentT == TokenType::EQUAL){
+		    if(parentT == TokenType::ASSIGN){
 			if (child_idx.size() == 0){
 				throw ParserError{curr};
 			}
@@ -84,7 +84,7 @@ std::vector<std::pair<int,int>> ASTree::get_child_idx(const std::vector<Token>& 
                 break;
 
             case TokenType::LPAR:
-		if(parentT == TokenType::EQUAL){
+		if(parentT == TokenType::ASSIGN){
 			if (child_idx.size() == 0){
 				throw ParserError{curr};
 			}
@@ -112,7 +112,7 @@ std::vector<std::pair<int,int>> ASTree::get_child_idx(const std::vector<Token>& 
                 }
                 break;
             case TokenType::EXP:
-            case TokenType::EQUAL:
+            case TokenType::ASSIGN:
                 if(i <= 0 || tokens.at(i - 1).get_type() != TokenType::LPAR){
                     //std::cout<<"THROW10"<<std::endl;
 			        throw ParserError(curr);
@@ -150,7 +150,7 @@ ASTree::ASNode ASTree::build(const std::vector<Token>& tokens, int start, int en
             //we know it should be an operand
             
 
-            if((tokens[start+1].get_type() != TokenType::EXP) && tokens[start+1].get_type() != TokenType::EQUAL){
+            if((tokens[start+1].get_type() != TokenType::EXP) && tokens[start+1].get_type() != TokenType::ASSIGN){
                 //std::cout<<"THROW9"<<std::endl;
                 throw ParserError(tokens[start+1]);
             }
@@ -166,7 +166,7 @@ ASTree::ASNode ASTree::build(const std::vector<Token>& tokens, int start, int en
             for(const std::pair<int,int>& child_idx : child_idx_list){
                 rootNode.add_child(build(tokens, child_idx.first, child_idx.second)); 
             }
-	    if(tokens[start+1].get_type() == TokenType::EQUAL){
+	    if(tokens[start+1].get_type() == TokenType::ASSIGN){
                  for(unsigned i{}; i < child_idx_list.size() - 1; i++){
 			 if(tokens.at(child_idx_list.at(i).first).get_type() == TokenType::LPAR){
 				 throw ParserError(tokens.at(child_idx_list.at(i).first));
@@ -174,7 +174,7 @@ ASTree::ASNode ASTree::build(const std::vector<Token>& tokens, int start, int en
 		 }
             }
 
-            if((tokens[start+1].get_type() == TokenType::EXP && tokens[start+2].get_type() == TokenType::VAR) || tokens[start+1].get_type() == TokenType::EQUAL){ //deals with (+ x), (= 3), (= x)
+            if((tokens[start+1].get_type() == TokenType::EXP && tokens[start+2].get_type() == TokenType::VAR) || tokens[start+1].get_type() == TokenType::ASSIGN){ //deals with (+ x), (= 3), (= x)
                 std::vector<ASNode> kids{rootNode.get_kids()}; 
                 if(kids.size() == 1){
                     throw ParserError(tokens[start+3]);
@@ -182,7 +182,7 @@ ASTree::ASNode ASTree::build(const std::vector<Token>& tokens, int start, int en
             }
             
            
-            if(tokens[start+1].get_type() == TokenType::EQUAL){
+            if(tokens[start+1].get_type() == TokenType::ASSIGN){
                  std::vector<ASNode> kids{rootNode.get_kids()};
                 
                 if(kids.back().get_pdata().get_type() == TokenType::VAR){
@@ -293,7 +293,7 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, unsigned sta
    			
 		}
 		break;
-            case TokenType::EQUAL: // WIP
+            case TokenType::ASSIGN: // WIP
 		if(pdepth == 0){
 			
 			if(last == TokenType::EXP){

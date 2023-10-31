@@ -37,7 +37,7 @@ std::vector<std::vector<Token>> split(const std::vector<Token>& input, unsigned 
                 }
                 break;
             case TokenType::EXP:
-            case TokenType::EQUAL:
+            case TokenType::ASSIGN:
 		if((i == 0) || (input.at(i - 1).get_type()) != TokenType::LPAR){
 			if(pdepth == 0){
 				parStart = i;
@@ -231,7 +231,7 @@ std::vector<Token> reader(const std::string& input, bool err) {  // Change retur
                 }
             }
                 // Create a token for the left parenthesis.
-                tokens.push_back(Token(column, line, std::string(1, ch), TokenType::EQUAL));
+                tokens.push_back(Token(column, line, std::string(1, ch), TokenType::ASSIGN));
                 break;
             // For decimal points.
             case '.':
