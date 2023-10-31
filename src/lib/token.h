@@ -15,6 +15,7 @@ enum class TokenType{
   RPAR,
   ERR,
   IF,
+  ELSE,
   WHILE,
   PRINT,
   ASSIGN,
