@@ -363,12 +363,7 @@ Var ASGrove::calcHelp(const ASTree::ASNode& root){
 			case '^':
 			    ret = (std::get<bool>(ret) ? std::get<bool>(val) : !(std::get<bool>(val)));
                             break;
-			case '=':
-			    ret = std::get<bool>(ret) == std::get<bool>(val);
-                            break;
-			case '!':
-			    ret = std::get<bool>(ret) != std::get<bool>(val);
-				break;
+
         	default:
                 break;
 		    }
@@ -377,7 +372,42 @@ Var ASGrove::calcHelp(const ASTree::ASNode& root){
 		++idx;	
 	   }
         	return ret;
+    case TokenType::EQUAL:
+		for(const auto& child: children){
+			val = this->calcHelp(child); // recursively obtains the value of a child, the children could be an expression or a constant
             
+			if(!((std::holds_alternative<bool>(val)&&std::holds_alternative<bool>(ret))||(std::holds_alternative<double>(val)&&std::holds_alternative<double>(ret)))){
+				throw TypeError(child.get_pdata());
+			}
+	    	if(idx ==0){ // if the child is the first of its siblings, set the return value to that childs value
+		   		ret = val;
+	   		}else{
+				 
+		   	switch(curr.get_text()[0]){ //math operations
+
+			case '=':
+				if(std::holds_alternative<bool>(ret)){}
+			    	ret = std::get<bool>(ret) == std::get<bool>(val);
+				}
+				else{
+					ret = std::get<double>(ret) == std::get<double>(val);
+				}
+				break;
+			case '!':
+			    if(std::holds_alternative<bool>(ret)){}
+			    	ret = std::get<bool>(ret) != std::get<bool>(val);
+				}
+				else{
+					ret = std::get<double>(ret) != std::get<double>(val);
+				}
+        	default:
+                break;
+		    }
+
+		}
+		++idx;	
+	   }
+        return ret;
     case TokenType::CONST:
 	    return std::stod(curr.get_text()); // if the token is a constant, just return it casted as a double
     case TokenType::BOOL:
@@ -495,7 +525,8 @@ Var ASGrove::calcHelp(const ASTree::ASNode& root){
 
 						case '^':
 							std::cout<< " ^ ";
-						
+							break;
+
 						case '=':
 							std::cout << " == ";
                             break;
@@ -512,6 +543,7 @@ Var ASGrove::calcHelp(const ASTree::ASNode& root){
 				}
 
 			}
+			break;
 		case TokenType::BOOL:
 	    case TokenType::CONST: //if the current token is just a constant, there is no more recursion, just print the constant
 		    std::cout<<std::stod(root.get_pdata().get_text());
