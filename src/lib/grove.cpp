@@ -73,7 +73,7 @@ ASGrove::ASGrove(std::vector<std::vector<Token>> commands, ASGrove* owner): ASGr
 ASGrove::~ASGrove(){
 	int idx{};
 	for(ASTree* tree: statements){
-		if(types.at(idx) == TreeType::EXP){
+		if(types.at(idx) == TreeType::EXP || types.at(idx == TreeType::PRINT){
 			delete tree;
 		}
 		else{
