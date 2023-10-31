@@ -57,7 +57,7 @@ std::vector<std::vector<Token>> split(const std::vector<Token>& input, unsigned 
     }
     return statements;
 }
-std::vector<std::vector<Token>> split(const std::vector<Token>& input, unsigned start, unsigned end) {throw NotImplemented{};};
+std::vector<std::vector<Token>> split_infix(const std::vector<Token>& input, unsigned start, unsigned end) {throw NotImplemented{};};
 // Function to parse the input string and create tokens for each number and operand.
 std::vector<Token> reader(const std::string& input, bool err) {  // Change return type to vector
     std::vector<Token> tokens;  // Use vector instead of stack to store generated tokens
@@ -366,7 +366,7 @@ std::vector<Token> reader(const std::string& input, bool err) {  // Change retur
                         column++;
                         break;
                     }else{
-                        std::cout << "Syntax error on line " << line << " column " << column + 1 << "!" << std::endl;
+                        std::cout << "Syntax error on line " << line << " column " << column << "." << std::endl;
                         currToken.clear();
                     if(err){
                         exit(1);
@@ -377,7 +377,7 @@ std::vector<Token> reader(const std::string& input, bool err) {  // Change retur
                     }
                 }
 
-                std::cout << "Syntax error on line " << line << " column " << column << "!" << std::endl;
+                std::cout << "Syntax error on line " << line << " column " << column << "." << std::endl;
                 currToken.clear();
                 if(err){
                     exit(1);
