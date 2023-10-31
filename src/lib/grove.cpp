@@ -342,6 +342,7 @@ Var ASGrove::calcHelp(const ASTree::ASNode& root){
         	return ret;
 
     case TokenType::LOG:
+	    ret = true;
 		for(const auto& child: children){
 			val = this->calcHelp(child); // recursively obtains the value of a child, the children could be an expression or a constant
             
