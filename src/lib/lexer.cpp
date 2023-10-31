@@ -91,6 +91,9 @@ std::vector<std::vector<Token>> split_infix(const std::vector<Token>& input, uns
                     pdepth = 0;
             }
             default:
+                if(last == TokenType::ERR){
+                    return {}; //placeholder
+                }
                 throw ParserError(input.at(i));
         }
     }
