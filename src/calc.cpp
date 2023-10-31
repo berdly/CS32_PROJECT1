@@ -51,6 +51,9 @@
         catch(const ZeroDivision&){
             std::cout << "Runtime error: division by zero." << '\n';
         }
+        catch(const TypeError&){
+            std::cout << "Runtime error: invalid operand type." << '\n';
+        }
         catch(const IdentifierError& e){
             std::cout<<e.new_what()<<'\n';
         }

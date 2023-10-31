@@ -314,7 +314,8 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, unsigned sta
 		}
                 break;
 	    case TokenType::LOG:
-            case TokenType::EXP:
+        case TokenType::EXP:
+		case TokenType::EQUAL:
                 if(pdepth == 0){
 			if(last == TokenType::EXP){
 				throw ParserError(curr);
