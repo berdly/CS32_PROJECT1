@@ -57,7 +57,10 @@ std::vector<std::vector<Token>> split(const std::vector<Token>& input, unsigned 
     }
     return statements;
 }
-std::vector<std::vector<Token>> split_infix(const std::vector<Token>& input, unsigned start, unsigned end) {throw NotImplemented{};};
+std::vector<std::vector<Token>> split(const std::vector<Token>& input, unsigned start, unsigned end) {
+    for(unsigned i{start}; i <= end; i++){
+        
+    }
 // Function to parse the input string and create tokens for each number and operand.
 std::vector<Token> reader(const std::string& input, bool err) {  // Change return type to vector
     std::vector<Token> tokens;  // Use vector instead of stack to store generated tokens
