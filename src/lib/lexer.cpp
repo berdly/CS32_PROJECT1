@@ -83,11 +83,19 @@ std::vector<Token> reader(const std::string& input, bool err) {  // Change retur
             case '-':
             case '*':
             case '/':
+            case '%':
+            
                 // If there's an accumulated number, create a token for it.
                 if (!currToken.empty()) {
                 if(startsVar){
-                    if((currToken == "while") || (currToken == "if") || (currToken == "print") || (currToken == "else")){
-                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::KW));
+                    if((currToken == "while")){
+                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::WHILE));
+                    }else if((currToken == "if")){
+                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::IF));
+                    }else if((currToken == "else")){
+                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::ELSE));
+                    }else if((currToken == "print")){
+                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::PRINT));
                     }else if((currToken == "true") || (currToken == "false")){
                         tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::BOOL));
                     }else{
@@ -115,14 +123,113 @@ std::vector<Token> reader(const std::string& input, bool err) {  // Change retur
                 // Create a token for the operator.
                 tokens.push_back(Token(column, line, std::string(1, ch), TokenType::EXP));
                 break;
+            case '<':
+            case '>':
 
-            // For left parenthesis.
+                 // If there's an accumulated number, create a token for it.
+                if (!currToken.empty()) {
+                if(startsVar){
+                    if((currToken == "while")){
+                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::WHILE));
+                    }else if((currToken == "if")){
+                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::IF));
+                    }else if((currToken == "else")){
+                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::ELSE));
+                    }else if((currToken == "print")){
+                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::PRINT));
+                    }else if((currToken == "true") || (currToken == "false")){
+                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::BOOL));
+                    }else{
+                    tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::VAR));
+                    }
+                    currToken.clear();
+                    startsVar = false;
+                }
+                else if(startsNum){
+                    tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::CONST));
+                    currToken.clear();
+                    startsNum = false;
+                }
+                if(isPer){ //error for periods in opperator cases
+                   std::cout << "Syntax error on line " << line << " column " << column << "." << std::endl;
+                   currToken.clear();
+                   if(err){
+                   exit(1);
+		   }
+		   else{
+			   return std::vector<Token>{Token{0,0,"",TokenType::ERR}};
+		   }                    
+                }                
+            }
+                // Create a token for the operator.
+            if(i != input.size()-1){
+                if(input[i+1] == '='){
+                tokens.push_back(Token(column, line, std::string(1, ch) + std::string(1,input[i+1]), TokenType::EXP));
+                i++;
+                column++;
+                break;
+                }
+
+            }
+            tokens.push_back(Token(column, line, std::string(1, ch), TokenType::EXP));
+            break;
+
+           
+            case '&':
+            case '|':
+            case '^':
+                if (!currToken.empty()) {
+                if(startsVar){
+                    if((currToken == "while")){
+                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::WHILE));
+                    }else if((currToken == "if")){
+                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::IF));
+                    }else if((currToken == "else")){
+                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::ELSE));
+                    }else if((currToken == "print")){
+                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::PRINT));
+                    }else if((currToken == "true") || (currToken == "false")){
+                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::BOOL));
+                    }else{
+                    tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::VAR));
+                    }
+                    currToken.clear();
+                    startsVar = false;
+                }
+                else if(startsNum){
+                    tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::CONST));
+                    currToken.clear();
+                    startsNum = false;
+                }
+                if(isPer){ //error for periods in opperator cases
+                   std::cout << "Syntax error on line " << line << " column " << column << "." << std::endl;
+                   currToken.clear();
+                   if(err){
+                   exit(1);
+		   }
+		   else{
+			   return std::vector<Token>{Token{0,0,"",TokenType::ERR}};
+		   }                    
+                }                
+            }
+                // Create a token for the operator.
+                tokens.push_back(Token(column, line, std::string(1, ch), TokenType::LOG));
+                break;
+
+
+             // For left parenthesis.
             case '(':
                 // If there's an accumulated number, create a token for it.
                 if (!currToken.empty()) {
                 if(startsVar){
-                    if((currToken == "while") || (currToken == "if") || (currToken == "print") || (currToken == "else")){
-                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::KW));
+                    if((currToken == "while")){
+                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::WHILE));
+                    }else if((currToken == "if")){
+                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::IF));
+                    }else if((currToken == "else")){
+                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::ELSE));
+                    }else if((currToken == "print")){
+                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::PRINT));
                     }else if((currToken == "true") || (currToken == "false")){
                         tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::BOOL));
                     }else{
@@ -146,8 +253,14 @@ std::vector<Token> reader(const std::string& input, bool err) {  // Change retur
                 // If there's an accumulated number, create a token for it.
                  if (!currToken.empty()) {
                 if(startsVar){
-                    if((currToken == "while") || (currToken == "if") || (currToken == "print") || (currToken == "else")){
-                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::KW));
+                    if((currToken == "while")){
+                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::WHILE));
+                    }else if((currToken == "if")){
+                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::IF));
+                    }else if((currToken == "else")){
+                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::ELSE));
+                    }else if((currToken == "print")){
+                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::PRINT));
                     }else if((currToken == "true") || (currToken == "false")){
                         tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::BOOL));
                     }else{
@@ -170,8 +283,14 @@ std::vector<Token> reader(const std::string& input, bool err) {  // Change retur
 
                 if (!currToken.empty()) {
                 if(startsVar){
-                    if((currToken == "while") || (currToken == "if") || (currToken == "print") || (currToken == "else")){
-                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::KW));
+                    if((currToken == "while")){
+                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::WHILE));
+                    }else if((currToken == "if")){
+                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::IF));
+                    }else if((currToken == "else")){
+                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::ELSE));
+                    }else if((currToken == "print")){
+                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::PRINT));
                     }else if((currToken == "true") || (currToken == "false")){
                         tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::BOOL));
                     }else{
@@ -193,8 +312,14 @@ std::vector<Token> reader(const std::string& input, bool err) {  // Change retur
 
                 if (!currToken.empty()) {
                 if(startsVar){
-                    if((currToken == "while") || (currToken == "if") || (currToken == "print") || (currToken == "else")){
-                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::KW));
+                    if((currToken == "while")){
+                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::WHILE));
+                    }else if((currToken == "if")){
+                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::IF));
+                    }else if((currToken == "else")){
+                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::ELSE));
+                    }else if((currToken == "print")){
+                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::PRINT));
                     }else if((currToken == "true") || (currToken == "false")){
                         tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::BOOL));
                     }else{
@@ -212,13 +337,17 @@ std::vector<Token> reader(const std::string& input, bool err) {  // Change retur
                 tokens.push_back(Token(column, line, std::string(1, ch), TokenType::RBRACE));
                 break;
 
-
-            case '=':
-                // If there's an accumulated number, create a token for it.
+            case '!':
                 if (!currToken.empty()) {
                 if(startsVar){
-                    if((currToken == "while") || (currToken == "if") || (currToken == "print") || (currToken == "else")){
-                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::KW));
+                    if((currToken == "while")){
+                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::WHILE));
+                    }else if((currToken == "if")){
+                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::IF));
+                    }else if((currToken == "else")){
+                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::ELSE));
+                    }else if((currToken == "print")){
+                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::PRINT));
                     }else if((currToken == "true") || (currToken == "false")){
                         tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::BOOL));
                     }else{
@@ -233,8 +362,71 @@ std::vector<Token> reader(const std::string& input, bool err) {  // Change retur
                     startsNum = false;
                 }
             }
-                // Create a token for the left parenthesis.
+                if(i != input.size()-1){
+                    if(input[i+1] == '='){
+                        tokens.push_back(Token(column, line, std::string(1, ch) + std::string(1, input[i+1]), TokenType::EQUAL));
+                        i++;
+                        column++;
+                        break;
+                    }else{
+                        std::cout << "Syntax error on line " << line << " column " << column + 1 << "!" << std::endl;
+                        currToken.clear();
+                    if(err){
+                        exit(1);
+		            }else{
+			            return std::vector<Token>{Token{0,0,"",TokenType::ERR}};
+		            }
+
+                    }
+                }
+
+                std::cout << "Syntax error on line " << line << " column " << column << "!" << std::endl;
+                currToken.clear();
+                if(err){
+                    exit(1);
+		        }else{
+			        return std::vector<Token>{Token{0,0,"",TokenType::ERR}};
+		        }
+                break;
+
+
+            case '=':
+                // If there's an accumulated number, create a token for it.
+                if (!currToken.empty()) {
+                if(startsVar){
+                    if((currToken == "while")){
+                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::WHILE));
+                    }else if((currToken == "if")){
+                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::IF));
+                    }else if((currToken == "else")){
+                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::ELSE));
+                    }else if((currToken == "print")){
+                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::PRINT));
+                    }else if((currToken == "true") || (currToken == "false")){
+                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::BOOL));
+                    }else{
+                    tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::VAR));
+                    }
+                    currToken.clear();
+                    startsVar = false;
+                }
+                else if(startsNum){
+                    tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::CONST));
+                    currToken.clear();
+                    startsNum = false;
+                }
+            }
+                if(i != input.size() - 1){
+                    if(input[i+1] == '='){
+                        tokens.push_back(Token(column, line, std::string(1, ch) + std::string(1,input[i+1]), TokenType::EQUAL));
+                        i++;
+                        column++;
+                        break;
+                    }
+                }
+                
                 tokens.push_back(Token(column, line, std::string(1, ch), TokenType::ASSIGN));
+                
                 break;
             // For decimal points.
             case '.':
@@ -291,8 +483,14 @@ std::vector<Token> reader(const std::string& input, bool err) {  // Change retur
             // If there's an accumulated number, create a token for it.
             if (!currToken.empty()) {
                 if(startsVar){
-                    if((currToken == "while") || (currToken == "if") || (currToken == "print") || (currToken == "else")){
-                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::KW));
+                    if((currToken == "while")){
+                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::WHILE));
+                    }else if((currToken == "if")){
+                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::IF));
+                    }else if((currToken == "else")){
+                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::ELSE));
+                    }else if((currToken == "print")){
+                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::PRINT));
                     }else if((currToken == "true") || (currToken == "false")){
                         tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::BOOL));
                     }else{
@@ -316,8 +514,14 @@ std::vector<Token> reader(const std::string& input, bool err) {  // Change retur
                
                 if (!currToken.empty()) {
                 if(startsVar){
-                    if((currToken == "while") || (currToken == "if") || (currToken == "print") || (currToken == "else")){
-                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::KW));
+                    if((currToken == "while")){
+                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::WHILE));
+                    }else if((currToken == "if")){
+                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::IF));
+                    }else if((currToken == "else")){
+                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::ELSE));
+                    }else if((currToken == "print")){
+                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::PRINT));
                     }else if((currToken == "true") || (currToken == "false")){
                         tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::BOOL));
                     }else{
@@ -377,8 +581,14 @@ std::vector<Token> reader(const std::string& input, bool err) {  // Change retur
                 if(isspace(ch)){
                     if (!currToken.empty()) {
                 if(startsVar){
-                    if((currToken == "while") || (currToken == "if") || (currToken == "print") || (currToken == "else")){
-                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::KW));
+                    if((currToken == "while")){
+                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::WHILE));
+                    }else if((currToken == "if")){
+                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::IF));
+                    }else if((currToken == "else")){
+                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::ELSE));
+                    }else if((currToken == "print")){
+                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::PRINT));
                     }else if((currToken == "true") || (currToken == "false")){
                         tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::BOOL));
                     }else{
