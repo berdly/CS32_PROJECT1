@@ -93,12 +93,13 @@ std::vector<std::vector<Token>> split_infix(const std::vector<Token>& input, uns
                 }
                 break;
             default:
-                if(last == TokenType::ERR || in_statement || bdepth == 7){
+                if(last == TokenType::ERR || in_statement || bdepth ==){
                     return {}; //placeholder
                 }
                 throw ParserError(input.at(i));
         }
     }
+    return {};
 }
 
 // Function to parse the input string and create tokens for each number and operand.
