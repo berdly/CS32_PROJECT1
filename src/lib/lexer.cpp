@@ -80,6 +80,7 @@ std::vector<std::vector<Token>> split_infix(const std::vector<Token>& input, uns
 
                 }
                 pdepth++;
+                break;
             case TokenType::RPAR:
                 pdepth--;
                 if(pdepth == 0){
@@ -89,9 +90,10 @@ std::vector<std::vector<Token>> split_infix(const std::vector<Token>& input, uns
                     //there's an extra outer parentheses, current behavior is add it to last statement, can add arbitrary number to end of statement
                     statements.back().push_back(input.at(i));
                     pdepth = 0;
-            }
+                }
+                break;
             default:
-                if(last == TokenType::ERR){
+                if(last == TokenType::ERR || in_statement || bdepth == 7){
                     return {}; //placeholder
                 }
                 throw ParserError(input.at(i));
