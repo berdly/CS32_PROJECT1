@@ -3,6 +3,8 @@
 #include <stack>
 #include <iostream>
 #include <stdexcept>
+ASTree::ASTree() : proot{} {};
+
 bool wrapped(const std::vector<Token>& tokens, unsigned start, unsigned end){
 	int pdepth{};
 	if(tokens.empty()){

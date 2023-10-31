@@ -51,6 +51,7 @@ class StatementTree: public ASTree{
   StatementTree(const ASTree& conditional, const ASGrove& block) : ASTree{conditional}, body{block} {}
   ASGrove& get_body() { return body; }
   const StatementTree* get_next() const { return next; }
+  void push_back(StatementTree*);
 };
 
 #endif
