@@ -386,7 +386,7 @@ Var ASGrove::calcHelp(const ASTree::ASNode& root){
 		   	switch(curr.get_text()[0]){ //math operations
 
 			case '=':
-				if(std::holds_alternative<bool>(ret)){}
+				if(std::holds_alternative<bool>(ret)){
 			    	ret = std::get<bool>(ret) == std::get<bool>(val);
 				}
 				else{
@@ -394,7 +394,7 @@ Var ASGrove::calcHelp(const ASTree::ASNode& root){
 				}
 				break;
 			case '!':
-			    if(std::holds_alternative<bool>(ret)){}
+			    if(std::holds_alternative<bool>(ret)){
 			    	ret = std::get<bool>(ret) != std::get<bool>(val);
 				}
 				else{
