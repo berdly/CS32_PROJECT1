@@ -11,21 +11,22 @@
     std::string one_back;
     ASGrove grove{};
     while(true){
-       
+       /*
        getline(std::cin, input);
         
         if (!input.empty()) {
             input +="\n"; // Concatenating each line with a newline character
         }
-        
+        */
+       input = "3 == 4";
         auto token_list{reader(input, false)};
+        /*
         if(!input.empty()){
           one_back = input;
         }
         input.clear(); // Clearing previous inputs for a new tree to be created
-        for(const Token& token : token_list){
-            std::cout << static_cast<int>(token.get_type()) << ' ';
-        }
+        */
+
         try{
             if((token_list.size() == 1) && token_list.at(0).get_type() == TokenType::ERR){}
             else if(!token_list.empty()){
