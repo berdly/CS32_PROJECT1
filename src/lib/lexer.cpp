@@ -57,9 +57,39 @@ std::vector<std::vector<Token>> split(const std::vector<Token>& input, unsigned 
     }
     return statements;
 }
-std::vector<std::vector<Token>> split(const std::vector<Token>& input, unsigned start, unsigned end) {
+std::vector<std::vector<Token>> split_infix(const std::vector<Token>& input, unsigned start, unsigned end) {
+    std::vector<std::vector<Token>> statements{};
+    int pdepth{};
+    int bdepth{};
+    unsigned curr_start{start};
+    bool in_statement{false};
+    TokenType last{TokenType::EXP};
     for(unsigned i{start}; i <= end; i++){
-        
+        switch(input.at(i).get_type()){
+            case TokenType::IF:
+            case TokenType::WHILE:
+            case TokenType::ELSE:
+                break;
+            case TokenType::CONST:
+            case TokenType::BOOL:
+            case TokenType::VAR:
+                break;
+            case TokenType::LPAR:
+                if(pdepth == 0){
+
+                }
+                pdepth++;
+            case TokenType::RPAR:
+                pdepth--;
+                if(pdepth == 0){
+                    statements.emplace_back(input.begin() + curr_start, input.begin() + i + 1);
+                }
+                else if(pdepth < 0){
+                    //there's an extra outer parentheses, current behavior is add it to last statement, can add arbitrary number to end of statement
+                    statements.back().push_back(input.at(i));
+                    pdepth = 0;
+            }
+        }
     }
 }
 // Function to parse the input string and create tokens for each number and operand.

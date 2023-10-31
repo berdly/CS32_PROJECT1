@@ -82,6 +82,7 @@ ASGrove::ASGrove(std::vector<std::vector<Token>> commands, unsigned start, unsig
 				}
 				statements.push_back(new StatementTree{ASTree{commands.at(i), static_cast<unsigned>(2), static_cast<unsigned>(condition_end - 1)}, ASGrove{split_infix(commands.at(i), condition_end + 2, commands.at(i).size() - 1), this}});
 				types.push_back(TreeType::IF);
+				break;
 			case TokenType::ELSE:
 				if(types.back() != TreeType::IF){
 					throw ParserError(commands.at(i).front());
@@ -122,6 +123,11 @@ ASGrove::ASGrove(std::vector<std::vector<Token>> commands, unsigned start, unsig
 					throw ParserError{commands.at(i).back(), PErrType::END};
 				}
 				static_cast<StatementTree*>(statements.back())->push_back(new StatementTree{ASTree{tree}, ASGrove{split_infix(commands.at(i), condition_end + 2, commands.at(i).size() - 1), this}});
+				break;
+			case TokenType::PRINT:
+				statements.push_back(new ASTree{commands.at(i), 1, static_cast<unsigned>(commands.at(i).size() - 1)});
+				types.push_back(TreeType::PRINT);
+				break;
 			default:
 				statements.push_back(new ASTree{commands.at(i)});
 				types.push_back(TreeType::EXP);
@@ -191,24 +197,28 @@ Var ASGrove::calc(bool print){
 			ret = calcHelp(tree->getProot());
 			break;
 		case TreeType::IF:
-			ret = calcHelp(tree->getProot());
-			if(!std::holds_alternative<bool>(ret)){
-				throw ConditionalError{};
-			}
-			else if(std::get<bool>(ret)){
-				statement = static_cast<StatementTree*>(tree);
-				statement->get_body().eval();
-				this->update_existing(statement->get_body().show_vars());
-			}
-			break;
-		case TreeType::WHILE:
-			while(true){
-				ret = calcHelp(tree->getProot());
+			statement = static_cast<StatementTree*>(tree);
+			while(statement){
+				ret = calcHelp(statement->getProot());
 				if(!std::holds_alternative<bool>(ret)){
 					throw ConditionalError{};
 				}
 				else if(std::get<bool>(ret)){
-					statement = static_cast<StatementTree*>(tree);
+					statement->get_body().eval();
+					this->update_existing(statement->get_body().show_vars());
+					break;
+				}
+				statement = statement->get_next();
+			}
+			break;
+		case TreeType::WHILE:
+		    statement = static_cast<StatementTree*>(tree);
+			while(true){
+				ret = calcHelp(statement->getProot());
+				if(!std::holds_alternative<bool>(ret)){
+					throw ConditionalError{};
+				}
+				else if(std::get<bool>(ret)){
 					statement->get_body().eval();
 					this->update_existing(statement->get_body().show_vars());
 					statement->get_body().reset();
@@ -243,7 +253,11 @@ Var ASGrove::calc(bool print){
 		vars = backup;
 		throw e;
 	}
-
+	catch(const ConditionalError&){
+		++place;
+		vars = backup;
+		throw ConditionalError{};
+	}
 	++place;
     return ret; //should return final value of tree and update variables but only once
 }
