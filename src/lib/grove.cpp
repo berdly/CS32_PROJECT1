@@ -234,7 +234,7 @@ Var ASGrove::calc(bool print){
 				std::cout<<std::get<double>(ret)<<std::endl;
 			}
 			else if(std::holds_alternative<bool>(ret)){
-				std::cout<<std::get<bool>(ret)<<std::endl;
+				std::cout<< std::boolalpha << std::get<bool>(ret) << std::endl;
 			}
 		}
 	}
