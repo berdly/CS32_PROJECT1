@@ -295,7 +295,7 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, unsigned sta
    			
 		}
 		break;
-            case TokenType::ASSIGN: // WIP
+        case TokenType::ASSIGN: // WIP
 		if(pdepth == 0){
 			
 			if(last == TokenType::EXP){

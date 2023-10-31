@@ -23,7 +23,9 @@
           one_back = input;
         }
         input.clear(); // Clearing previous inputs for a new tree to be created
-        
+        for(const Token& token : token_list){
+            std::cout << static_cast<int>(token.get_type()) << ' ';
+        }
         try{
             if((token_list.size() == 1) && token_list.at(0).get_type() == TokenType::ERR){}
             else if(!token_list.empty()){
