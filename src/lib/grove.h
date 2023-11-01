@@ -42,6 +42,7 @@ public:
   void add_tree(ASTree* tree, TreeType type = TreeType::EXP);
   void reset(); // Will reset the placement of the tree
   void print() const;
+  void printAll() const;
 };
 class StatementTree: public ASTree{
   private:

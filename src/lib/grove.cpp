@@ -433,9 +433,18 @@ Var ASGrove::calcHelp(const ASTree::ASNode& root){
 
   void ASGrove::print() const {
 	 
+	 	
       	  printHelp(statements.at(place)->getProot());
           std::cout<<std::endl;
           
+  }
+  void ASGrove::printAll() const{
+		for(size_t i = 0; i < statements.size();i++){
+      	  print();
+          std::cout<<std::endl;
+
+		}
+		
   }
 
   void ASGrove::printHelp(const ASTree::ASNode& root) const{ 
@@ -561,10 +570,20 @@ Var ASGrove::calcHelp(const ASTree::ASNode& root){
 	    case TokenType::CONST: //if the current token is just a constant, there is no more recursion, just print the constant
 		    std::cout<<std::stod(root.get_pdata().get_text());
             break;
+	  case TokenType::LBRACE:
+	  	std::cout<<root.get_pdata().get_text()<<std::endl;
+		//indent += "    ";
+		break;
+	  case TokenType::RBRACE:
+	  	std::cout<<root.get_pdata().get_text()<<std::endl;
+		//indent  = indent.;
+		break;
+
+		
       case TokenType::VAR:
         std::cout<<root.get_pdata().get_text();
             break;
-
+	
       default:
 		    throw ParserError(root.get_pdata());
             break;
