@@ -14,27 +14,13 @@ ASGrove::ASGrove(std::vector<std::vector<Token>> commands, unsigned start, unsig
 		ASTree tree{};
 		switch(commands.at(i).front().get_type()){
 			case TokenType::WHILE:
-				if(commands.at(i).at(1).get_type() != TokenType::LPAR){
-					throw ParserError(commands.at(i).at(1));
+				for(unsigned j{1}; j < commands.at(i).size() - 2; j++){
+					if(commands.at(i).at(j).get_type() == TokenType::LBRACE){
+						condition_end = j;
+					}
 				}
-				for(unsigned j{2}; j < commands.at(i).size() - 2; j++){
-					switch(commands.at(i).at(j).get_type()){
-						case TokenType::LPAR:
-							pdepth++;
-							break;
-						case TokenType::RPAR:
-							pdepth--;
-							if(pdepth < 0){
-								throw ParserError(commands.at(i).at(j));
-							}
-							break;
-						default:
-							break;
-					}
-					if(pdepth == 0){
-						condition_end = i;
-						break;
-					}
+				if(condition_end == 0){
+						throw ParserError(commands.at(i).back());
 				}
 				if(pdepth > 0){
 					throw ParserError{commands.at(i).back(), PErrType::END};
@@ -53,6 +39,9 @@ ASGrove::ASGrove(std::vector<std::vector<Token>> commands, unsigned start, unsig
 					if(commands.at(i).at(j).get_type() == TokenType::LBRACE){
 						condition_end = j;
 					}
+				}
+				if(condition_end == 0){
+						throw ParserError(commands.at(i).back());
 				}
 				if(pdepth > 0){
 					throw ParserError{commands.at(i).back(), PErrType::END};
