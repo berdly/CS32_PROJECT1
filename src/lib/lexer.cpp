@@ -89,6 +89,7 @@ std::vector<std::vector<Token>> split_infix(const std::vector<Token>& input, uns
                     pdepth = 0;
                     last = TokenType::EXP;
                 }
+                break;
             case TokenType::CONST:
             case TokenType::BOOL:
             case TokenType::VAR:
@@ -136,6 +137,7 @@ std::vector<std::vector<Token>> split_infix(const std::vector<Token>& input, uns
                 if(in_statement){
                     bdepth++;
                 }
+                break;
             case TokenType::RBRACE:
                 if(in_statement){
                     bdepth--;
@@ -145,6 +147,7 @@ std::vector<std::vector<Token>> split_infix(const std::vector<Token>& input, uns
                     }
                     in_statement = false;
                 }
+                break;
             default:
                 throw ParserError(input.at(i));
         }  
