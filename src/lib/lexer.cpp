@@ -159,6 +159,7 @@ std::vector<std::vector<Token>> split_infix(const std::vector<Token>& input, uns
     bool in_block{false};
     int curr_start{};
     for(unsigned i{start}; i <= end; i++){
+        std::cout << input.at(i).get_line() << ' ' << curr_line << '\n';
         if((!in_statement) && (input.at(i).get_line() != curr_line)){
             curr_line = input.at(i).get_line();
             statements.emplace_back(input.begin() + curr_start, input.begin() + i);
@@ -197,7 +198,7 @@ std::vector<std::vector<Token>> split_infix(const std::vector<Token>& input, uns
                 break;
         }
     }
-    statements.emplace_back(input.begin() + curr_start, input.end());
+    //statements.emplace_back(input.begin() + curr_start, input.end());
     return statements;
 }
 
