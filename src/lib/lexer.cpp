@@ -152,7 +152,7 @@ std::vector<std::vector<Token>> split_infix(const std::vector<Token>& input, uns
                 throw ParserError(input.at(i));
         }  
     }
-    return {};
+    return statements;
 }
 
 // Function to parse the input string and create tokens for each number and operand.
