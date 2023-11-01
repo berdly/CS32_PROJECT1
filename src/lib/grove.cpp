@@ -362,7 +362,7 @@ Var ASGrove::calcHelp(const ASTree::ASNode& root){
 			    ret = std::get<bool>(ret) || std::get<bool>(val);
                             break;
 			case '^':
-			    ret = std::get<bool>(ret) != std::get<bool>(val);
+			    ret = (std::get<bool>(ret) != std::get<bool>(val));
                             break;
 
         	default:
@@ -377,7 +377,7 @@ Var ASGrove::calcHelp(const ASTree::ASNode& root){
 		for(const auto& child: children){
 			val = this->calcHelp(child); // recursively obtains the value of a child, the children could be an expression or a constant
             
-			if(!((std::holds_alternative<bool>(val)&&std::holds_alternative<bool>(ret))||(std::holds_alternative<double>(val)&&std::holds_alternative<double>(ret)))){
+			if((idx > 0) && !((std::holds_alternative<bool>(val)&&std::holds_alternative<bool>(ret))||(std::holds_alternative<double>(val)&&std::holds_alternative<double>(ret)))){
 				throw TypeError(child.get_pdata());
 			}
 	    	if(idx ==0){ // if the child is the first of its siblings, set the return value to that childs value
