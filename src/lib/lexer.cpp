@@ -157,7 +157,7 @@ std::vector<std::vector<Token>> split_infix(const std::vector<Token>& input, uns
     bool in_statement{false};
     int bdepth{};
     bool in_block{false};
-    int curr_start{start};
+    unsigned curr_start{start};
     for(unsigned i{start}; i <= end; i++){
         //std::cout << input.at(i).get_line() << ' ' << curr_line << '\n';
         if((!in_statement) && (input.at(i).get_line() != curr_line)){
