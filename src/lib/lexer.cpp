@@ -95,7 +95,7 @@ std::vector<std::vector<Token>> split_infix(const std::vector<Token>& input, uns
                 if((!in_statement) && pdepth == 0 && last == TokenType::CONST){
                     statements.emplace_back(input.begin() + curr_start, input.begin() + i);
                     curr_start = i;
-                    last = TokenType::EXP
+                    last = TokenType::EXP;
                 }
                 if(pdepth == 0){
                     last = TokenType::CONST;
@@ -105,7 +105,7 @@ std::vector<std::vector<Token>> split_infix(const std::vector<Token>& input, uns
                 if((!in_statement) && pdepth == 0 && last == TokenType::CONST){
                     statements.emplace_back(input.begin() + curr_start, input.begin() + i);
                     curr_start = i;
-                    last = TokenType::EXP
+                    last = TokenType::EXP;
                 }
                 pdepth++;
                 break;
