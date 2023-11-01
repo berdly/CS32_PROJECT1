@@ -153,7 +153,7 @@ std::vector<std::vector<Token>> split_infix(const std::vector<Token>& input, uns
         }  
     }
     */
-    int curr_line{input.front().get_line()};
+    int curr_line{input.at(start).get_line()};
     bool in_statement{false};
     int bdepth{};
     bool in_block{false};
@@ -198,7 +198,7 @@ std::vector<std::vector<Token>> split_infix(const std::vector<Token>& input, uns
                 break;
         }
     }
-    statements.emplace_back(input.begin() + curr_start, input.end());
+    statements.emplace_back(input.begin() + curr_start, input.begin() + end + 1);
     return statements;
 }
 
