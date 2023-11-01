@@ -44,7 +44,7 @@
         try{
             
             if(!token_lists.empty()){
-                ASGrove gr{token_lists, 0, static_cast<unsigned>(token_lists.size()-1)};
+                ASGrove gr{token_lists};
                 gr.printAll();
             }
             else{

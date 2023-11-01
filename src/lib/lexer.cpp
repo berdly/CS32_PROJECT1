@@ -60,7 +60,7 @@ std::vector<std::vector<Token>> split(const std::vector<Token>& input, unsigned 
 
 std::vector<std::vector<Token>> split_infix(const std::vector<Token>& input, unsigned start, unsigned end) {
     std::vector<std::vector<Token>> statements{};
-    int bdepth{};
+    /*int bdepth{};
     int pdepth{};
     unsigned curr_start{start};
     bool in_statement{false};
@@ -152,6 +152,57 @@ std::vector<std::vector<Token>> split_infix(const std::vector<Token>& input, uns
                 throw ParserError(input.at(i));
         }  
     }
+    */
+    std::vector<Token> curr{};
+    int curr_line{input.front().get_line()};
+    bool in_statement{};
+    int bdepth{};
+    bool in_block{};
+    for(unsigned i{start}; i <= end; i++){
+        if((!in_statement) && (input.at(i).get_line() != curr_line)){
+            curr_line = input.at(i).get_line();
+            statements.push_back(curr);
+            curr.clear();
+        }
+        switch(input.at(i).get_type()){
+            case TokenType::WHILE:
+            case TokenType::IF:
+            case TokenType::ELSE:
+                if(!in_statement){
+                    in_statement = true;
+                    statements.push_back(curr);
+                    curr.clear();
+                }
+                curr.push_back(input.at(i));
+                break;
+            case TokenType::LBRACE:
+                if(in_statement){
+                    bdepth++;
+                    if(!in_block){
+                        in_block = true;
+                    }
+                }
+            case TokenType::RBRACE:
+                if(in_statement){
+                    bdepth--;
+                    if(in_block && bdepth == 0){
+                        curr.push_back(input.at(i));
+                        in_block = false;
+                        in_statement = false;
+                    }
+                }
+                if(bdepth < 0){
+                    statements.back().push_back(input.at(i));
+                    bdepth = 0;
+                }
+                else{
+                    curr.push_back(input.at(i));
+                }
+            default:
+                curr.push_back(input.at(i));
+        }
+    }
+    statements.push_back(curr);
     return statements;
 }
 
