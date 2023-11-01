@@ -9,7 +9,7 @@ ASGrove::ASGrove() : statements{}, types{}, vars{}, place{}, parent{nullptr} {}
 ASGrove::ASGrove(std::vector<std::vector<Token>> commands, unsigned start, unsigned end, ASGrove* owner): statements{}, types{}, vars{}, place{}, parent{owner}{
 	//needs to be changed to normal number for loop using start and end
 	for(unsigned i{start}; i <= end; i++){
-		int pdepth{1};
+		int pdepth{0};
 		int condition_end{};
 		ASTree tree{};
 		switch(commands.at(i).front().get_type()){
