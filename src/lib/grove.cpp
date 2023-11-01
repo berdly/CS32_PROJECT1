@@ -24,7 +24,7 @@ ASGrove::ASGrove(std::vector<std::vector<Token>> commands, unsigned start, unsig
 				if(commands.at(i).back().get_type() != TokenType::RBRACE){
 					throw ParserError{commands.at(i).back(), PErrType::END};
 				}
-				statements.push_back(new StatementTree{ASTree{commands.at(i), static_cast<unsigned>(2), static_cast<unsigned>(condition_end - 1)}, ASGrove{split_infix(commands.at(i), condition_end + 2, commands.at(i).size() - 1), this}});
+				statements.push_back(new StatementTree{ASTree{commands.at(i), 1, static_cast<unsigned>(condition_end - 1)}, ASGrove{split_infix(commands.at(i), condition_end + 1, commands.at(i).size() - 2), this}});
 				types.push_back(TreeType::WHILE);
 				break;
 			case TokenType::IF:
@@ -39,7 +39,7 @@ ASGrove::ASGrove(std::vector<std::vector<Token>> commands, unsigned start, unsig
 				if(commands.at(i).back().get_type() != TokenType::RBRACE){
 					throw ParserError{commands.at(i).back(), PErrType::END};
 				}
-				statements.push_back(new StatementTree{ASTree{commands.at(i), static_cast<unsigned>(1), static_cast<unsigned>(condition_end - 1)}, ASGrove{split_infix(commands.at(i), condition_end + 1, commands.at(i).size() - 1), this}});
+				statements.push_back(new StatementTree{ASTree{commands.at(i), static_cast<unsigned>(1), static_cast<unsigned>(condition_end - 1)}, ASGrove{split_infix(commands.at(i), condition_end + 1, commands.at(i).size() - 2), this}});
 				types.push_back(TreeType::IF);
 				break;
 			case TokenType::ELSE:
@@ -64,7 +64,7 @@ ASGrove::ASGrove(std::vector<std::vector<Token>> commands, unsigned start, unsig
 				if(commands.at(i).back().get_type() != TokenType::RBRACE){
 					throw ParserError{commands.at(i).back(), PErrType::END};
 				}
-				static_cast<StatementTree*>(statements.back())->push_back(new StatementTree{ASTree{tree}, ASGrove{split_infix(commands.at(i), condition_end + 1, commands.at(i).size() - 1), this}});
+				static_cast<StatementTree*>(statements.back())->push_back(new StatementTree{ASTree{tree}, ASGrove{split_infix(commands.at(i), condition_end + 1, commands.at(i).size() - 2), this}});
 				break;
 			case TokenType::PRINT:
 				statements.push_back(new ASTree{commands.at(i), 1, static_cast<unsigned>(commands.at(i).size() - 1)});
