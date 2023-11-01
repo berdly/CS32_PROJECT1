@@ -502,7 +502,9 @@ Var ASGrove::calcHelp(const ASTree::ASNode& root){
 							}
                             break;
 						
-
+						case '%':
+							std::cout << " % ";
+							break;
                         default:
                             break;
 
