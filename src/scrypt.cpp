@@ -26,11 +26,11 @@
         if(std::cin.eof()){
             break;
         }
-        std::cout << input << "\n";
         input.clear();
         linecount++;
      }
         //std::cout<<input<<std::endl;
+        std::cout << fullinput << '\n';
         auto tokens{reader(fullinput)};
         auto token_lists{split_infix(tokens, 0, static_cast<unsigned>(tokens.size() - 1))};
         for(const auto& list: token_lists){
