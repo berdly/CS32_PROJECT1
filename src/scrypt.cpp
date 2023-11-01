@@ -30,9 +30,15 @@
         linecount++;
      }
         //std::cout<<input<<std::endl;
-
+        std::cout << input << "\n\n";
         auto token_lists{split_infix(reader(fullinput))};
-  /*
+        for(const auto& list: token_lists){
+            for(const Token& token: list){
+                std::cout << token.get_text() << ' ';
+            }
+            std::cout << '\n';
+        }
+  /*    
         std::cout << fullinput << '\n';
         for(const auto& list: token_lists){
          for(const Token& token : list){
