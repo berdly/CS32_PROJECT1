@@ -179,6 +179,7 @@ std::vector<std::vector<Token>> split_infix(const std::vector<Token>& input, uns
                         in_block = true;
                     }
                 }
+                break;
             case TokenType::RBRACE:
                 if(in_statement){
                     bdepth--;
@@ -191,10 +192,12 @@ std::vector<std::vector<Token>> split_infix(const std::vector<Token>& input, uns
                     statements.back().push_back(input.at(i));
                     bdepth = 0;
                 }
+                break;
             default:
                 break;
         }
     }
+    statements.emplace_back(input.begin() + curr_start, input.end());
     return statements;
 }
 
