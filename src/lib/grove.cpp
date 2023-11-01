@@ -49,26 +49,9 @@ ASGrove::ASGrove(std::vector<std::vector<Token>> commands, unsigned start, unsig
 				types.push_back(TreeType::WHILE);
 				break;
 			case TokenType::IF:
-				if(commands.at(i).at(1).get_type() != TokenType::LPAR){
-					throw ParserError(commands.at(i).at(1));
-				}
-				for(unsigned i{2}; i < commands.at(i).size() - 2; i++){
-					switch(commands.at(i).at(i).get_type()){
-						case TokenType::LPAR:
-							pdepth++;
-							break;
-						case TokenType::RPAR:
-							pdepth--;
-							if(pdepth < 0){
-								throw ParserError(commands.at(i).at(i));
-							}
-							break;
-						default:
-							break;
-					}
-					if(pdepth == 0){
+				for(unsigned i{1}; i < commands.at(i).size() - 2; i++){
+					if(commands.at(i).at(i).get_type() == TokenType::LBRACE){
 						condition_end = i;
-						break;
 					}
 				}
 				if(pdepth > 0){
@@ -80,7 +63,7 @@ ASGrove::ASGrove(std::vector<std::vector<Token>> commands, unsigned start, unsig
 				else if(commands.at(i).back().get_type() != TokenType::RBRACE){
 					throw ParserError{commands.at(i).back(), PErrType::END};
 				}
-				statements.push_back(new StatementTree{ASTree{commands.at(i), static_cast<unsigned>(2), static_cast<unsigned>(condition_end - 1)}, ASGrove{split_infix(commands.at(i), condition_end + 2, commands.at(i).size() - 1), this}});
+				statements.push_back(new StatementTree{ASTree{commands.at(i), static_cast<unsigned>(1), static_cast<unsigned>(condition_end - 1)}, ASGrove{split_infix(commands.at(i), condition_end + 1, commands.at(i).size() - 1), this}});
 				types.push_back(TreeType::IF);
 				break;
 			case TokenType::ELSE:
@@ -88,29 +71,14 @@ ASGrove::ASGrove(std::vector<std::vector<Token>> commands, unsigned start, unsig
 					throw ParserError(commands.at(i).front());
 				}
 				if(commands.at(i).at(1).get_type() == TokenType::IF){
-					for(unsigned i{2}; i < commands.at(i).size() - 2; i++){
-						switch(commands.at(i).at(i).get_type()){
-							case TokenType::LPAR:
-								pdepth++;
-								break;
-							case TokenType::RPAR:
-								pdepth--;
-								if(pdepth < 0){
-									throw ParserError(commands.at(i).at(i));
-								}
-								break;
-							default:
-								break;
-						}
-						if(pdepth == 0){
-							condition_end = i;
-							break;
-						}
+					for(unsigned i{1}; i < commands.at(i).size() - 2; i++){
+					if(commands.at(i).at(i).get_type() == TokenType::LBRACE){
+						condition_end = i;
 					}
-					tree = ASTree{commands.at(i), static_cast<unsigned>(2), static_cast<unsigned>(condition_end - 1)};
+					tree = ASTree{commands.at(i), static_cast<unsigned>(1), static_cast<unsigned>(condition_end - 1)};
 				}
 				else{
-					condition_end = 0;
+					condition_end = 1;
 					tree = ASTree{std::vector<Token>{Token{0,0,"true", TokenType::BOOL}}};
 				}
 				if(pdepth > 0){
@@ -122,7 +90,7 @@ ASGrove::ASGrove(std::vector<std::vector<Token>> commands, unsigned start, unsig
 				else if(commands.at(i).back().get_type() != TokenType::RBRACE){
 					throw ParserError{commands.at(i).back(), PErrType::END};
 				}
-				static_cast<StatementTree*>(statements.back())->push_back(new StatementTree{ASTree{tree}, ASGrove{split_infix(commands.at(i), condition_end + 2, commands.at(i).size() - 1), this}});
+				static_cast<StatementTree*>(statements.back())->push_back(new StatementTree{ASTree{tree}, ASGrove{split_infix(commands.at(i), condition_end + 1, commands.at(i).size() - 1), this}});
 				break;
 			case TokenType::PRINT:
 				statements.push_back(new ASTree{commands.at(i), 1, static_cast<unsigned>(commands.at(i).size() - 1)});

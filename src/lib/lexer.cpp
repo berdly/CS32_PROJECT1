@@ -60,8 +60,8 @@ std::vector<std::vector<Token>> split(const std::vector<Token>& input, unsigned 
 
 std::vector<std::vector<Token>> split_infix(const std::vector<Token>& input, unsigned start, unsigned end) {
     std::vector<std::vector<Token>> statements{};
-    int pdepth{};
     int bdepth{};
+    int pdepth{};
     unsigned curr_start{start};
     bool in_statement{false};
     TokenType last{TokenType::EXP};
@@ -70,14 +70,42 @@ std::vector<std::vector<Token>> split_infix(const std::vector<Token>& input, uns
             case TokenType::IF:
             case TokenType::WHILE:
             case TokenType::ELSE:
+                if(!in_statement){
+                    if(curr_start != i){
+                        statements.emplace_back(input.begin() + curr_start, input.begin() + i);
+                        curr_start = i;
+                    }
+                    pdepth = 0;
+                    in_statement = true;
+                    last = TokenType::EXP;
+                }
                 break;
+            case TokenType::PRINT:
+                if(!in_statement){
+                    if(curr_start != i){
+                        statements.emplace_back(input.begin() + curr_start, input.begin() + i);
+                        curr_start = i;
+                    }
+                    pdepth = 0;
+                    last = TokenType::EXP;
+                }
             case TokenType::CONST:
             case TokenType::BOOL:
             case TokenType::VAR:
+                if((!in_statement) && pdepth == 0 && last == TokenType::CONST){
+                    statements.emplace_back(input.begin() + curr_start, input.begin() + i);
+                    curr_start = i;
+                    last = TokenType::EXP
+                }
+                if(pdepth == 0){
+                    last = TokenType::CONST;
+                }
                 break;
             case TokenType::LPAR:
-                if(pdepth == 0){
-
+                if((!in_statement) && pdepth == 0 && last == TokenType::CONST){
+                    statements.emplace_back(input.begin() + curr_start, input.begin() + i);
+                    curr_start = i;
+                    last = TokenType::EXP
                 }
                 pdepth++;
                 break;
@@ -92,12 +120,34 @@ std::vector<std::vector<Token>> split_infix(const std::vector<Token>& input, uns
                     pdepth = 0;
                 }
                 break;
-            default:
-                if(last == TokenType::ERR || in_statement || bdepth == 7){
-                    return {}; //placeholder
+            case TokenType::EXP:
+            case TokenType::LOG:
+            case TokenType::EQUAL:
+            case TokenType::ASSIGN:
+                if((!in_statement) && pdepth == 0 && last == TokenType::EXP){
+                    statements.emplace_back(input.begin() + curr_start, input.begin() + i + 1);
+                    curr_start = i;
                 }
+                if(pdepth == 0){
+                    last = TokenType::EXP;
+                }
+                break;
+            case TokenType::LBRACE:
+                if(in_statement){
+                    bdepth++;
+                }
+            case TokenType::RBRACE:
+                if(in_statement){
+                    bdepth--;
+                    if(bdepth == 0){
+                        statements.emplace_back(input.begin() + curr_start, input.begin() + i + 1);
+                        curr_start = i + 1;
+                    }
+                    in_statement = false;
+                }
+            default:
                 throw ParserError(input.at(i));
-        }
+        }  
     }
     return {};
 }
