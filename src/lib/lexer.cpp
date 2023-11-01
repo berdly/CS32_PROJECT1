@@ -198,7 +198,7 @@ std::vector<std::vector<Token>> split_infix(const std::vector<Token>& input, uns
                 break;
         }
     }
-    //statements.emplace_back(input.begin() + curr_start, input.end());
+    statements.emplace_back(input.begin() + curr_start, input.end());
     return statements;
 }
 
