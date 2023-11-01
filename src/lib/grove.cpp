@@ -454,7 +454,9 @@ Var ASGrove::calcHelp(const ASTree::ASNode& root){
 				}
 				else{
 					switch(root.get_pdata().get_text()[0]){ // if it isnt at the end of the list print the operator
-				
+			case '!':
+				std::cout << " != ";
+				break;
             case '=':
 			  if((root.get_pdata().get_text().size() > 1) && (root.get_pdata().get_text()[1] == '=')){
 				std::cout << " == ";
