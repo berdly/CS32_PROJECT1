@@ -153,16 +153,16 @@ std::vector<std::vector<Token>> split_infix(const std::vector<Token>& input, uns
         }  
     }
     */
-    std::vector<Token> curr{};
     int curr_line{input.front().get_line()};
     bool in_statement{};
     int bdepth{};
     bool in_block{};
+    int curr_start{};
     for(unsigned i{start}; i <= end; i++){
         if((!in_statement) && (input.at(i).get_line() != curr_line)){
             curr_line = input.at(i).get_line();
-            statements.push_back(curr);
-            curr.clear();
+            statements.emplace_back(input.begin() + curr_start, input.begin() + i);
+            curr_start = i;
         }
         switch(input.at(i).get_type()){
             case TokenType::WHILE:
@@ -170,10 +170,7 @@ std::vector<std::vector<Token>> split_infix(const std::vector<Token>& input, uns
             case TokenType::ELSE:
                 if(!in_statement){
                     in_statement = true;
-                    statements.push_back(curr);
-                    curr.clear();
                 }
-                curr.push_back(input.at(i));
                 break;
             case TokenType::LBRACE:
                 if(in_statement){
@@ -186,7 +183,6 @@ std::vector<std::vector<Token>> split_infix(const std::vector<Token>& input, uns
                 if(in_statement){
                     bdepth--;
                     if(in_block && bdepth == 0){
-                        curr.push_back(input.at(i));
                         in_block = false;
                         in_statement = false;
                     }
@@ -195,14 +191,10 @@ std::vector<std::vector<Token>> split_infix(const std::vector<Token>& input, uns
                     statements.back().push_back(input.at(i));
                     bdepth = 0;
                 }
-                else{
-                    curr.push_back(input.at(i));
-                }
             default:
-                curr.push_back(input.at(i));
+                break;
         }
     }
-    statements.push_back(curr);
     return statements;
 }
 
