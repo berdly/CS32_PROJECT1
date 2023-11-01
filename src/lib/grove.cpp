@@ -8,12 +8,7 @@ ASGrove::ASGrove() : statements{}, types{}, vars{}, place{}, parent{nullptr} {}
 //ASGrove::ASGrove(const ASTree& tree) : statements(std::vector<ASTree>{tree}), vars{}, types{}, place{} {}
 ASGrove::ASGrove(std::vector<std::vector<Token>> commands, unsigned start, unsigned end, ASGrove* owner): statements{}, types{}, vars{}, place{}, parent{owner}{
 	//needs to be changed to normal number for loop using start and end
-	std::cout << "Grove Constructor";
 	for(unsigned i{start}; i <= end; i++){
-		for(const auto& token : commands.at(i)){
-			std::cout << token.get_text() << ' ';
-		}
-		std::cout << '\n';
 		int condition_end{};
 		ASTree tree{};
 		switch(commands.at(i).front().get_type()){
