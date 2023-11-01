@@ -443,7 +443,8 @@ Var ASGrove::calcHelp(const ASTree::ASNode& root){
     switch(root.get_pdata().get_type()){
     
     	case TokenType::ASSIGN:
-		case TokenType::EXP: //checks the token type - if it is an expression, more recursion needs to be done on the children of the expression
+		case TokenType::EXP:
+		case TokenType::EQUAL: //checks the token type - if it is an expression, more recursion needs to be done on the children of the expression
 			std::cout << '(';
 			for(size_t i =0; i < root.get_kids().size();i++){ //loops through all children of the current node being examined
 				  printHelp(root.get_kids().at(i)); //recursive call
@@ -455,7 +456,11 @@ Var ASGrove::calcHelp(const ASTree::ASNode& root){
 					switch(root.get_pdata().get_text()[0]){ // if it isnt at the end of the list print the operator
 				
             case '=':
+			  if((root.get_pdata().get_text().size() > 1) && (root.get_pdata().get_text()[1] == '=')){
+				std::cout << " == ";
+			  else{
               std::cout<< " = ";
+			  }
               break;
               
 						case '*':
