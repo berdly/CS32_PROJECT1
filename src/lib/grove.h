@@ -41,8 +41,8 @@ public:
   Var calc(bool print = true); //Stepper evaluates one tree one step at a time
   void add_tree(ASTree* tree, TreeType type = TreeType::EXP);
   void reset(); // Will reset the placement of the tree
-  void print() const;
-  void printAll() const;
+  void print();
+  void printAll();
 };
 class StatementTree: public ASTree{
   private:
