@@ -390,11 +390,11 @@ void ASGrove::print(unsigned i, unsigned indent) const{
 			if(tr == 0){
 				std::cout<<"if "; 
 				printHelp(statement->getProot());
-				std::cout<<' {'<<std::endl;
+				std::cout<<" {"<<std::endl;
 			}else if(statement->getProot().get_pdata().get_text() != "true"){
 				std::cout<<"else if "; 
 				printHelp(statement->getProot());
-				std::cout<<' {'<<std::endl;
+				std::cout<<" {"<<std::endl;
 			}else{
 				std::cout<<"else {"; 
 
@@ -415,7 +415,7 @@ void ASGrove::print(unsigned i, unsigned indent) const{
 			statement = static_cast<StatementTree*>(tree);
 			std::cout<<"while ";
 			printHelp(statement->getProot());
-			std::cout<<' {'<<std::endl;
+			std::cout<<" {"<<std::endl;
 			statement->get_body()->printAll(indent+1);
 			for(unsigned j{}; j < indent * 4; j++){
 				std::cout << ' ';
