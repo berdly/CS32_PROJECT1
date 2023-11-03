@@ -379,7 +379,7 @@ void ASGrove::print(unsigned i, unsigned indent) const{
   for(unsigned j{}; j < indent * 4; j++){
 	std::cout << ' ';
   }
-	switch(types.at(place)){
+	switch(types.at(i)){
 		case TreeType::EXP:
 			printHelp(tree->getProot());
 			break;
