@@ -416,7 +416,7 @@ void ASGrove::print(unsigned i) const{
 }
 
   void ASGrove::printAll() const {
-	while(unsigned i{}; i < statements.size(); i++){
+	for(unsigned i{}; i < statements.size(); i++){
       	print(i);
 		std::cout<<std::endl;
       }
