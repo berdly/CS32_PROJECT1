@@ -67,7 +67,7 @@ ASGrove::ASGrove(std::vector<std::vector<Token>> commands, unsigned start, unsig
 				if(commands.at(i).back().get_type() != TokenType::RBRACE){
 					throw ParserError{commands.at(i).back(), PErrType::END};
 				}
-				state = dynamic_cast<StatementTree*>(statements.back());
+				state = static_cast<StatementTree*>(statements.back());
 				state->push_back(new StatementTree{ASTree{tree}, new ASGrove{split_infix(commands.at(i), condition_end + 1, commands.at(i).size() - 2), this}});
 				break;
 			case TokenType::PRINT:
@@ -135,7 +135,7 @@ Var ASGrove::calc(bool print){
 			ret = calcHelp(tree->getProot());
 			break;
 		case TreeType::IF:
-			statement = dynamic_cast<StatementTree*>(tree);
+			statement = static_cast<StatementTree*>(tree);
 			while(statement){
 				ret = calcHelp(statement->getProot());
 				if(!std::holds_alternative<bool>(ret)){
@@ -150,7 +150,7 @@ Var ASGrove::calc(bool print){
 			}
 			break;
 		case TreeType::WHILE:
-		    statement = dynamic_cast<StatementTree*>(tree);
+		    statement = static_cast<StatementTree*>(tree);
 			while(true){
 				ret = calcHelp(statement->getProot());
 				if(!std::holds_alternative<bool>(ret)){
@@ -383,7 +383,7 @@ void ASGrove::print(unsigned i, unsigned indent) const{
 			printHelp(tree->getProot());
 			break;
 		case TreeType::IF:
-			statement = dynamic_cast<StatementTree*>(tree);
+			statement = static_cast<StatementTree*>(tree);
 			std::cout<<"if "; //need to add else....
 			printHelp(statement->getProot());
 			std::cout<<'{'<<std::endl;
@@ -395,7 +395,7 @@ void ASGrove::print(unsigned i, unsigned indent) const{
 			
 			break;
 		case TreeType::WHILE:
-			statement = dynamic_cast<StatementTree*>(tree);
+			statement = static_cast<StatementTree*>(tree);
 			std::cout<<"while ";
 			printHelp(statement->getProot());
 			std::cout<<'{'<<std::endl;
