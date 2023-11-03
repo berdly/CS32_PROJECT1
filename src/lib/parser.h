@@ -14,7 +14,7 @@ public:
     ASNode();
     ASNode(Token pdata);
     const Token& get_pdata() const;
-
+    
     void add_child(ASNode child);
     //double calcHelp();
     //void printHelp() const;
@@ -35,6 +35,7 @@ private:
 public:
   ASTree(const std::vector<Token>& tokens, unsigned start, unsigned end, bool infix = true);
   ASTree(const std::vector<Token>& tokens, bool infix = true);
+  virtual ~ASTree() = default;
   ASTree();
   const ASNode& getProot() const;
 };
