@@ -375,6 +375,7 @@ void ASGrove::print_curr() const{
 void ASGrove::print(unsigned i, unsigned indent) const{
   ASTree* tree{statements.at(i)};
   StatementTree* statement;
+  int tr{};
   for(unsigned j{}; j < indent * 4; j++){
 	std::cout << ' ';
   }
@@ -384,14 +385,27 @@ void ASGrove::print(unsigned i, unsigned indent) const{
 			break;
 		case TreeType::IF:
 			statement = static_cast<StatementTree*>(tree);
-			std::cout<<"if "; //need to add else....
-			printHelp(statement->getProot());
+			tr = 0;
+			while(statement != nullptr){
+			if(tr == 0){
+				std::cout<<"if "; 
+				printHelp(statement->getProot());
+			}else if(statement->getProot().get_pdata().get_text() != "true"){
+				std::cout<<"else if "; 
+				printHelp(statement->getProot());
+			}else{
+				std::cout<<"else "; 
+			}
+			
 			std::cout<<'{'<<std::endl;
 			statement->get_body()->printAll(indent + 1);
 			for(unsigned j{}; j < indent * 4; j++){
 				std::cout << ' ';
   			}
 			std::cout<<'}'<<std::endl;
+			statement = statement->get_next();
+			tr++;
+			}
 			
 			break;
 		case TreeType::WHILE:
