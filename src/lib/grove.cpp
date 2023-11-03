@@ -392,25 +392,28 @@ void ASGrove::print(unsigned i, std::string indent) const{
 			break;
 		case TreeType::IF:
 			statement = static_cast<StatementTree*>(tree);
-			std::cout<<"if "; //need to add else....
+			std::cout<<indent<< "if "; //need to add else....
 			printHelp(statement->getProot());
-			indent +="    ";
 			std::cout<<"{"<<std::endl;
+			indent +="    ";
 			statement->get_body().printAll(indent);
-			std::cout<<"}"<<std::endl;
+			indent = indent.substr(0, indent.size()-4 );
+			std::cout<<indent<<"}"<<std::endl;
+			
 			break;
 		case TreeType::WHILE:
 			statement = static_cast<StatementTree*>(tree);
-			std::cout<<"while ";
+			std::cout<<indent<< "while ";
 			printHelp(statement->getProot());
-			indent +="    ";
 			std::cout<<"{"<<std::endl;
+			indent +="    ";
 			statement->get_body().printAll(indent);
-			std::cout<<"}"<<std::endl;
 			indent = indent.substr(0, indent.size()-4 );
+			std::cout<<indent<< "}"<<std::endl;
+			
 			break;
 		case TreeType::PRINT:
-			std::cout<<"print ";
+			std::cout<<indent<< "print ";
 			printHelp(tree->getProot());
 			
 			break;
