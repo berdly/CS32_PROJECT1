@@ -50,7 +50,7 @@ class StatementTree: public ASTree{
   ASGrove* body;
   StatementTree* next;
   public:
-  StatementTree(const ASTree& conditional, ASGrove* block) : ASTree{conditional}, body{block} {}
+  StatementTree(const ASTree& conditional, ASGrove* block) : ASTree{conditional}, body{block}, next{nullptr} {}
   virtual ~StatementTree();
   ASGrove* get_body() { return body; }
   StatementTree* get_next() const { return next; }
