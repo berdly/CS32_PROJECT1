@@ -378,18 +378,9 @@ Var ASGrove::calcHelp(const ASTree::ASNode& root){
 
   }
 
-  void ASGrove::print() {
-	 
-  auto backup{vars};
-  if(place >= statements.size()){
-		  return;
-  }
-  ASTree* tree{statements.at(place)};
-  if(!tree){
-	  throw std::runtime_error("BAD GROVE");
-  }
+void ASGrove::print(unsigned i) const{
+  ASTree* tree{statements.at(i)};
   StatementTree* statement;
-	try{
 	switch(types.at(place)){
 		case TreeType::EXP:
 			printHelp(tree->getProot());
@@ -400,7 +391,7 @@ Var ASGrove::calcHelp(const ASTree::ASNode& root){
 			printHelp(statement->getProot());
 			std::cout<<"{"<<std::endl;
 			statement->get_body().printAll();
-			std::cout<<"{"<<std::endl;
+			std::cout<<"}"<<std::endl;
 			break;
 		case TreeType::WHILE:
 			statement = static_cast<StatementTree*>(tree);
@@ -419,40 +410,12 @@ Var ASGrove::calcHelp(const ASTree::ASNode& root){
 			break;
 
 		    
-		}
 	}
-	catch(const ZeroDivision&){
-		++place;
-		vars = backup;
-		throw ZeroDivision{};
-	}
-	catch(const IdentifierError& e){
-		++place;
-		vars = backup;
-		throw e;
-	}
-	catch(const TypeError& e){
-		++place;
-		vars = backup;
-		throw e;
-	}
-	catch(const ConditionalError&){
-		++place;
-		vars = backup;
-		throw ConditionalError{};
-	}
-	++place;
-    
+}
 
-
-          
-  }
-
-
-
-  void ASGrove::printAll(){
-		while(place < statements.size()){
-      	print();
+  void ASGrove::printAll() const {
+	while(unsigned i{}; i < statements.size(); i++){
+      	print(i);
 		std::cout<<std::endl;
       }
 		
