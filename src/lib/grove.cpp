@@ -84,16 +84,8 @@ ASGrove::ASGrove(std::vector<std::vector<Token>> commands, unsigned start, unsig
 ASGrove::ASGrove(std::vector<std::vector<Token>> commands, ASGrove* owner): ASGrove{commands, 0, static_cast<unsigned>(commands.size() - 1), owner} {}
 
 ASGrove::~ASGrove(){
-	int idx{};
 	for(ASTree* tree: statements){
-		if(types.at(idx) == TreeType::EXP || types.at(idx) == TreeType::PRINT){
-			delete tree;
-		}
-		else{
-			StatementTree* state{dynamic_cast<StatementTree*>(tree)};
-			delete state;
-		}
-		idx++;
+		delete tree;
 	}
 }
 void ASGrove::reset(){
@@ -611,5 +603,8 @@ void StatementTree::push_back(StatementTree* child){
 StatementTree::~StatementTree(){
 	if(next){
 		delete next;
+	}
+	if(body){
+		delete body;
 	}
 }
