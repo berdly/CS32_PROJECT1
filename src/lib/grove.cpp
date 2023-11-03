@@ -8,14 +8,10 @@ ASGrove::ASGrove() : statements{}, types{}, vars{}, place{}, parent{nullptr} {}
 //ASGrove::ASGrove(const ASTree& tree) : statements(std::vector<ASTree>{tree}), vars{}, types{}, place{} {}
 ASGrove::ASGrove(std::vector<std::vector<Token>> commands, unsigned start, unsigned end, ASGrove* owner): statements{}, types{}, vars{}, place{}, parent{owner} {
 	//needs to be changed to normal number for loop using start and end
-	std::cout << "Grove Constructor\n";
 	for(unsigned i{start}; i <= end; i++){
-		for(const auto& token : commands.at(i)){
-			std::cout << token.get_text() << ' ';
-		}
-		std::cout << '\n';
 		int condition_end{};
 		ASTree tree{};
+		StatementTree* state{};
 		switch(commands.at(i).front().get_type()){
 			case TokenType::WHILE:
 				for(unsigned j{1}; j < commands.at(i).size() - 2; j++){
@@ -29,7 +25,8 @@ ASGrove::ASGrove(std::vector<std::vector<Token>> commands, unsigned start, unsig
 				if(commands.at(i).back().get_type() != TokenType::RBRACE){
 					throw ParserError{commands.at(i).back(), PErrType::END};
 				}
-				statements.push_back(new StatementTree{ASTree{commands.at(i), 1, static_cast<unsigned>(condition_end - 1)}, ASGrove{split_infix(commands.at(i), condition_end + 1, commands.at(i).size() - 2), this}});
+				state = new StatementTree{ASTree{commands.at(i), 1, static_cast<unsigned>(condition_end - 1)}, ASGrove{split_infix(commands.at(i), condition_end + 1, commands.at(i).size() - 2), this}};
+				statements.push_back(static_cast<ASTree*>(state));
 				types.push_back(TreeType::WHILE);
 				break;
 			case TokenType::IF:
