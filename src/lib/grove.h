@@ -47,12 +47,12 @@ public:
 };
 class StatementTree: public ASTree{
   private:
-  ASGrove body;
+  ASGrove* body;
   StatementTree* next;
   public:
-  StatementTree(const ASTree& conditional, const ASGrove& block) : ASTree{conditional}, body{block} {}
+  StatementTree(const ASTree& conditional, ASGrove* block) : ASTree{conditional}, body{block} {}
   virtual ~StatementTree();
-  ASGrove& get_body() { return body; }
+  ASGrove* get_body() { return body; }
   StatementTree* get_next() const { return next; }
   void push_back(StatementTree*);
 };

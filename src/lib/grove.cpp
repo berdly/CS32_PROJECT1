@@ -25,7 +25,7 @@ ASGrove::ASGrove(std::vector<std::vector<Token>> commands, unsigned start, unsig
 				if(commands.at(i).back().get_type() != TokenType::RBRACE){
 					throw ParserError{commands.at(i).back(), PErrType::END};
 				}
-				state = new StatementTree{ASTree{commands.at(i), 1, static_cast<unsigned>(condition_end - 1)}, ASGrove{split_infix(commands.at(i), condition_end + 1, commands.at(i).size() - 2), this}};
+				state = new StatementTree{ASTree{commands.at(i), 1, static_cast<unsigned>(condition_end - 1)}, new ASGrove{split_infix(commands.at(i), condition_end + 1, commands.at(i).size() - 2), this}};
 				statements.push_back(static_cast<ASTree*>(state));
 				types.push_back(TreeType::WHILE);
 				break;
@@ -41,7 +41,7 @@ ASGrove::ASGrove(std::vector<std::vector<Token>> commands, unsigned start, unsig
 				if(commands.at(i).back().get_type() != TokenType::RBRACE){
 					throw ParserError{commands.at(i).back(), PErrType::END};
 				}
-				state = new StatementTree{ASTree{commands.at(i), 1, static_cast<unsigned>(condition_end - 1)}, ASGrove{split_infix(commands.at(i), condition_end + 1, commands.at(i).size() - 2), this}};
+				state = new StatementTree{ASTree{commands.at(i), 1, static_cast<unsigned>(condition_end - 1)}, new ASGrove{split_infix(commands.at(i), condition_end + 1, commands.at(i).size() - 2), this}};
 				statements.push_back(static_cast<ASTree*>(state));
 				types.push_back(TreeType::IF);
 				break;
@@ -68,7 +68,7 @@ ASGrove::ASGrove(std::vector<std::vector<Token>> commands, unsigned start, unsig
 					throw ParserError{commands.at(i).back(), PErrType::END};
 				}
 				state = dynamic_cast<StatementTree*>(statements.back());
-				state->push_back(new StatementTree{ASTree{tree}, ASGrove{split_infix(commands.at(i), condition_end + 1, commands.at(i).size() - 2), this}});
+				state->push_back(new StatementTree{ASTree{tree}, new ASGrove{split_infix(commands.at(i), condition_end + 1, commands.at(i).size() - 2), this}});
 				break;
 			case TokenType::PRINT:
 				statements.push_back(new ASTree{commands.at(i), 1, static_cast<unsigned>(commands.at(i).size() - 1)});
@@ -150,8 +150,8 @@ Var ASGrove::calc(bool print){
 					throw ConditionalError{};
 				}
 				else if(std::get<bool>(ret)){
-					statement->get_body().eval();
-					this->update_existing(statement->get_body().show_vars());
+					statement->get_body()->eval();
+					this->update_existing(statement->get_body()->show_vars());
 					break;
 				}
 				statement = statement->get_next();
@@ -165,9 +165,9 @@ Var ASGrove::calc(bool print){
 					throw ConditionalError{};
 				}
 				else if(std::get<bool>(ret)){
-					statement->get_body().eval();
-					this->update_existing(statement->get_body().show_vars());
-					statement->get_body().reset();
+					statement->get_body()->eval();
+					this->update_existing(statement->get_body()->show_vars());
+					statement->get_body()->reset();
 				}
 				else{
 					break;
@@ -395,7 +395,7 @@ void ASGrove::print(unsigned i, std::string indent) const{
 			printHelp(statement->getProot());
 			std::cout<<"{"<<std::endl;
 			indent +="    ";
-			statement->get_body().printAll(indent);
+			statement->get_body()->printAll(indent);
 			indent = indent.substr(0, indent.size()-4 );
 			std::cout<<indent<<"}"<<std::endl;
 			
@@ -406,7 +406,7 @@ void ASGrove::print(unsigned i, std::string indent) const{
 			printHelp(statement->getProot());
 			std::cout<<"{"<<std::endl;
 			indent +="    ";
-			statement->get_body().printAll(indent);
+			statement->get_body()->printAll(indent);
 			indent = indent.substr(0, indent.size()-4 );
 			std::cout<<indent<< "}"<<std::endl;
 			
