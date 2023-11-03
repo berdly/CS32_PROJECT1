@@ -46,7 +46,7 @@
             
             if(!token_lists.empty()){
                 ASGrove gr{token_lists};
-                gr.printAll("");
+                gr.printAll();
             }
             else{
                 std::cout << "Unexpected token at line " << linecount+1 << " column 1: END\n";

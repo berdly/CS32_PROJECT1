@@ -369,44 +369,46 @@ Var ASGrove::calcHelp(const ASTree::ASNode& root){
 
   }
 void ASGrove::print_curr() const{
-	this->print(place,"");
+	this->print(place, 0);
 	std::cout << '\n';
 }
-void ASGrove::print(unsigned i, std::string indent) const{
+void ASGrove::print(unsigned i, unsigned indent) const{
   ASTree* tree{statements.at(i)};
   StatementTree* statement;
-  
+  for(unsigned j{}; j < indent * 4; j++){
+	std::cout << ' ';
+  }
 	switch(types.at(place)){
 		case TreeType::EXP:
-			std::cout<<indent;
 			printHelp(tree->getProot());
 			break;
 		case TreeType::IF:
 			statement = dynamic_cast<StatementTree*>(tree);
-			std::cout<<indent<< "if "; //need to add else....
+			std::cout<<"if "; //need to add else....
 			printHelp(statement->getProot());
-			std::cout<<"{"<<std::endl;
-			indent +="    ";
-			statement->get_body()->printAll(indent);
-			indent = indent.substr(0, indent.size()-4 );
-			std::cout<<indent<<"}"<<std::endl;
+			std::cout<<'{'<<std::endl;
+			statement->get_body()->printAll(indent + 1);
+			for(unsigned j{}; j < indent * 4; j++){
+				std::cout << ' ';
+  			}
+			std::cout<<'}'<<std::endl;
 			
 			break;
 		case TreeType::WHILE:
 			statement = dynamic_cast<StatementTree*>(tree);
-			std::cout<<indent<< "while ";
+			std::cout<<"while ";
 			printHelp(statement->getProot());
-			std::cout<<"{"<<std::endl;
-			indent +="    ";
-			statement->get_body()->printAll(indent);
-			indent = indent.substr(0, indent.size()-4 );
-			std::cout<<indent<< "}"<<std::endl;
+			std::cout<<'{'<<std::endl;
+			statement->get_body()->printAll(indent+1);
+			for(unsigned j{}; j < indent * 4; j++){
+				std::cout << ' ';
+  			}
+			std::cout<<'}'<<std::endl;
 			
 			break;
 		case TreeType::PRINT:
-			std::cout<<indent<< "print ";
+			std::cout<<"print ";
 			printHelp(tree->getProot());
-			
 			break;
 		default:
 			break;
@@ -419,7 +421,7 @@ void ASGrove::print(unsigned i, std::string indent) const{
 
 
 
-  void ASGrove::printAll(std::string indent)const{
+  void ASGrove::printAll(unsigned indent)const{
 		
 	for(unsigned i{}; i < statements.size(); i++){
       	print(i, indent);
