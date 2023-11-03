@@ -382,7 +382,7 @@ Var ASGrove::calcHelp(const ASTree::ASNode& root){
 	 
   auto backup{vars};
   if(place >= statements.size()){
-		  throw std::out_of_range("");
+		  return;
   }
   ASTree* tree{statements.at(place)};
   if(!tree){
@@ -411,10 +411,8 @@ Var ASGrove::calcHelp(const ASTree::ASNode& root){
 			std::cout<<"}"<<std::endl;
 			break;
 		case TreeType::PRINT:
-			
-			statement = static_cast<StatementTree*>(tree);
 			std::cout<<"print ";
-			printHelp(statement->getProot());
+			printHelp(tree->getProot());
 			
 			break;
 		default:
