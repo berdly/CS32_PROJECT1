@@ -378,8 +378,8 @@ Var ASGrove::calcHelp(const ASTree::ASNode& root){
 
   }
 
-  void ASGrove::print() {
-	 
+  void ASGrove::print(std::string indent) {
+
   auto backup{vars};
   if(place >= statements.size()){
 		  throw std::out_of_range("");
@@ -392,23 +392,28 @@ Var ASGrove::calcHelp(const ASTree::ASNode& root){
 	try{
 	switch(types.at(place)){
 		case TreeType::EXP:
+			std::cout<<indent;
 			printHelp(tree->getProot());
 			break;
 		case TreeType::IF:
 			statement = static_cast<StatementTree*>(tree);
 			std::cout<<"if "; //need to add else....
 			printHelp(statement->getProot());
+			indent +="    ";
 			std::cout<<"{"<<std::endl;
 			statement->get_body().printAll();
-			std::cout<<"{"<<std::endl;
+			std::cout<<"}"<<std::endl;
+			indent = indent.substr(0, indent.size()-4 );
 			break;
 		case TreeType::WHILE:
 			statement = static_cast<StatementTree*>(tree);
 			std::cout<<"while ";
 			printHelp(statement->getProot());
+			indent +="    ";
 			std::cout<<"{"<<std::endl;
 			statement->get_body().printAll();
 			std::cout<<"}"<<std::endl;
+			indent = indent.substr(0, indent.size()-4 );
 			break;
 		case TreeType::PRINT:
 			
@@ -452,9 +457,9 @@ Var ASGrove::calcHelp(const ASTree::ASNode& root){
 
 
 
-  void ASGrove::printAll(){
+  void ASGrove::printAll(std::string indent = ""){
 		while(place < statements.size()){
-      	print();
+      	print(indent);
 		std::cout<<std::endl;
       }
 		
@@ -467,6 +472,7 @@ Var ASGrove::calcHelp(const ASTree::ASNode& root){
     	case TokenType::ASSIGN:
 		case TokenType::EXP:
 		case TokenType::EQUAL: //checks the token type - if it is an expression, more recursion needs to be done on the children of the expression
+			
 			std::cout << '(';
 			for(size_t i =0; i < root.get_kids().size();i++){ //loops through all children of the current node being examined
 				  printHelp(root.get_kids().at(i)); //recursive call
