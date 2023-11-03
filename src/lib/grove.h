@@ -41,18 +41,18 @@ public:
   Var calc(bool print = true); //Stepper evaluates one tree one step at a time
   void add_tree(ASTree* tree, TreeType type = TreeType::EXP);
   void reset(); // Will reset the placement of the tree
-  void printAll(std::string indent) const;
-  void print(unsigned i, std::string indent) const;
+  void printAll(unsigned indent = 0) const;
+  void print(unsigned i, unsigned indent) const;
   void print_curr() const;
 };
 class StatementTree: public ASTree{
   private:
-  ASGrove body;
+  ASGrove* body;
   StatementTree* next;
   public:
-  StatementTree(const ASTree& conditional, const ASGrove& block) : ASTree{conditional}, body{block} {}
+  StatementTree(const ASTree& conditional, ASGrove* block) : ASTree{conditional}, body{block}, next{nullptr} {}
   virtual ~StatementTree();
-  ASGrove& get_body() { return body; }
+  ASGrove* get_body() { return body; }
   StatementTree* get_next() const { return next; }
   void push_back(StatementTree*);
 };

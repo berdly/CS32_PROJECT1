@@ -31,7 +31,8 @@
      }
         //std::cout<<input<<std::endl;
 
-        auto token_lists{split_infix(reader(fullinput))};
+        auto tokens{reader(fullinput)};
+        auto token_lists{split_infix(tokens, 0, static_cast<unsigned>(tokens.size() - 1))};
   /*
         std::cout << fullinput << '\n';
         for(const auto& list: token_lists){
@@ -45,7 +46,7 @@
             
             if(!token_lists.empty()){
                 ASGrove gr{token_lists};
-                gr.printAll("");
+                gr.printAll();
             }
             else{
                 std::cout << "Unexpected token at line " << linecount+1 << " column 1: END\n";
