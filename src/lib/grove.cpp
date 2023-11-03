@@ -375,34 +375,42 @@ Var ASGrove::calcHelp(const ASTree::ASNode& root){
 
   }
 void ASGrove::print_curr() const{
-	this->print(place);
+	this->print(place,"");
 	std::cout << '\n';
 }
-void ASGrove::print(unsigned i) const{
+void ASGrove::print(unsigned i, std::string indent) const{
   ASTree* tree{statements.at(i)};
   StatementTree* statement;
+  
 	switch(types.at(place)){
 		case TreeType::EXP:
+			std::cout<<indent;
 			printHelp(tree->getProot());
 			break;
 		case TreeType::IF:
 			statement = static_cast<StatementTree*>(tree);
-			std::cout<<"if "; //need to add else....
+			std::cout<<indent<< "if "; //need to add else....
 			printHelp(statement->getProot());
 			std::cout<<"{"<<std::endl;
-			statement->get_body().printAll();
-			std::cout<<"}"<<std::endl;
+			indent +="    ";
+			statement->get_body().printAll(indent);
+			indent = indent.substr(0, indent.size()-4 );
+			std::cout<<indent<<"}"<<std::endl;
+			
 			break;
 		case TreeType::WHILE:
 			statement = static_cast<StatementTree*>(tree);
-			std::cout<<"while ";
+			std::cout<<indent<< "while ";
 			printHelp(statement->getProot());
 			std::cout<<"{"<<std::endl;
-			statement->get_body().printAll();
-			std::cout<<"}"<<std::endl;
+			indent +="    ";
+			statement->get_body().printAll(indent);
+			indent = indent.substr(0, indent.size()-4 );
+			std::cout<<indent<< "}"<<std::endl;
+			
 			break;
 		case TreeType::PRINT:
-			std::cout<<"print ";
+			std::cout<<indent<< "print ";
 			printHelp(tree->getProot());
 			
 			break;
@@ -410,16 +418,23 @@ void ASGrove::print(unsigned i) const{
 			break;
 
 		    
+		}
 	}
-}
+	
+  
 
-  void ASGrove::printAll() const {
+
+
+  void ASGrove::printAll(std::string indent)const{
+		
 	for(unsigned i{}; i < statements.size(); i++){
-      	print(i);
+      	print(i, indent);
 		std::cout<<std::endl;
       }
 		
   }
+		
+  
 
   void ASGrove::printHelp(const ASTree::ASNode& root) const{ 
 
@@ -428,6 +443,7 @@ void ASGrove::print(unsigned i) const{
     	case TokenType::ASSIGN:
 		case TokenType::EXP:
 		case TokenType::EQUAL: //checks the token type - if it is an expression, more recursion needs to be done on the children of the expression
+			
 			std::cout << '(';
 			for(size_t i =0; i < root.get_kids().size();i++){ //loops through all children of the current node being examined
 				  printHelp(root.get_kids().at(i)); //recursive call
