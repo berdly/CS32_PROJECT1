@@ -377,19 +377,14 @@ Var ASGrove::calcHelp(const ASTree::ASNode& root){
     return Var{};
 
   }
-
-  void ASGrove::print(std::string indent) {
-
-  auto backup{vars};
-  if(place >= statements.size()){
-		  throw std::out_of_range("");
-  }
-  ASTree* tree{statements.at(place)};
-  if(!tree){
-	  throw std::runtime_error("BAD GROVE");
-  }
+void ASGrove::print_curr() const{
+	this->print(place,"");
+	std::cout << '\n';
+}
+void ASGrove::print(unsigned i, std::string indent) const{
+  ASTree* tree{statements.at(i)};
   StatementTree* statement;
-	try{
+  
 	switch(types.at(place)){
 		case TreeType::EXP:
 			std::cout<<indent;
@@ -401,9 +396,8 @@ Var ASGrove::calcHelp(const ASTree::ASNode& root){
 			printHelp(statement->getProot());
 			indent +="    ";
 			std::cout<<"{"<<std::endl;
-			statement->get_body().printAll();
+			statement->get_body().printAll(indent);
 			std::cout<<"}"<<std::endl;
-			indent = indent.substr(0, indent.size()-4 );
 			break;
 		case TreeType::WHILE:
 			statement = static_cast<StatementTree*>(tree);
@@ -411,15 +405,13 @@ Var ASGrove::calcHelp(const ASTree::ASNode& root){
 			printHelp(statement->getProot());
 			indent +="    ";
 			std::cout<<"{"<<std::endl;
-			statement->get_body().printAll();
+			statement->get_body().printAll(indent);
 			std::cout<<"}"<<std::endl;
 			indent = indent.substr(0, indent.size()-4 );
 			break;
 		case TreeType::PRINT:
-			
-			statement = static_cast<StatementTree*>(tree);
 			std::cout<<"print ";
-			printHelp(statement->getProot());
+			printHelp(tree->getProot());
 			
 			break;
 		default:
@@ -428,42 +420,21 @@ Var ASGrove::calcHelp(const ASTree::ASNode& root){
 		    
 		}
 	}
-	catch(const ZeroDivision&){
-		++place;
-		vars = backup;
-		throw ZeroDivision{};
-	}
-	catch(const IdentifierError& e){
-		++place;
-		vars = backup;
-		throw e;
-	}
-	catch(const TypeError& e){
-		++place;
-		vars = backup;
-		throw e;
-	}
-	catch(const ConditionalError&){
-		++place;
-		vars = backup;
-		throw ConditionalError{};
-	}
-	++place;
-    
-
-
-          
-  }
+	
+  
 
 
 
-  void ASGrove::printAll(std::string indent = ""){
-		while(place < statements.size()){
-      	print(indent);
+  void ASGrove::printAll(std::string indent)const{
+		
+	for(unsigned i{}; i < statements.size(); i++){
+      	print(i, indent);
 		std::cout<<std::endl;
       }
 		
   }
+		
+  
 
   void ASGrove::printHelp(const ASTree::ASNode& root) const{ 
 
