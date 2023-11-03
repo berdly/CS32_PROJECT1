@@ -43,6 +43,7 @@ public:
   void reset(); // Will reset the placement of the tree
   void printAll() const;
   void print(unsigned i) const;
+  void print_curr() const;
 };
 class StatementTree: public ASTree{
   private:

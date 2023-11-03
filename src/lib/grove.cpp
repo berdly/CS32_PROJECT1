@@ -377,7 +377,9 @@ Var ASGrove::calcHelp(const ASTree::ASNode& root){
     return Var{};
 
   }
-
+void ASGrove::print_curr() const{
+	this->print(place);
+}
 void ASGrove::print(unsigned i) const{
   ASTree* tree{statements.at(i)};
   StatementTree* statement;
