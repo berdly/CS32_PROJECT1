@@ -109,7 +109,9 @@ void ASGrove::add_var(const std::string& name, Var val){
 std::optional<Var> ASGrove::search_var(const std::string& query) const{
    if(parent){
 		   auto pval{parent->search_var(query)};
-		   return (pval.has_value()) ? pval : std::optional<Var>{};
+	       if(pval.has_value()){
+		   		return pval;
+   		   }
 	}
    auto value{vars.find(query)};//map iterator type
    if(value == vars.end()){
