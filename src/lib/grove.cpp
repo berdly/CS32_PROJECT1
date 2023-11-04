@@ -107,14 +107,12 @@ void ASGrove::add_var(const std::string& name, Var val){
 }
 
 std::optional<Var> ASGrove::search_var(const std::string& query) const{
-   if(parent){
-		   auto pval{parent->search_var(query)};
-	       if(pval.has_value()){
-		   		return pval;
-   		   }
-	}
    auto value{vars.find(query)};//map iterator type
    if(value == vars.end()){
+	   if(parent){
+		   auto pval{parent->search_var(query)};
+		   return (pval.has_value()) ? pval : std::optional<Var>{};
+	   }
 	   return std::optional<Var>{};
    }
    else{
@@ -147,6 +145,7 @@ Var ASGrove::calc(bool print){
 					throw ConditionalError{};
 				}
 				else if(std::get<bool>(ret)){
+					statement->get_body()->update_existing(this->show_vars());
 					statement->get_body()->eval();
 					this->update_existing(statement->get_body()->show_vars());
 					break;

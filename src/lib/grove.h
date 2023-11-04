@@ -22,6 +22,7 @@ class ASGrove{
   std::vector<ASTree*> statements;
   std::vector<TreeType> types; //A reference Vector to tell what type the trees are
   std::map<std::string, Var> vars;
+  
   unsigned place; //how many trees have been executed
   const ASGrove* parent;
 
