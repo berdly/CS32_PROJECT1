@@ -61,7 +61,7 @@ ASGrove::ASGrove(std::vector<std::vector<Token>> commands, unsigned start, unsig
 					if(condition_end == 0){
 						throw ParserError(commands.at(i).back());
 					}
-					tree = ASTree{commands.at(i), static_cast<unsigned>(1), static_cast<unsigned>(condition_end - 1)};
+					tree = ASTree{commands.at(i), static_cast<unsigned>(2), static_cast<unsigned>(condition_end - 1)};
 				}
 				else{
 					condition_end = 1;
