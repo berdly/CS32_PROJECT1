@@ -607,10 +607,10 @@ const std::map<std::string, Var>& ASGrove::show_vars() const { return vars; }
 
 void ASGrove::update_existing(const std::map<std::string, Var>& v_map) {
 	for(const auto& pair: v_map){
-		auto itr{this->vars.find(pair.first)};
-		if(itr != this->vars.end()){
-			itr->second = pair.second;
-		}
+		//auto itr{this->vars.find(pair.first)};
+		//if(itr != this->vars.end()){
+		vars[pair.first] = pair.second;
+		//}
 	}
 }
 
