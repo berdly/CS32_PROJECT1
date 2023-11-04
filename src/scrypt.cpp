@@ -74,10 +74,15 @@
             return 3;
         }
         catch(const IdentifierError& e){
-            std::cout<<e.new_what()<<"\n";
+            std::cout<<e.new_what()<<'\n';
             return 3;
-        }catch(const TypeError& e){
-            std::cout<<e.new_what()<<"\n";
+        }
+        catch(const TypeError& e){
+            std::cout<<e.new_what()<<'\n';
+            return 3;
+        }
+        catch(const ConditionalError&){
+            std::cout << "Runtime error: condition is not a bool.\n";
             return 3;
         }
     
