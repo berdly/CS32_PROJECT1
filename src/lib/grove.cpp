@@ -148,6 +148,7 @@ Var ASGrove::calc(bool print){
 					statement->get_body()->eval();
 					this->update_existing(statement->get_body()->show_vars());
 					statement->clear();
+					statement->get_body()->reset();
 					break;
 				}
 				statement = statement->get_next();
