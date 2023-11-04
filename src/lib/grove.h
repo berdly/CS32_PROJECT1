@@ -26,6 +26,7 @@ class ASGrove{
   unsigned place; //how many trees have been executed
   const ASGrove* parent;
 
+
   void add_var(const std::string& name, Var val);
   std::optional<Var> search_var(const std::string& query) const;
   Var calcHelp(const ASTree::ASNode&);
@@ -45,6 +46,7 @@ public:
   void printAll(unsigned indent = 0) const;
   void print(unsigned i, unsigned indent) const;
   void print_curr() const;
+  void clear();
 };
 class StatementTree: public ASTree{
   private:
@@ -57,6 +59,7 @@ class StatementTree: public ASTree{
   StatementTree* get_next() const { return next; }
   void update_down(const std::map<std::string, Var>&);
   void push_back(StatementTree*);
+  void clear() {this->body->clear();}
 };
 
 #endif

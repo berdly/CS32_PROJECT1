@@ -146,8 +146,8 @@ Var ASGrove::calc(bool print){
 				}
 				else if(std::get<bool>(ret)){
 					statement->get_body()->eval();
-					(static_cast<StatementTree*>(tree))->update_down(statement->get_body()->show_vars());
 					this->update_existing(statement->get_body()->show_vars());
+					statement->clear();
 					break;
 				}
 				statement = statement->get_next();
@@ -163,6 +163,7 @@ Var ASGrove::calc(bool print){
 				else if(std::get<bool>(ret)){
 					statement->get_body()->eval();
 					this->update_existing(statement->get_body()->show_vars());
+					statement->clear();
 					statement->get_body()->reset();
 				}
 				else{
@@ -622,6 +623,9 @@ void ASGrove::update_existing(const std::map<std::string, Var>& v_map) {
 	}
 }
 
+void ASGrove::clear(){
+	vars.clear();
+}
 void StatementTree::push_back(StatementTree* child){
 	if(next){
 		next->push_back(child);
