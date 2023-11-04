@@ -436,7 +436,6 @@ void ASGrove::print(unsigned i, unsigned indent) const{
 		case TreeType::PRINT:
 			std::cout<<"print ";
 			printHelp(tree->getProot());
-			std::cout<<std::endl;
 			break;
 		default:
 			break;
