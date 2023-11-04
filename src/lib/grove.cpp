@@ -399,7 +399,7 @@ void ASGrove::print(unsigned i, unsigned indent) const{
 				printHelp(statement->getProot());
 				std::cout<<" {"<<std::endl;
 			}else{
-				std::cout<<"else {"; 
+				std::cout<<"else {"<<std::endl; 
 
 			}
 			
