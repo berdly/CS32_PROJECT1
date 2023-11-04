@@ -453,7 +453,7 @@ void ASGrove::print(unsigned i, unsigned indent) const{
 		
 	for(unsigned i{}; i < statements.size(); i++){
       	print(i, indent);
-		//std::cout<<std::endl;
+		std::cout<<std::endl;
       }
 		
   }
