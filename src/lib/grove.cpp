@@ -17,6 +17,7 @@ ASGrove::ASGrove(std::vector<std::vector<Token>> commands, unsigned start, unsig
 				for(unsigned j{1}; j < commands.at(i).size() - 2; j++){
 					if(commands.at(i).at(j).get_type() == TokenType::LBRACE){
 						condition_end = j;
+						break;
 					}
 				}
 				if(condition_end == 0){
@@ -33,6 +34,7 @@ ASGrove::ASGrove(std::vector<std::vector<Token>> commands, unsigned start, unsig
 				for(unsigned j{1}; j < commands.at(i).size() - 2; j++){
 					if(commands.at(i).at(j).get_type() == TokenType::LBRACE){
 						condition_end = j;
+						break;
 					}
 				}
 				if(condition_end == 0){
@@ -53,6 +55,7 @@ ASGrove::ASGrove(std::vector<std::vector<Token>> commands, unsigned start, unsig
 					for(unsigned j{1}; j < commands.at(i).size() - 2; j++){
 						if(commands.at(i).at(j).get_type() == TokenType::LBRACE){
 							condition_end = j;
+							break;
 						}
 					}
 					if(condition_end == 0){
