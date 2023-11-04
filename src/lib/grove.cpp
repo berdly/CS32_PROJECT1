@@ -110,8 +110,8 @@ std::optional<Var> ASGrove::search_var(const std::string& query) const{
    auto value{vars.find(query)};//map iterator type
    if(value == vars.end()){
 	   if(parent){
-		   auto pval{parent->show_vars().find(query)};
-		   return (pval == parent->show_vars().end()) ? std::optional<Var>{} : std::optional<Var>{pval->second};
+		   auto pval{parent->search_var(query)};
+		   return (pval.has_value()) ? pval : std::optional<Var>{};
 	   }
 	   return std::optional<Var>{};
    }
