@@ -430,7 +430,7 @@ void ASGrove::print(unsigned i, unsigned indent) const{
 			for(unsigned j{}; j < indent * 4; j++){
 				std::cout << ' ';
   			}
-			std::cout<<'}'<<std::endl;
+			std::cout<<'}';
 			
 			break;
 		case TreeType::PRINT:
