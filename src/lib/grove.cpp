@@ -408,7 +408,7 @@ void ASGrove::print(unsigned i, unsigned indent) const{
 			for(unsigned j{}; j < indent * 4; j++){
 				std::cout << ' ';
   			}
-			std::cout<<'}';
+			std::cout<<'}'<<std::endl;
 			statement = statement->get_next();
 			tr++;
 			}
