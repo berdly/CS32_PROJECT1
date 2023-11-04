@@ -385,7 +385,6 @@ void ASGrove::print(unsigned i, unsigned indent) const{
 	switch(types.at(i)){
 		case TreeType::EXP:
 			printHelp(tree->getProot());
-			std::cout<<std::endl;
 			break;
 		case TreeType::IF:
 			statement = static_cast<StatementTree*>(tree);
@@ -429,7 +428,7 @@ void ASGrove::print(unsigned i, unsigned indent) const{
 			std::cout<<" {"<<std::endl;
 			statement->get_body()->printAll(indent+1);
 			for(unsigned j{}; j < indent * 4; j++){
-				std::cout << '4';
+				std::cout << ' ';
   			}
 			std::cout<<'}'<<std::endl;
 			
