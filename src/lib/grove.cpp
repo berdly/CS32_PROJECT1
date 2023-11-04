@@ -395,11 +395,17 @@ void ASGrove::print(unsigned i, unsigned indent) const{
 				printHelp(statement->getProot());
 				std::cout<<" {"<<std::endl;
 			}else if(statement->getProot().get_pdata().get_text() != "true"){
+				for(unsigned j{}; j < indent * 4; j++){
+				std::cout << ' ';
+  			}
 				std::cout<<"else if "; 
 				printHelp(statement->getProot());
 				std::cout<<" {"<<std::endl;
 			}else{
-				std::cout<<"else {"; 
+				for(unsigned j{}; j < indent * 4; j++){
+				std::cout << ' ';
+  			}
+				std::cout<<"else {"<<std::endl; 
 
 			}
 			
@@ -408,9 +414,10 @@ void ASGrove::print(unsigned i, unsigned indent) const{
 			for(unsigned j{}; j < indent * 4; j++){
 				std::cout << ' ';
   			}
-			std::cout<<'}';
+			std::cout<<'}'<<std::endl;
 			statement = statement->get_next();
 			tr++;
+			
 			}
 			
 			break;
@@ -423,7 +430,7 @@ void ASGrove::print(unsigned i, unsigned indent) const{
 			for(unsigned j{}; j < indent * 4; j++){
 				std::cout << ' ';
   			}
-			std::cout<<'}';
+			std::cout<<'}'<<std::endl;
 			
 			break;
 		case TreeType::PRINT:
