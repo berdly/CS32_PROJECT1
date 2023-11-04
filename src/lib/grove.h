@@ -55,6 +55,7 @@ class StatementTree: public ASTree{
   virtual ~StatementTree();
   ASGrove* get_body() { return body; }
   StatementTree* get_next() const { return next; }
+  void update_down(const std::map<std::string, Var>&);
   void push_back(StatementTree*);
 };
 
