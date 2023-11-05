@@ -11,7 +11,68 @@
 #include <variant>
 #include <utility>
 
-typedef std::variant<double, bool, std::pair<void*, unsigned>> Var;
+class Var{
+  typedef std::vector<Var>& Arr;
+  std::variant<double, bool, Arr> data;
+  public:
+  Var() = default;
+  Var(double d): data{d} {}
+  Var(bool b): data{b} {}
+  Var(Arr a): data{a} {}
+  bool holds_bool() const{
+    return(std::holds_alternative<bool>(this->data));
+  }
+  bool holds_Arr() const{
+    return(std::holds_alternative<Arr>(this->data));
+  }
+  bool holds_double() const{
+    return(std::holds_alternative<double>(this->data));
+  }
+  double get_double() const{
+    return(std::get<double>(this->data));
+  }
+  bool get_bool() const{
+    return(std::get<bool>(this->data));
+  }
+  Arr get_Arr() const{
+    return(std::get<Arr>(this->data));
+  }
+};
+
+typedef std::vector<Var>& Arr;
+std::optional<Var> pop(const std::vector<Var>& args){
+  if(args.size() != 1){
+    throw ArgError{};
+  }
+  if(!(args[0].holds_Arr())){
+    throw ArgError{};
+  }
+  Arr arr{args[0].get_Arr()};
+  Var last = arr.back();
+  arr.pop_back();
+  return std::optional<Var>(last);
+}
+std::optional<Var> len(const std::vector<Var>& args){
+  if(args.size() != 1){
+    throw ArgError{};
+  }
+  if(!(args[0].holds_Arr())){
+    throw ArgError{};
+  }
+  return std::optional<Var>(static_cast<double>(args[0].get_Arr().size()));
+}
+std::optional<Var> push(const std::vector<Var>& args){
+   if(args.size() != 2){
+    throw ArgError{};
+  }
+  if(!(args[0].holds_Arr())){
+    throw ArgError{};
+  }
+  args[0].get_Arr().push_back(args[1]);
+  return std::optional<Var>{};
+}
+
+
 
 enum class TreeType{
 EXP,
@@ -22,6 +83,10 @@ RETURN,
 };
 
 class ASGrove{
+  public:
+  static std::vector<std::vector<Var>> array_holder;
+  static const std::map<std::string, decltype(&push)> specials;
+  private:
   std::vector<ASTree*> statements;
   std::vector<TreeType> types; //A reference Vector to tell what type the trees are
   std::map<std::string, Var> vars;

@@ -2,6 +2,8 @@
 #include "error.h"
 #include <cmath>
 #include "lexer.h"
+const std::map<std::string, decltype(&push)> ASGrove::specials = {{"pop", pop}, {"len", len}, {"push", push}};
+std::vector<std::vector<Var>> ASGrove::array_holder{};
 
 ASGrove::ASGrove() : statements{}, types{}, vars{}, place{}, parent{nullptr}, is_func{false} {}
 //ASGrove::ASGrove(const std::vector<ASTree>& tree) : statements{tree}, vars{}, place{} {}
@@ -429,8 +431,21 @@ std::optional<Var> ASGrove::calcHelp(const ASTree::ASNode& root){
 			else{
 				throw InvalidAssignment{};
 			}
-
+			args.push_back(val);
 		}
+		return funcs[root.get_pdata().get_text()].call(args);
+	case TokenType::SPECIAL:
+		for(const auto& child: children){
+			possible_val = this->calcHelp(child); // recursively obtains the value of a child, the children could be an expression or a constant
+            if(possible_val.has_value()){
+				val = *possible_val;
+			}
+			else{
+				throw InvalidAssignment{};
+			}
+			args.push_back(val);
+		}
+		return specials[root.get_pdata().get_text()](args);
     default:
             //throw ParserError(root.get_pdata());
             break;
