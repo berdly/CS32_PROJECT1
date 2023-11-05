@@ -101,12 +101,14 @@ ASGrove::~ASGrove(){
 void ASGrove::reset(){
 	place = 0;
 }
-Var ASGrove::eval(){
-      Var val{};
+std::optional<Var> ASGrove::eval(){
       while(place < statements.size()){
-      	val = calc(false);
+      	auto val = calc(false);
+		if(val.second){
+			return val.first;
+		}
       }
-      return val;
+      return std::optional<Var>{};
 }
 
 void ASGrove::add_var(const std::string& name, Var val){
@@ -127,7 +129,8 @@ std::optional<Var> ASGrove::search_var(const std::string& query) const{
    }
 }
 
-Var ASGrove::calc(bool print){
+std::pair<std::optional<Var>, bool> ASGrove::calc(bool print){
+  std::optional<Var> possible_val{};
   Var ret{};
   auto backup{vars};
   if(place >= statements.size()){
@@ -142,12 +145,25 @@ Var ASGrove::calc(bool print){
 	switch(types.at(place)){
 		case TreeType::PRINT:
 		case TreeType::EXP:
-			ret = calcHelp(tree->getProot());
+		case TreeType::RETURN:
+			possible_val = calcHelp(tree->getProot());
+			if(possible_val.has_value()){
+					ret = *possible_val;
+			}
+			else{
+				throw ArgError();
+			}
 			break;
 		case TreeType::IF:
 			statement = static_cast<StatementTree*>(tree);
 			while(statement){
-				ret = calcHelp(statement->getProot());
+				possible_val = calcHelp(statement->getProot());
+				if(possible_val.has_value()){
+					ret = *possible_val;
+				}
+				else{
+					throw ArgError{};
+				}
 				if(!std::holds_alternative<bool>(ret)){
 					throw ConditionalError{};
 				}
@@ -164,7 +180,10 @@ Var ASGrove::calc(bool print){
 		case TreeType::WHILE:
 		    statement = static_cast<StatementTree*>(tree);
 			while(true){
-				ret = calcHelp(statement->getProot());
+				possible_val = calcHelp(statement->getProot());
+				if(possible_val.has_value()){
+					ret = *possible_val;
+				}
 				if(!std::holds_alternative<bool>(ret)){
 					throw ConditionalError{};
 				}
@@ -209,37 +228,57 @@ Var ASGrove::calc(bool print){
 		vars = backup;
 		throw ConditionalError{};
 	}
+	if(types.at(place) == TreeType::RETURN){
+		if(!is_func){
+			throw UnexpectedReturn{};
+		}
+		return std::make_pair(std::optional{ret}, true);
+	}
+	else{
+		return std::make_pair(std::optional{ret}, false);
+	}
 	++place;
-    return ret; //should return final value of tree and update variables but only once
+    return std::make_pair(std::optional<Var>{}, false); //should return final value of tree and update variables but only once
 }
 
-Var ASGrove::calcHelp(const ASTree::ASNode& root){
-    
+std::optional<Var> ASGrove::calcHelp(const ASTree::ASNode& root){
+    //TODO make optional due to new void return types
     Var ret{}; // will be returned
     const auto& children{root.get_kids()};
     const Token& curr{root.get_pdata()};
     Var val{};
     unsigned idx{};
     Var value{};
+	std::vector<Var> args;
 	std::optional<Var> possible_val{};
     
     switch(curr.get_type()){
 
       case TokenType::ASSIGN:
-            val = this->calcHelp(children.back());
+            possible_val = this->calcHelp(children.back());
             for(size_t i{}; i < children.size() - 1 ; i++){
-                  this->add_var(children.at(i).get_pdata().get_text(), val);
+				if(possible_val.has_value()){
+                  this->add_var(children.at(i).get_pdata().get_text(), *possible_val);
+				}
+				else{
+					throw InvalidAssignment{};
+				}
             }
 
-            return val;
+            return ;
 
             break;
 		
      case TokenType::EXP:
 	    ret = 0.0;
 		for(const auto& child: children){
-		    val = this->calcHelp(child); // recursively obtains the value of a child, the children could be an expression or a constant
-            
+		    possible_val = this->calcHelp(child); // recursively obtains the value of a child, the children could be an expression or a constant
+            if(possible_val.has_value()){
+				val = *possible_val;
+			}
+			else{
+				throw InvalidAssignment{};
+			}
 			if(!(std::holds_alternative<double>(val) && std::holds_alternative<double>(ret))){
 				throw TypeError(child.get_pdata());
 			}
@@ -288,15 +327,19 @@ Var ASGrove::calcHelp(const ASTree::ASNode& root){
 		    }
 		}
 		++idx;
-
 	}
         	return ret;
 
     case TokenType::LOG:
 	    ret = true;
 		for(const auto& child: children){
-			val = this->calcHelp(child); // recursively obtains the value of a child, the children could be an expression or a constant
-            
+			possible_val = this->calcHelp(child); // recursively obtains the value of a child, the children could be an expression or a constant
+            if(possible_val.has_value()){
+				val = *possible_val;
+			}
+			else{
+				throw InvalidAssignment{};
+			}
 			if(!(std::holds_alternative<bool>(val)&&std::holds_alternative<bool>(ret))){
 				throw TypeError(child.get_pdata());
 			}
@@ -326,8 +369,13 @@ Var ASGrove::calcHelp(const ASTree::ASNode& root){
         	return ret;
     case TokenType::EQUAL:
 		for(const auto& child: children){
-			val = this->calcHelp(child); // recursively obtains the value of a child, the children could be an expression or a constant
-            
+			possible_val = this->calcHelp(child); // recursively obtains the value of a child, the children could be an expression or a constant
+            if(possible_val.has_value()){
+				val = *possible_val;
+			}
+			else{
+				throw InvalidAssignment{};
+			}
 			if((idx > 0) && !((std::holds_alternative<bool>(val)&&std::holds_alternative<bool>(ret))||(std::holds_alternative<double>(val)&&std::holds_alternative<double>(ret)))){
 				throw TypeError(child.get_pdata());
 			}
@@ -372,6 +420,17 @@ Var ASGrove::calcHelp(const ASTree::ASNode& root){
 	     else{
 		 throw IdentifierError(curr);
 	     }
+	case TokenType::FUNC:
+		for(const auto& child: children){
+			possible_val = this->calcHelp(child); // recursively obtains the value of a child, the children could be an expression or a constant
+            if(possible_val.has_value()){
+				val = *possible_val;
+			}
+			else{
+				throw InvalidAssignment{};
+			}
+
+		}
     default:
             //throw ParserError(root.get_pdata());
             break;

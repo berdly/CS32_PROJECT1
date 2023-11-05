@@ -29,6 +29,8 @@ enum class TokenType{
   LBRACK, // [
   RBRACK, // ]
   SEMI, // ;
+  FUNC, //for regular functions
+  SPECIAL, //for special functions
   //CALL, 
   // for left parentheses which come after variables, indicates function call
   //ACCESS, 

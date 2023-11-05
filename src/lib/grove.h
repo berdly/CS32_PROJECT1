@@ -11,7 +11,7 @@
 #include <variant>
 #include <utility>
 
-typedef std::variant<double, bool, void*> Var;
+typedef std::variant<double, bool, std::pair<void*, unsigned>> Var;
 
 enum class TreeType{
 EXP,
@@ -31,7 +31,7 @@ class ASGrove{
   const ASGrove* parent;
   bool is_func;
   std::optional<Var> search_var(const std::string& query) const;
-  Var calcHelp(const ASTree::ASNode&);
+  std::optional<Var> calcHelp(const ASTree::ASNode&);
   void printHelp(const ASTree::ASNode&) const;
   
 public:
@@ -41,8 +41,8 @@ public:
   ~ASGrove();
   void update_existing(const std::map<std::string, Var>&); //If a Variable exists both in the lower grove and upper grove, takes the value from the lower grove and assigns it to the upper grove. (Makes i++) 
   const std::map<std::string, Var>& show_vars() const;
-  Var eval(); // Evaluates all trees sequentially until the end
-  Var calc(bool print = true); //Stepper evaluates one tree one step at a time
+  std::optional<Var> eval(); // Evaluates all trees sequentially until the end
+  std::pair<std::optional<Var>, bool> calc(bool print = true); //Stepper evaluates one tree one step at a time
   void add_tree(ASTree* tree, TreeType type = TreeType::EXP);
   void reset(); // Will reset the placement of the tree
   void printAll(unsigned indent = 0) const;
@@ -109,15 +109,15 @@ class Func{
     }
     body = ASGrove{split_infix(tokens, var_end + 2, static_cast<unsigned>(tokens.size() - 2)), owner};
   }
-  std::optional<Var> operator()(const std::vector<Var>& args){
+  std::optional<Var> call(const std::vector<Var>& args){
     if(args.size() != names.size()){
       throw ArgError{};
     }
-    Func new_scope{*this};
+    ASGrove new_scope{this->body}; //copies body by value to create new scope
     for(unsigned i{}; i < names.size(); i++){
-      new_scope.body.add_var(names.at(i), args.at(i));
+      new_scope.add_var(names.at(i), args.at(i));
     }
-    return new_scope.body.eval();
+    return new_scope.eval();
   }
 };
 

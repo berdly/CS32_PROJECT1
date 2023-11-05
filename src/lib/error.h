@@ -68,4 +68,6 @@ class TypeError: public std::exception{
 class ConditionalError: public std::exception {};
 class NotImplemented: public std::exception {};
 class ArgError: public std::exception {};
+class InvalidAssignment: public std::exception{};
+class UnexpectedReturn: public std::exception{};
 #endif
