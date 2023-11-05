@@ -401,7 +401,12 @@ void ASGrove::print(unsigned i, unsigned indent) const{
 				for(unsigned j{}; j < indent * 4; j++){
 				std::cout << ' ';
   			}
-				std::cout<<"else if "; 
+				std::cout<<"else {"<<std::endl;
+				for(unsigned j{}; j < (indent+1) * 4; j++){
+				std::cout << ' ';
+  			}
+				std::cout<<"if ";
+
 				printHelp(statement->getProot());
 				std::cout<<" {"<<std::endl;
 			}else{
