@@ -67,4 +67,5 @@ class TypeError: public std::exception{
 };
 class ConditionalError: public std::exception {};
 class NotImplemented: public std::exception {};
+class ArgError: public std::exception {};
 #endif

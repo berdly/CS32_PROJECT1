@@ -3,10 +3,10 @@
 #include <cmath>
 #include "lexer.h"
 
-ASGrove::ASGrove() : statements{}, types{}, vars{}, place{}, parent{nullptr} {}
+ASGrove::ASGrove() : statements{}, types{}, vars{}, place{}, parent{nullptr}, is_func{false} {}
 //ASGrove::ASGrove(const std::vector<ASTree>& tree) : statements{tree}, vars{}, place{} {}
 //ASGrove::ASGrove(const ASTree& tree) : statements(std::vector<ASTree>{tree}), vars{}, types{}, place{} {}
-ASGrove::ASGrove(std::vector<std::vector<Token>> commands, unsigned start, unsigned end, ASGrove* owner): statements{}, types{}, vars{}, place{}, parent{owner} {
+ASGrove::ASGrove(std::vector<std::vector<Token>> commands, unsigned start, unsigned end, ASGrove* owner, bool func): statements{}, types{}, vars{}, place{}, parent{owner}, is_func{func} {
 	//needs to be changed to normal number for loop using start and end
 	for(unsigned i{start}; i <= end; i++){
 		int condition_end{};
@@ -77,6 +77,13 @@ ASGrove::ASGrove(std::vector<std::vector<Token>> commands, unsigned start, unsig
 				statements.push_back(new ASTree{commands.at(i), 1, static_cast<unsigned>(commands.at(i).size() - 1)});
 				types.push_back(TreeType::PRINT);
 				break;
+			case TokenType::DEF:
+				
+				if(commands.at(i).at(1).get_type() != TokenType::VAR){
+					throw ParserError{commands.at(i).at(1)};
+				}
+				funcs[commands.at(i).at(1).get_text()] = Func{commands.at(i), this};
+				break;
 			default:
 				statements.push_back(new ASTree{commands.at(i)});
 				types.push_back(TreeType::EXP);
@@ -84,7 +91,7 @@ ASGrove::ASGrove(std::vector<std::vector<Token>> commands, unsigned start, unsig
 			}
 		}
 	}
-ASGrove::ASGrove(std::vector<std::vector<Token>> commands, ASGrove* owner): ASGrove{commands, 0, static_cast<unsigned>(commands.size() - 1), owner} {}
+ASGrove::ASGrove(std::vector<std::vector<Token>> commands, ASGrove* owner, bool func): ASGrove{commands, 0, static_cast<unsigned>(commands.size() - 1), owner, func} {}
 
 ASGrove::~ASGrove(){
 	for(ASTree* tree: statements){
