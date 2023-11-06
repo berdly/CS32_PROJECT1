@@ -5,10 +5,10 @@
 const std::map<std::string, decltype(&push)> ASGrove::specials = {{"pop", pop}, {"len", len}, {"push", push}};
 std::vector<std::vector<Var>> ASGrove::array_holder{};
 
-ASGrove::ASGrove() : statements{}, types{}, vars{}, place{}, parent{nullptr}, is_func{false} {}
+ASGrove::ASGrove() : statements{}, types{}, vars{}, place{}, funcs{}, parent{nullptr}, is_func{false} {}
 //ASGrove::ASGrove(const std::vector<ASTree>& tree) : statements{tree}, vars{}, place{} {}
 //ASGrove::ASGrove(const ASTree& tree) : statements(std::vector<ASTree>{tree}), vars{}, types{}, place{} {}
-ASGrove::ASGrove(std::vector<std::vector<Token>> commands, unsigned start, unsigned end, ASGrove* owner, bool func): statements{}, types{}, vars{}, place{}, parent{owner}, is_func{func} {
+ASGrove::ASGrove(std::vector<std::vector<Token>> commands, unsigned start, unsigned end, ASGrove* owner, bool func): statements{}, types{}, vars{}, funcs{}, place{}, parent{owner}, is_func{func} {
 	//needs to be changed to normal number for loop using start and end
 	for(unsigned i{start}; i <= end; i++){
 		int condition_end{};
@@ -433,19 +433,7 @@ std::optional<Var> ASGrove::calcHelp(const ASTree::ASNode& root){
 			}
 			args.push_back(val);
 		}
-		return funcs[root.get_pdata().get_text()].call(args);
-	case TokenType::SPECIAL:
-		for(const auto& child: children){
-			possible_val = this->calcHelp(child); // recursively obtains the value of a child, the children could be an expression or a constant
-            if(possible_val.has_value()){
-				val = *possible_val;
-			}
-			else{
-				throw InvalidAssignment{};
-			}
-			args.push_back(val);
-		}
-		return specials[root.get_pdata().get_text()](args);
+		return this->find_func(root.get_pdata().get_text(), args);
     default:
             //throw ParserError(root.get_pdata());
             break;
@@ -707,6 +695,21 @@ void ASGrove::update_existing(const std::map<std::string, Var>& v_map) {
 
 void ASGrove::clear(){
 	vars.clear();
+}
+
+std::optional<Var> ASGrove::find_func(const std::string& name, const std::vector<Var>& args) const {
+	auto func{funcs.find(name)};
+	if(func != funcs.end()){
+		return func->second(args);
+	}
+	if(parent){
+		return parent->find_func(name, args);
+	}
+	auto special{specials.find(name)};
+	if(special != specials.end()){
+		return special->second(args);
+	}
+	throw ArgError{};
 }
 void StatementTree::push_back(StatementTree* child){
 	if(next){

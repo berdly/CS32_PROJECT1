@@ -98,6 +98,7 @@ class ASGrove{
   std::optional<Var> search_var(const std::string& query) const;
   std::optional<Var> calcHelp(const ASTree::ASNode&);
   void printHelp(const ASTree::ASNode&) const;
+  std::optional<Var> find_func(const std::string& name, const std::vector<Var>& args) const;
   
 public:
   ASGrove();
@@ -174,7 +175,7 @@ class Func{
     }
     body = ASGrove{split_infix(tokens, var_end + 2, static_cast<unsigned>(tokens.size() - 2)), owner};
   }
-  std::optional<Var> call(const std::vector<Var>& args){
+  std::optional<Var> operator()(const std::vector<Var>& args) const{
     if(args.size() != names.size()){
       throw ArgError{};
     }
