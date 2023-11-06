@@ -469,16 +469,10 @@ void ASGrove::print(unsigned i, unsigned indent, ASTree* start) const{
 
 				
 
+			
 				
+				std::cout<<'}';
 				
-				
-
-
-				if(statement == nullptr){
-					std::cout<<'}';
-				}else{
-				std::cout<<'}'<<std::endl;
-				}
 				tr++;
 				break;
 				
