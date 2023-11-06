@@ -262,17 +262,15 @@ std::pair<std::optional<Var>, bool> ASGrove::calc(bool print){
 		vars = backup;
 		throw ConditionalError{};
 	}
+	++place;
 	if(types.at(place) == TreeType::RETURN){
 		if(!is_func){
 			throw UnexpectedReturn{};
 		}
 		return std::make_pair(std::optional{ret}, true);
 	}
-	else{
-		return std::make_pair(std::optional{ret}, false);
-	}
-	++place;
-    return std::make_pair(std::optional<Var>{}, false); //should return final value of tree and update variables but only once
+	
+	return std::make_pair(std::optional{ret}, false);
 }
 
 std::optional<Var> ASGrove::calcHelp(const ASTree::ASNode& root){
