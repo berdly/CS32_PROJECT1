@@ -454,10 +454,11 @@ void ASGrove::print(unsigned i, unsigned indent, ASTree* start) const{
 				
 
 				statement = statement->get_next();
+				if(statement != nullptr){
+					print(i,indent,statement);	
+				}
 
-				print(i,indent,statement);
-					
-					statement = nullptr;
+				//statement = nullptr;
 				
 				indent--;
 				
@@ -479,6 +480,7 @@ void ASGrove::print(unsigned i, unsigned indent, ASTree* start) const{
 				std::cout<<'}'<<std::endl;
 				}
 				tr++;
+				break;
 				
 
 			}else{
