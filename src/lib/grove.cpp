@@ -166,10 +166,10 @@ std::pair<std::optional<Var>, bool> ASGrove::calc(bool print){
 				else{
 					throw ArgError{};
 				}
-				if(!std::holds_alternative<bool>(ret)){
+				if(!ret.holds_bool()){
 					throw ConditionalError{};
 				}
-				else if(std::get<bool>(ret)){
+				else if(ret.get_bool()){
 					statement->get_body()->eval();
 					this->update_existing(statement->get_body()->show_vars());
 					statement->clear();
@@ -186,10 +186,10 @@ std::pair<std::optional<Var>, bool> ASGrove::calc(bool print){
 				if(possible_val.has_value()){
 					ret = *possible_val;
 				}
-				if(!std::holds_alternative<bool>(ret)){
+				if(!ret.holds_bool()){
 					throw ConditionalError{};
 				}
-				else if(std::get<bool>(ret)){
+				else if(ret.get_bool()){
 					statement->get_body()->eval();
 					this->update_existing(statement->get_body()->show_vars());
 					statement->clear();
@@ -202,11 +202,11 @@ std::pair<std::optional<Var>, bool> ASGrove::calc(bool print){
 			break;
 		}
 		if(print || types.at(place) == TreeType::PRINT){
-			if(std::holds_alternative<double>(ret)){
-				std::cout<<std::get<double>(ret)<<std::endl;
+			if(ret.holds_double()){
+				std::cout<<ret.get_double()<<std::endl;
 			}
-			else if(std::holds_alternative<bool>(ret)){
-				std::cout<< std::boolalpha << std::get<bool>(ret) << std::endl;
+			else if(ret.holds_bool()){
+				std::cout<< std::boolalpha << ret.get_bool() << std::endl;
 			}
 		}
 	}
@@ -281,7 +281,7 @@ std::optional<Var> ASGrove::calcHelp(const ASTree::ASNode& root){
 			else{
 				throw InvalidAssignment{};
 			}
-			if(!(std::holds_alternative<double>(val) && std::holds_alternative<double>(ret))){
+			if(!(val.holds_double() && ret.holds_double())){
 				throw TypeError(child.get_pdata());
 			}
 	    	if(idx ==0){ // if the child is the first of its siblings, set the return value to that childs value
@@ -291,35 +291,35 @@ std::optional<Var> ASGrove::calcHelp(const ASTree::ASNode& root){
 		   switch(curr.get_text()[0]){ //math operations
 
 			case '*':
-			    ret = std::get<double>(ret) * std::get<double>(val);
+			    ret = ret.get_double() * val.get_double();
                             break;
 			case '+':
-			    ret = std::get<double>(ret) + std::get<double>(val);
+			    ret = ret.get_double() + val.get_double();
                             break;
 			case '-':
-			    ret = std::get<double>(ret) - std::get<double>(val);
+			    ret = ret.get_double() - val.get_double();
                             break;
 			case '/':
-			    if(std::get<double>(val) == 0){
+			    if(val.get_double() == 0){
 				throw ZeroDivision{};
 			    }
-			    ret = std::get<double>(ret) / std::get<double>(val);
+			    ret = ret.get_double() / val.get_double();
                             break;
 			case '%':
-			    ret = std::fmod(std::get<double>(ret), std::get<double>(val));
+			    ret = std::fmod(ret.get_double(), val.get_double());
 			    break;
 			case '<':
 				if(curr.get_text()== "<="){
-					ret = std::get<double>(ret) <= std::get<double>(val);
+					ret = ret.get_double() <= val.get_double();
 				}else{
-					ret = std::get<double>(ret) < std::get<double>(val);
+					ret = ret.get_double() > val.get_double();
 				}
 				break;
 			case '>':
 				if(curr.get_text()== ">="){
-					ret = std::get<double>(ret) >= std::get<double>(val);
+					ret = ret.get_double() >= val.get_double();
 				}else{
-					ret = std::get<double>(ret) > std::get<double>(val);
+					ret = ret.get_double() > val.get_double();
 				}
 				break;
 			
@@ -342,7 +342,7 @@ std::optional<Var> ASGrove::calcHelp(const ASTree::ASNode& root){
 			else{
 				throw InvalidAssignment{};
 			}
-			if(!(std::holds_alternative<bool>(val)&&std::holds_alternative<bool>(ret))){
+			if(!(val.holds_bool() && ret.holds_bool())){
 				throw TypeError(child.get_pdata());
 			}
 	    	if(idx ==0){ // if the child is the first of its siblings, set the return value to that childs value
@@ -352,13 +352,13 @@ std::optional<Var> ASGrove::calcHelp(const ASTree::ASNode& root){
 		   		switch(curr.get_text()[0]){ //math operations
 
 			case '&':
-			    ret = std::get<bool>(ret) && std::get<bool>(val);
+			    ret = ret.get_bool() && val.get_bool();
                             break;
 			case '|':
-			    ret = std::get<bool>(ret) || std::get<bool>(val);
+			    ret = ret.get_bool() || val.get_bool();
                             break;
 			case '^':
-			    ret = (std::get<bool>(ret) != std::get<bool>(val));
+			    ret = (ret.get_bool() != val.get_bool());
                             break;
 
         	default:
@@ -378,7 +378,7 @@ std::optional<Var> ASGrove::calcHelp(const ASTree::ASNode& root){
 			else{
 				throw InvalidAssignment{};
 			}
-			if((idx > 0) && !((std::holds_alternative<bool>(val)&&std::holds_alternative<bool>(ret))||(std::holds_alternative<double>(val)&&std::holds_alternative<double>(ret)))){
+			if((idx > 0) && !((val.holds_bool() && ret.holds_bool())||(val.holds_double() && ret.holds_double()))){
 				throw TypeError(child.get_pdata());
 			}
 	    	if(idx ==0){ // if the child is the first of its siblings, set the return value to that childs value
@@ -388,19 +388,19 @@ std::optional<Var> ASGrove::calcHelp(const ASTree::ASNode& root){
 		   	switch(curr.get_text()[0]){ //math operations
 
 			case '=':
-				if(std::holds_alternative<bool>(ret)){
-			    	ret = std::get<bool>(ret) == std::get<bool>(val);
+				if(ret.holds_bool()){
+			    	ret = ret.get_bool() == val.get_bool();
 				}
 				else{
-					ret = std::get<double>(ret) == std::get<double>(val);
+					ret = ret.get_double() == val.get_double();
 				}
 				break;
 			case '!':
-			    if(std::holds_alternative<bool>(ret)){
-			    	ret = std::get<bool>(ret) != std::get<bool>(val);
+			    if(ret.holds_bool()){
+			    	ret = ret.get_bool() != val.get_bool();
 				}
 				else{
-					ret = std::get<double>(ret) != std::get<double>(val);
+					ret = ret.get_double() != val.get_double();
 				}
         	default:
                 break;
