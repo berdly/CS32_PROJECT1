@@ -12,7 +12,7 @@
 #include <utility>
 
 class Var{
-  typedef std::vector<Var>& Arr;
+  typedef std::vector<Var>* Arr;
   std::variant<double, bool, Arr> data;
   public:
   Var() = default;
@@ -39,7 +39,7 @@ class Var{
   }
 };
 
-typedef std::vector<Var>& Arr;
+typedef std::vector<Var>* Arr;
 std::optional<Var> pop(const std::vector<Var>& args){
   if(args.size() != 1){
     throw ArgError{};
@@ -48,8 +48,8 @@ std::optional<Var> pop(const std::vector<Var>& args){
     throw ArgError{};
   }
   Arr arr{args[0].get_Arr()};
-  Var last = arr.back();
-  arr.pop_back();
+  Var last = arr->back();
+  arr->pop_back();
   return std::optional<Var>(last);
 }
 std::optional<Var> len(const std::vector<Var>& args){
@@ -59,7 +59,7 @@ std::optional<Var> len(const std::vector<Var>& args){
   if(!(args[0].holds_Arr())){
     throw ArgError{};
   }
-  return std::optional<Var>(static_cast<double>(args[0].get_Arr().size()));
+  return std::optional<Var>(static_cast<double>(args[0].get_Arr()->size()));
 }
 std::optional<Var> push(const std::vector<Var>& args){
    if(args.size() != 2){
@@ -68,7 +68,7 @@ std::optional<Var> push(const std::vector<Var>& args){
   if(!(args[0].holds_Arr())){
     throw ArgError{};
   }
-  args[0].get_Arr().push_back(args[1]);
+  args[0].get_Arr()->push_back(args[1]);
   return std::optional<Var>{};
 }
 
