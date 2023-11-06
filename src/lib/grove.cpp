@@ -263,7 +263,7 @@ std::pair<std::optional<Var>, bool> ASGrove::calc(bool print){
 		throw ConditionalError{};
 	}
 	++place;
-	if(types.at(place) == TreeType::RETURN){
+	if(types.at(place - 1) == TreeType::RETURN){
 		if(!is_func){
 			throw UnexpectedReturn{};
 		}
