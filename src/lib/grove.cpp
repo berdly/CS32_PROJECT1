@@ -403,9 +403,15 @@ void ASGrove::print(unsigned i, unsigned indent) const{
 						std::cout << ' ';
   					}
 			
-			std::cout<<'}'<<std::endl;
+			
 			statement = statement->get_next();
+			if(statement == nullptr){
+				std::cout<<'}';
+			}else{
+				std::cout<<'}'<<std::endl;
+			}
 			tr++;
+
 			}else if(statement->getProot().get_pdata().get_text() != "true"){
 
 				for(unsigned j{}; j < indent * 4; j++){
@@ -421,7 +427,7 @@ void ASGrove::print(unsigned i, unsigned indent) const{
 
 				std::cout<<"if ";
 				printHelp(statement->getProot());
-				std::cout<<"{"<<std::endl;
+				std::cout<<" {"<<std::endl;
 
 				statement->get_body()->printAll(indent + 1);
 				for(unsigned j{}; j < indent * 4; j++){
@@ -434,9 +440,14 @@ void ASGrove::print(unsigned i, unsigned indent) const{
 				for(unsigned j{}; j < indent * 4; j++){
 					std::cout << ' ';
   				}
-				std::cout<<'}'<<std::endl;
+				
 
 				statement = statement->get_next();
+				if(statement == nullptr){
+					std::cout<<'}';
+				}else{
+				std::cout<<'}'<<std::endl;
+				}
 				tr++;
 				
 
@@ -452,8 +463,14 @@ void ASGrove::print(unsigned i, unsigned indent) const{
 				std::cout << ' ';
   				}
 
-			std::cout<<'}'<<std::endl;
+			
+			
 			statement = statement->get_next();
+			if(statement == nullptr){
+				std::cout<<'}';
+			}else{
+				std::cout<<'}'<<std::endl;
+			}
 			tr++;
 
 			}
