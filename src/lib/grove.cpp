@@ -397,34 +397,76 @@ void ASGrove::print(unsigned i, unsigned indent) const{
 				std::cout<<"if "; 
 				printHelp(statement->getProot());
 				std::cout<<" {"<<std::endl;
-			}else if(statement->getProot().get_pdata().get_text() != "true"){
-				for(unsigned j{}; j < indent * 4; j++){
-				std::cout << ' ';
-  			}
-				std::cout<<"else {"<<std::endl;
-				for(unsigned j{}; j < (indent+1) * 4; j++){
-				std::cout << ' ';
-  			}
-				std::cout<<"if ";
 
-				printHelp(statement->getProot());
-				std::cout<<" {"<<std::endl;
-			}else{
+				statement->get_body()->printAll(indent + 1);
+					for(unsigned j{}; j < indent * 4; j++){
+						std::cout << ' ';
+  					}
+			
+			std::cout<<'}'<<std::endl;
+			statement = statement->get_next();
+			tr++;
+			}else if(statement->getProot().get_pdata().get_text() != "true"){
+
 				for(unsigned j{}; j < indent * 4; j++){
 				std::cout << ' ';
-  			}
+  				}
+
+				indent++;
+				std::cout<<"else {"<<std::endl;
+				
+				for(unsigned j{}; j < indent * 4; j++){
+				std::cout << ' ';
+  				}
+
+				std::cout<<"if ";
+				printHelp(statement->getProot());
+				std::cout<<"{"<<std::endl;
+
+				statement->get_body()->printAll(indent + 1);
+				for(unsigned j{}; j < indent * 4; j++){
+					std::cout << ' ';
+  				}
+				
+			
+				std::cout<<'}'<<std::endl;
+				indent--;
+				for(unsigned j{}; j < indent * 4; j++){
+					std::cout << ' ';
+  				}
+				std::cout<<'}'<<std::endl;
+
+				statement = statement->get_next();
+				tr++;
+				
+
+			}else{
+
+				for(unsigned j{}; j < indent * 4; j++){
+				std::cout << ' ';
+  				}
 				std::cout<<"else {"<<std::endl; 
+
+				statement->get_body()->printAll(indent + 1);
+				for(unsigned j{}; j < indent * 4; j++){
+				std::cout << ' ';
+  				}
+
+			std::cout<<'}'<<std::endl;
+			statement = statement->get_next();
+			tr++;
 
 			}
 			
 			
-			statement->get_body()->printAll(indent + 1);
+			/* statement->get_body()->printAll(indent + 1);
 			for(unsigned j{}; j < indent * 4; j++){
 				std::cout << ' ';
   			}
+			
 			std::cout<<'}'<<std::endl;
 			statement = statement->get_next();
-			tr++;
+			tr++; */
 			
 			}
 			
