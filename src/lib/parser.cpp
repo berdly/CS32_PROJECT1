@@ -58,10 +58,34 @@ bool wrapped_bracks(const std::vector<Token>& tokens, unsigned start, unsigned e
 	return false;
 }
 ASTree::ASNode ASTree::build_array(const std::vector<Token>& tokens, unsigned start, unsigned end){
-	throw NotImplemented{};
+	ASNode root{tokens.at(start)};
+	int curr_start{start + 1};
+	int bdepth{};
+	int pdepth{};
+	for(unsigned i{start + 1}; i <= end; i++){
+		switch(tokens.at(i).get_type()){
+			case TokenType::COMMA:
+				if((bdepth == 0) && (pdepth == 0)){
+					root.add_child(this->buildInfix(tokens, start, i - 1, false));
+				}
+				break;
+		}
+	}
 }
 ASTree::ASNode ASTree::build_call(const std::vector<Token>& tokens, unsigned start, unsigned end){
-	throw NotImplemented{};
+	ASNode root{tokens.at(start)};
+	int curr_start{start};
+	int bdepth{};
+	int pdepth{};
+	for(unsigned i{start + 2}; i <= end - 1; i++){
+		switch(tokens.at(i).get_type()){
+			case TokenType::COMMA:
+				if((bdepth == 0) && (pdepth == 0)){
+					root.add_child(this->buildInfix(tokens, start, i - 1, false));
+				}
+				break;
+		}
+	}
 }
 ASTree::ASTree(const std::vector<Token>& tokens, unsigned start, unsigned end, bool infix) {
     if(tokens.empty()){
@@ -276,10 +300,17 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, unsigned sta
     if((start == end) && ((tokens[start].get_type() == TokenType::CONST) || (tokens[start].get_type() == TokenType::BOOL) || (tokens[start].get_type() == TokenType::VAR))){
 	    return ASTree::ASNode{tokens[start]};
     }
+	else if(wrapped_bracks(tokens, start, end)){
+		return build_array(tokens, start, end - 1);
+	}
+	else if((tokens[start].get_type() == TokenType::CONST) || (tokens[start].get_type() == TokenType::BOOL) || (tokens[start].get_type() == TokenType::VAR) && wrapped(tokens, start+1, end)){
+		return build_call(tokens, start, end);
+	}
     
     int curr_pres{100};
     int low_idx{-1};
     int pdepth{};
+	int bdepth{};
     ASTree::ASNode rootNode{};
     ASTree::ASNode right_child{};
 

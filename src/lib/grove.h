@@ -55,6 +55,7 @@ PRINT,
 RETURN,
 };
 class StatementTree;
+
 class ASGrove{
   public:
     class Func{
@@ -70,7 +71,6 @@ class ASGrove{
   public:
     static std::vector<std::vector<Var>> array_holder;
     static const std::map<std::string, Specials::Special> specials;
-    friend class StatementTree;
     friend class Func;
   private:
     std::vector<ASTree*> statements;
@@ -88,14 +88,14 @@ class ASGrove{
     std::optional<Var> find_func(const std::string& name, const std::vector<Var>& args) const;
     void update_existing(const std::map<std::string, Var>&); //If a Variable exists both in the lower grove and upper grove, takes the value from the lower grove and assigns it to the upper grove. (Makes i++) 
     const std::map<std::string, Var>& show_vars() const;
-    void reset(); // Will reset the placement of the tree
-    void clear();
     void add_var(const std::string& name, Var val);
     
 public:
   ASGrove();
   ASGrove(std::vector<std::vector<Token>> commands, ASGrove* owner = nullptr, bool func = false);
   ~ASGrove();
+  void clear();
+  void reset();
   std::optional<Var> eval(); // Evaluates all trees sequentially until the end
   std::pair<std::optional<Var>, bool> calc(bool print = true); //Stepper evaluates one tree one step at a time
   void add_tree(ASTree* tree, TreeType type = TreeType::EXP);
@@ -113,7 +113,6 @@ class StatementTree: public ASTree{
   virtual ~StatementTree();
   ASGrove* get_body() { return body; }
   StatementTree* get_next() const { return next; }
-  void update_down(const std::map<std::string, Var>&);
   void push_back(StatementTree*);
   void clear() {this->body->clear();}
 };

@@ -815,9 +815,3 @@ StatementTree::~StatementTree(){
 		delete body;
 	}
 }
-void StatementTree::update_down(const std::map<std::string, Var>& vars){
-	this->get_body()->update_existing(vars);
-	if(next){
-		next->update_down(vars);
-	}
-}
