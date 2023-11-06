@@ -10,6 +10,7 @@
 #include <iostream>
 #include <variant>
 #include <utility>
+
 class Var;
 typedef std::vector<Var>* Arr;
 
@@ -46,7 +47,6 @@ std::optional<Var> push(const std::vector<Var>& args);
 typedef decltype(&pop) Special;
 }
 
-
 enum class TreeType{
 EXP,
 IF,
@@ -54,7 +54,7 @@ WHILE,
 PRINT,
 RETURN,
 };
-
+class StatementTree;
 class ASGrove{
   public:
     class Func{
@@ -70,7 +70,9 @@ class ASGrove{
   public:
     static std::vector<std::vector<Var>> array_holder;
     static const std::map<std::string, Specials::Special> specials;
-    private:
+    friend class StatementTree;
+    friend class Func;
+  private:
     std::vector<ASTree*> statements;
     std::vector<TreeType> types; //A reference Vector to tell what type the trees are
     std::map<std::string, Var> vars;
@@ -79,27 +81,27 @@ class ASGrove{
     unsigned place; //how many trees have been executed
     const ASGrove* parent;
     bool is_func;
+    ASGrove(std::vector<std::vector<Token>> commands, unsigned start, unsigned end, ASGrove* owner = nullptr, bool func = false);
     std::optional<Var> search_var(const std::string& query) const;
     std::optional<Var> calcHelp(const ASTree::ASNode&);
     void printHelp(const ASTree::ASNode&) const;
     std::optional<Var> find_func(const std::string& name, const std::vector<Var>& args) const;
+    void update_existing(const std::map<std::string, Var>&); //If a Variable exists both in the lower grove and upper grove, takes the value from the lower grove and assigns it to the upper grove. (Makes i++) 
+    const std::map<std::string, Var>& show_vars() const;
+    void reset(); // Will reset the placement of the tree
+    void clear();
+    void add_var(const std::string& name, Var val);
     
 public:
   ASGrove();
-  ASGrove(std::vector<std::vector<Token>> commands, unsigned start, unsigned end, ASGrove* owner = nullptr, bool func = false);
   ASGrove(std::vector<std::vector<Token>> commands, ASGrove* owner = nullptr, bool func = false);
   ~ASGrove();
-  void update_existing(const std::map<std::string, Var>&); //If a Variable exists both in the lower grove and upper grove, takes the value from the lower grove and assigns it to the upper grove. (Makes i++) 
-  const std::map<std::string, Var>& show_vars() const;
   std::optional<Var> eval(); // Evaluates all trees sequentially until the end
   std::pair<std::optional<Var>, bool> calc(bool print = true); //Stepper evaluates one tree one step at a time
   void add_tree(ASTree* tree, TreeType type = TreeType::EXP);
-  void reset(); // Will reset the placement of the tree
   void printAll(unsigned indent = 0) const;
   void print(unsigned i, unsigned indent) const;
   void print_curr() const;
-  void clear();
-  void add_var(const std::string& name, Var val);
 };
 
 class StatementTree: public ASTree{

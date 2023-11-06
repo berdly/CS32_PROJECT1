@@ -31,6 +31,38 @@ bool wrapped(const std::vector<Token>& tokens, unsigned start, unsigned end){
 	}
 	return false;
 }
+bool wrapped_bracks(const std::vector<Token>& tokens, unsigned start, unsigned end){
+	int pdepth{};
+	if(tokens.empty()){
+		return false;
+	}
+	if(tokens.at(start).get_type() == TokenType::LBRACK){
+		for(unsigned i{start+ 1}; i <= end; i++){
+			if(tokens.at(i).get_type() == TokenType::LBRACK){
+				pdepth++;
+			}
+			else if(tokens.at(i).get_type() == TokenType::RBRACK){
+				if(pdepth == 0){
+					return (i == end) && (end > 1);
+				}
+				
+				else{
+					pdepth--;
+				}
+		}
+	}
+	}
+	else{
+		return false;
+	}
+	return false;
+}
+ASTree::ASNode ASTree::build_array(const std::vector<Token>& tokens, unsigned start, unsigned end){
+	throw NotImplemented{};
+}
+ASTree::ASNode ASTree::build_call(const std::vector<Token>& tokens, unsigned start, unsigned end){
+	throw NotImplemented{};
+}
 ASTree::ASTree(const std::vector<Token>& tokens, unsigned start, unsigned end, bool infix) {
     if(tokens.empty()){
 	    throw ParserError(Token{});
