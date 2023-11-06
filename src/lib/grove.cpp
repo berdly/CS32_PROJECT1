@@ -378,22 +378,33 @@ void ASGrove::print_curr() const{
 	this->print(place, 0);
 	std::cout << '\n';
 }
-void ASGrove::print(unsigned i, unsigned indent) const{
+void ASGrove::print(unsigned i, unsigned indent, ASTree* start) const{
   ASTree* tree{statements.at(i)};
   StatementTree* statement;
+  
   int tr{};
+  if(start == nullptr){
   for(unsigned j{}; j < indent * 4; j++){
+	
 	std::cout << ' ';
   }
+
+  }
+  
+
 	switch(types.at(i)){
 		case TreeType::EXP:
 			printHelp(tree->getProot());
 			break;
 		case TreeType::IF:
-			statement = static_cast<StatementTree*>(tree);
+			if(start!= nullptr){
+				statement = static_cast<StatementTree*>(start);
+  			}else{
+				statement = static_cast<StatementTree*>(tree);
+			}
 			tr = 0;
 			while(statement != nullptr){
-			if(tr == 0){
+			if(tr == 0 && start == nullptr){
 				std::cout<<"if "; 
 				printHelp(statement->getProot());
 				std::cout<<" {"<<std::endl;
@@ -418,9 +429,10 @@ void ASGrove::print(unsigned i, unsigned indent) const{
 				std::cout << ' ';
   				}
 
-				indent++;
+				
 				std::cout<<"else {"<<std::endl;
 				
+				indent++;
 				for(unsigned j{}; j < indent * 4; j++){
 				std::cout << ' ';
   				}
@@ -430,19 +442,37 @@ void ASGrove::print(unsigned i, unsigned indent) const{
 				std::cout<<" {"<<std::endl;
 
 				statement->get_body()->printAll(indent + 1);
+
+
 				for(unsigned j{}; j < indent * 4; j++){
 					std::cout << ' ';
   				}
 				
 			
 				std::cout<<'}'<<std::endl;
-				indent--;
-				for(unsigned j{}; j < indent * 4; j++){
-					std::cout << ' ';
-  				}
+				
 				
 
 				statement = statement->get_next();
+
+				print(i,indent,statement);
+					
+					statement = nullptr;
+				
+				indent--;
+				
+
+				for(unsigned j{}; j <( indent) * 4; j++){
+					std::cout << ' ';
+  				}
+
+				
+
+				
+				
+				
+
+
 				if(statement == nullptr){
 					std::cout<<'}';
 				}else{
@@ -457,8 +487,12 @@ void ASGrove::print(unsigned i, unsigned indent) const{
 				std::cout << ' ';
   				}
 				std::cout<<"else {"<<std::endl; 
+				
+				
 
 				statement->get_body()->printAll(indent + 1);
+
+				
 				for(unsigned j{}; j < indent * 4; j++){
 				std::cout << ' ';
   				}
@@ -509,6 +543,11 @@ void ASGrove::print(unsigned i, unsigned indent) const{
 
 		    
 		}
+
+		if(start != nullptr){
+			std::cout<<std::endl;
+		}
+
 	}
 	
   
