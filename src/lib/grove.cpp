@@ -2,8 +2,40 @@
 #include "error.h"
 #include <cmath>
 #include "lexer.h"
-const std::map<std::string, decltype(&push)> ASGrove::specials = {{"pop", pop}, {"len", len}, {"push", push}};
 std::vector<std::vector<Var>> ASGrove::array_holder{};
+std::optional<Var> Specials::pop(const std::vector<Var>& args){
+  if(args.size() != 1){
+    throw ArgError{};
+  }
+  if(!(args[0].holds_Arr())){
+    throw ArgError{};
+  }
+  Arr arr{args[0].get_Arr()};
+  Var last = arr->back();
+  arr->pop_back();
+  return std::optional<Var>(last);
+}
+std::optional<Var> Specials::len(const std::vector<Var>& args){
+  if(args.size() != 1){
+    throw ArgError{};
+  }
+  if(!(args[0].holds_Arr())){
+    throw ArgError{};
+  }
+  return std::optional<Var>(static_cast<double>(args[0].get_Arr()->size()));
+}
+std::optional<Var> Specials::push(const std::vector<Var>& args){
+   if(args.size() != 2){
+    throw ArgError{};
+  }
+  if(!(args[0].holds_Arr())){
+    throw ArgError{};
+  }
+  args[0].get_Arr()->push_back(args[1]);
+  return std::optional<Var>{};
+}
+
+const std::map<std::string, Specials::Special> ASGrove::specials{{{"pop", Specials::pop}, {"len", Specials::len}, {"push", Specials::push}}};
 
 ASGrove::ASGrove() : statements{}, types{}, vars{}, funcs{}, place{}, parent{nullptr}, is_func{false} {}
 //ASGrove::ASGrove(const std::vector<ASTree>& tree) : statements{tree}, vars{}, place{} {}
