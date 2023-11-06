@@ -4,8 +4,6 @@
 #include "lexer.h"
 
 ASGrove::ASGrove() : statements{}, types{}, vars{}, place{}, parent{nullptr} {}
-//ASGrove::ASGrove(const std::vector<ASTree>& tree) : statements{tree}, vars{}, place{} {}
-//ASGrove::ASGrove(const ASTree& tree) : statements(std::vector<ASTree>{tree}), vars{}, types{}, place{} {}
 ASGrove::ASGrove(std::vector<std::vector<Token>> commands, unsigned start, unsigned end, ASGrove* owner): statements{}, types{}, vars{}, place{}, parent{owner} {
 	//needs to be changed to normal number for loop using start and end
 	for(unsigned i{start}; i <= end; i++){
@@ -366,7 +364,6 @@ Var ASGrove::calcHelp(const ASTree::ASNode& root){
 		 throw IdentifierError(curr);
 	     }
     default:
-            //throw ParserError(root.get_pdata());
             break;
 
 		
@@ -458,7 +455,7 @@ void ASGrove::print(unsigned i, unsigned indent, ASTree* start) const{
 					print(i,indent,statement);	
 				}
 
-				//statement = nullptr;
+				
 				
 				indent--;
 				
@@ -505,15 +502,6 @@ void ASGrove::print(unsigned i, unsigned indent, ASTree* start) const{
 
 			}
 			
-			
-			/* statement->get_body()->printAll(indent + 1);
-			for(unsigned j{}; j < indent * 4; j++){
-				std::cout << ' ';
-  			}
-			
-			std::cout<<'}'<<std::endl;
-			statement = statement->get_next();
-			tr++; */
 			
 			}
 			
@@ -716,10 +704,7 @@ const std::map<std::string, Var>& ASGrove::show_vars() const { return vars; }
 
 void ASGrove::update_existing(const std::map<std::string, Var>& v_map) {
 	for(const auto& pair: v_map){
-		//auto itr{this->vars.find(pair.first)};
-		//if(itr != this->vars.end()){
 		vars[pair.first] = pair.second;
-		//}
 	}
 }
 
