@@ -89,6 +89,7 @@ class ASGrove{
       ASGrove* body;
       std::vector<std::string> names;
       public:
+      Func() = default;
       Func(const std::vector<Token>& tokens, ASGrove* owner);
       ~Func();
       std::optional<Var> operator()(const std::vector<Var>& args) const;

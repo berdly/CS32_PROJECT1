@@ -5,7 +5,7 @@
 const std::map<std::string, decltype(&push)> ASGrove::specials = {{"pop", pop}, {"len", len}, {"push", push}};
 std::vector<std::vector<Var>> ASGrove::array_holder{};
 
-ASGrove::ASGrove() : statements{}, types{}, vars{}, place{}, funcs{}, parent{nullptr}, is_func{false} {}
+ASGrove::ASGrove() : statements{}, types{}, vars{}, funcs{}, place{}, parent{nullptr}, is_func{false} {}
 //ASGrove::ASGrove(const std::vector<ASTree>& tree) : statements{tree}, vars{}, place{} {}
 //ASGrove::ASGrove(const ASTree& tree) : statements(std::vector<ASTree>{tree}), vars{}, types{}, place{} {}
 ASGrove::ASGrove(std::vector<std::vector<Token>> commands, unsigned start, unsigned end, ASGrove* owner, bool func): statements{}, types{}, vars{}, funcs{}, place{}, parent{owner}, is_func{func} {
@@ -258,16 +258,17 @@ std::optional<Var> ASGrove::calcHelp(const ASTree::ASNode& root){
 
       case TokenType::ASSIGN:
             possible_val = this->calcHelp(children.back());
+			if(possible_val.has_value()){
+				val = *possible_val;
+			}
+			else{
+				throw InvalidAssignment{};
+			}
             for(size_t i{}; i < children.size() - 1 ; i++){
-				if(possible_val.has_value()){
-                  this->add_var(children.at(i).get_pdata().get_text(), *possible_val);
-				}
-				else{
-					throw InvalidAssignment{};
-				}
+                this->add_var(children.at(i).get_pdata().get_text(), *possible_val);
             }
 
-            return ;
+            return val;
 
             break;
 		
