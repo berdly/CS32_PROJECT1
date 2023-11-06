@@ -196,7 +196,7 @@ std::pair<std::optional<Var>, bool> ASGrove::calc(bool print){
 					ret = *possible_val;
 				}
 				else{
-					throw ArgError{};
+					throw ConditionalError{};
 				}
 				if(!ret.holds_bool()){
 					throw ConditionalError{};
@@ -217,6 +217,9 @@ std::pair<std::optional<Var>, bool> ASGrove::calc(bool print){
 				possible_val = calcHelp(statement->getProot());
 				if(possible_val.has_value()){
 					ret = *possible_val;
+				}
+				else{
+					throw ConditionalError{};
 				}
 				if(!ret.holds_bool()){
 					throw ConditionalError{};
@@ -343,7 +346,7 @@ std::optional<Var> ASGrove::calcHelp(const ASTree::ASNode& root){
 				if(curr.get_text()== "<="){
 					ret = ret.get_double() <= val.get_double();
 				}else{
-					ret = ret.get_double() > val.get_double();
+					ret = ret.get_double() < val.get_double();
 				}
 				break;
 			case '>':
