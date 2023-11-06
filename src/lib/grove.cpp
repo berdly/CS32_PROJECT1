@@ -711,6 +711,60 @@ std::optional<Var> ASGrove::find_func(const std::string& name, const std::vector
 	}
 	throw ArgError{};
 }
+
+ASGrove::Func::Func(const std::vector<Token>& tokens, ASGrove* owner): body{}, names{} {
+    unsigned var_end{};
+    if(tokens.at(2).get_type() != TokenType::LPAR){
+      throw ParserError{tokens.at(2)};
+    }
+    TokenType last{TokenType::COMMA};
+    for(unsigned i{3}; i < tokens.size(); i++){
+      switch(tokens.at(i).get_type()){
+        case TokenType::RPAR:
+           var_end = i;
+           break;
+        case TokenType::VAR:
+          if(last == TokenType::VAR){
+            throw ParserError(tokens.at(i));
+          }
+          names.push_back(tokens.at(i).get_text());
+          last = TokenType::VAR;
+          break;
+        case TokenType::COMMA:
+          last = TokenType::COMMA;
+          break;
+        default:
+          throw ParserError(tokens.at(i));
+          break;
+      }
+      if(var_end > 0){
+        break;
+      }
+    }
+    if(var_end == 0 || var_end >= tokens.size() - 3){
+      throw ParserError(tokens.back());
+    }
+    if(tokens.at(var_end + 1).get_type() != TokenType::LBRACE){
+      throw ParserError(tokens.at(var_end + 1));
+    }
+    if(tokens.back().get_type() != TokenType::RBRACE){
+      throw ParserError(tokens.back());
+    }
+    body = new ASGrove{split_infix(tokens, var_end + 2, static_cast<unsigned>(tokens.size() - 2)), owner};
+  }
+std::optional<Var> ASGrove::Func::operator()(const std::vector<Var>& args) const{
+    if(args.size() != names.size()){
+      throw ArgError{};
+    }
+    ::ASGrove new_scope{*(this->body)}; //copies body by value to create new scope
+    for(unsigned i{}; i < names.size(); i++){
+      new_scope.add_var(names.at(i), args.at(i));
+    }
+    return new_scope.eval();
+  }
+ASGrove::Func::~Func(){
+	delete body;
+}
 void StatementTree::push_back(StatementTree* child){
 	if(next){
 		next->push_back(child);
