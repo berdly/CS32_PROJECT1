@@ -46,7 +46,6 @@ std::vector<std::vector<Token>> split(const std::vector<Token>& input, unsigned 
 		}
 		break;
             case TokenType::ERR:
-                //std::cout<<"THROW9"<<std::endl;
                 break;
         default:
             break;
@@ -60,99 +59,6 @@ std::vector<std::vector<Token>> split(const std::vector<Token>& input, unsigned 
 
 std::vector<std::vector<Token>> split_infix(const std::vector<Token>& input, unsigned start, unsigned end) {
     std::vector<std::vector<Token>> statements{};
-    /*int bdepth{};
-    int pdepth{};
-    unsigned curr_start{start};
-    bool in_statement{false};
-    TokenType last{TokenType::EXP};
-    for(unsigned i{start}; i <= end; i++){
-        switch(input.at(i).get_type()){
-            case TokenType::IF:
-            case TokenType::WHILE:
-            case TokenType::ELSE:
-                if(!in_statement){
-                    if(curr_start != i){
-                        statements.emplace_back(input.begin() + curr_start, input.begin() + i);
-                        curr_start = i;
-                    }
-                    pdepth = 0;
-                    in_statement = true;
-                    last = TokenType::EXP;
-                }
-                break;
-            case TokenType::PRINT:
-                if(!in_statement){
-                    if(curr_start != i){
-                        statements.emplace_back(input.begin() + curr_start, input.begin() + i);
-                        curr_start = i;
-                    }
-                    pdepth = 0;
-                    last = TokenType::EXP;
-                }
-                break;
-            case TokenType::CONST:
-            case TokenType::BOOL:
-            case TokenType::VAR:
-                if((!in_statement) && pdepth == 0 && last == TokenType::CONST){
-                    statements.emplace_back(input.begin() + curr_start, input.begin() + i);
-                    curr_start = i;
-                    last = TokenType::EXP;
-                }
-                if(pdepth == 0){
-                    last = TokenType::CONST;
-                }
-                break;
-            case TokenType::LPAR:
-                if((!in_statement) && pdepth == 0 && last == TokenType::CONST){
-                    statements.emplace_back(input.begin() + curr_start, input.begin() + i);
-                    curr_start = i;
-                    last = TokenType::EXP;
-                }
-                pdepth++;
-                break;
-            case TokenType::RPAR:
-                pdepth--;
-                if(pdepth == 0){
-                    statements.emplace_back(input.begin() + curr_start, input.begin() + i + 1);
-                }
-                else if(pdepth < 0){
-                    //there's an extra outer parentheses, current behavior is add it to last statement, can add arbitrary number to end of statement
-                    statements.back().push_back(input.at(i));
-                    pdepth = 0;
-                }
-                break;
-            case TokenType::EXP:
-            case TokenType::LOG:
-            case TokenType::EQUAL:
-            case TokenType::ASSIGN:
-                if((!in_statement) && pdepth == 0 && last == TokenType::EXP){
-                    statements.emplace_back(input.begin() + curr_start, input.begin() + i + 1);
-                    curr_start = i;
-                }
-                if(pdepth == 0){
-                    last = TokenType::EXP;
-                }
-                break;
-            case TokenType::LBRACE:
-                if(in_statement){
-                    bdepth++;
-                }
-                break;
-            case TokenType::RBRACE:
-                if(in_statement){
-                    bdepth--;
-                    if(bdepth == 0){
-                        statements.emplace_back(input.begin() + curr_start, input.begin() + i + 1);
-                        curr_start = i + 1;
-                    }
-                    in_statement = false;
-                }
-                break;
-            default:
-                throw ParserError(input.at(i));
-        }  
-    }
-    */
     int curr_line{input.at(start).get_line()};
     bool in_statement{false};
     int bdepth{};
