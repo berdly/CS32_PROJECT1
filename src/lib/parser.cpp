@@ -306,6 +306,7 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, unsigned sta
 	else if((tokens[start].get_type() == TokenType::CONST) || (tokens[start].get_type() == TokenType::BOOL) || (tokens[start].get_type() == TokenType::VAR) && wrapped(tokens, start+1, end)){
 		return build_call(tokens, start, end);
 	}
+	//ADD ACCESS
     
     int curr_pres{100};
     int low_idx{-1};
