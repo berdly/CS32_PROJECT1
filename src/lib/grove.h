@@ -10,9 +10,10 @@
 #include <iostream>
 #include <variant>
 #include <utility>
+class Var;
+typedef std::vector<Var>* Arr;
 
 class Var{
-  typedef std::vector<Var>* Arr;
   std::variant<double, bool, Arr> data;
   public:
   Var() = default;
@@ -44,7 +45,7 @@ std::optional<Var> len(const std::vector<Var>& args);
 std::optional<Var> push(const std::vector<Var>& args);
 typedef decltype(&pop) Special;
 }
-typedef std::vector<Var>* Arr;
+
 
 enum class TreeType{
 EXP,
