@@ -286,9 +286,8 @@ std::optional<Var> ASGrove::calcHelp(const ASTree::ASNode& root){
     Var value{};
 	std::vector<Var> args;
 	std::optional<Var> possible_val{};
-    
+    double dummy;
     switch(curr.get_type()){
-
       case TokenType::ASSIGN:
             possible_val = this->calcHelp(children.back());
 			if(possible_val.has_value()){
@@ -456,7 +455,8 @@ std::optional<Var> ASGrove::calcHelp(const ASTree::ASNode& root){
 	     else{
 		 throw IdentifierError(curr);
 	     }
-	case TokenType::FUNC:
+	case TokenType::RBRACK:
+		array_holder.emplace_back(children.size());
 		for(const auto& child: children){
 			possible_val = this->calcHelp(child); // recursively obtains the value of a child, the children could be an expression or a constant
             if(possible_val.has_value()){
@@ -465,9 +465,49 @@ std::optional<Var> ASGrove::calcHelp(const ASTree::ASNode& root){
 			else{
 				throw InvalidAssignment{};
 			}
+			array_holder.back().push_back(val);
+		}
+		return &(array_holder.back());
+	case TokenType::LBRACK:
+		possible_val = calcHelp(children.at(0)); //added this auto - might not work as intended
+		if(possible_val.has_value()){
+			val = *possible_val;
+		}
+		else{
+			throw InvalidAssignment{};
+		}
+		if(!val.holds_Arr()){
+			throw InvalidAccess{};
+		}
+		possible_val = calcHelp(children.at(1));
+		if(possible_val.has_value()){
+			ret = *possible_val;
+		}
+		else{
+			throw InvalidAssignment{};
+		}
+		if(!ret.holds_double()){
+			throw InvalidIndex{};
+		}
+		if(std::modf(ret.get_double(), &dummy) != 0){
+			throw FractionalIndex{};
+		}
+		return val.get_Arr()->at(static_cast<size_t>(ret.get_double()));
+	case TokenType::LPAR:
+		for(unsigned i{1}; i < children.size(); i++){
+			possible_val = this->calcHelp(children.at(i)); // recursively obtains the value of a child, the children could be an expression or a constant
+            if(possible_val.has_value()){
+				val = *possible_val;
+			}
+			else{
+				throw InvalidAssignment{};
+			}
 			args.push_back(val);
 		}
-		return this->find_func(root.get_pdata().get_text(), args);
+		if(children.at(0).get_pdata().get_type() != TokenType::VAR){
+			throw NotaFunction{};
+		}
+		return this->find_func(children.at(0).get_pdata().get_text(), args);
     default:
             //throw ParserError(root.get_pdata());
             break;

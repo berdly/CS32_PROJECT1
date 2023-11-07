@@ -70,4 +70,8 @@ class NotImplemented: public std::exception {};
 class ArgError: public std::exception {};
 class InvalidAssignment: public std::exception{};
 class UnexpectedReturn: public std::exception{};
+class NotaFunction: public std::exception{};
+class InvalidAccess: public std::exception{};
+class InvalidIndex: public std::exception{};
+class FractionalIndex: public std::exception{};
 #endif
