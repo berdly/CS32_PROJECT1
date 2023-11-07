@@ -9,7 +9,6 @@
  int main(){
     std::vector<ASTree> statements{};
     std::string input;
-    //bool l = false;  // Initialize l to false'
     int linecount{};
     std::string fullinput{};
     
@@ -20,7 +19,6 @@
         
         if (!input.empty()) {
             input +="\n"; // Concatenating each line with a newline character
-            //l = true;
         }
         fullinput+=input;
         if(std::cin.eof()){
@@ -29,19 +27,9 @@
         input.clear();
         linecount++;
      }
-        //std::cout<<input<<std::endl;
-        //std::cout << fullinput << '\n';
         auto tokens{reader(fullinput)};
         auto token_lists{split_infix(tokens, 0, static_cast<unsigned>(tokens.size() - 1))};
-  /*    
-        std::cout << fullinput << '\n';
-        for(const auto& list: token_lists){
-         for(const Token& token : list){
-          std::cout << token.get_text() << ' ';
-           }
-          std::cout << '\n';
-        }
-  */
+ 
         try{
             
             if(!token_lists.empty()){
@@ -61,7 +49,6 @@
         catch(const ParserError& e){
             //handles parser errors and displays error messages, else block is for early endings since the END token is not on the actual vector and must be imagined next to the final token
             if(e.etype == PErrType::NORM){
-                //std::cout<<"THORW 3";
             std::cout << e.new_what() << '\n';
             }
             else{
