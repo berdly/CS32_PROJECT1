@@ -58,6 +58,11 @@ std::vector<std::vector<Token>> split(const std::vector<Token>& input, unsigned 
 }
 
 std::vector<std::vector<Token>> split_infix(const std::vector<Token>& input, unsigned start, unsigned end) {
+/* 
+Takes in whole input of a vector consisting of tokens and seperates the original vector into subvectors by the statement type for 
+normal expressions, if statements, while statements, etc. Returns a vector of a vector of tokens with the statements properly seperated.
+*/
+	
     std::vector<std::vector<Token>> statements{};
     int curr_line{input.at(start).get_line()};
     bool in_statement{false};
@@ -65,7 +70,7 @@ std::vector<std::vector<Token>> split_infix(const std::vector<Token>& input, uns
     bool in_block{false};
     unsigned curr_start{start};
     for(unsigned i{start}; i <= end; i++){
-        if((!in_statement) && (input.at(i).get_line() != curr_line)){
+        if((!in_statement) && (input.at(i).get_line() != curr_line)){ // Creates vectors for statements when a new line is found and not in a statement
             curr_line = input.at(i).get_line();
             statements.emplace_back(input.begin() + curr_start, input.begin() + i);
             curr_start = i;
