@@ -75,7 +75,7 @@ normal expressions, if statements, while statements, etc. Returns a vector of a 
             statements.emplace_back(input.begin() + curr_start, input.begin() + i);
             curr_start = i;
         }
-        switch(input.at(i).get_type()){
+        switch(input.at(i).get_type()){ // Handles different statement types
             case TokenType::WHILE:
             case TokenType::IF:
             case TokenType::ELSE:
