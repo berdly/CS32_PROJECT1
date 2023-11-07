@@ -40,19 +40,4 @@ public:
   TokenType get_type() const { return this->ptype; };
 };
 #endif
-/*
-
-how to respond to different token types:
-
-switch(token1.get_type()){
-case TokenType::EXP:
-  do_something();
-  break;
-case TokenType::CONST:
-  do_something_else();
-  break;
-default:
-  break;
-}
-*/
 
