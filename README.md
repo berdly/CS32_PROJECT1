@@ -1,16 +1,28 @@
 # CS32_PROJECT1
 Authors: Jakob Pinedo, Sawyer Rice, David Chang, and Jaren Lowe
 
-These programs should be capable of formatting simple s expressions in standard input into an abstract syntax tree for further calculations or other manipulations of arbitrary nature. It considers each symbol or number as a token which is represented by a designated Token class. This class contains the column, row, text of the token, and includes information on the semantic meaning of the token. These types are enumerated through an enum class TokenTypes which has further explanation in the respective header file, Token.h.
+This project seeks to implement a simple dynamically typed programming language using abstract syntax trees.
 
-The Lexer which parses the input into a series of tokens is implemented as a single function “reader” which is declared in lexer.h and implemented in src/lib/lexer.cpp. This function moves through the input and identifies valid and invalid tokens, throwing an error in the event of invalid ones. 
+The process begins with lexing the input. The input's characters are parsed into groups based on their semantic meanings and stored in instances of class Token. Each token contains the text of the characters, their semantic meaning represented by a member of enum class TokenType, and place in the text for error messages. 
 
-The Parser organizes the tokens into a tree. This is represented by the class ASTree which contains the nested class ASNode. The tree possesses a root ASnode, and each node possess a Token and a std::vector<Token> containing its children. These are build recursively from the output of the reader function. Further details can be found in the implementation file src/lib/parser.cpp.
+Parsing on the expression level is handled by the class ASTree. An array of tokens is pased to the constructor and parsed into a single properly grouped expression based on precedence rules. This class has a member which is either empty or the root node of a valid expression. 
+
+Parsing on the block level is handled by the heart of the library, ASGrove. It is passed an array of arrays of Tokens which represent individual statements. If a statement is simply an expression, it's passed off to the ASTree constructor and stored as an ASTree, and if the statement is a more complex one like and if or while, then it's split into two parts, the conditional which is passed to the ASTree constructor and the body which is handled as an entirely new grove by recursively calling the ASGrove constructor. 
+
+These two parts are then stored in a StatementTree object which inherits from ASTree. The StatementTree also has a next member which points to another StatementTree allowing linked list functionality which is used for chaining ifs, elses, and elseifs. The various ASTrees and StatementTrees generated from parsing the input are then stored in order in a vector of ASTree* which can then be evaluated. The types of the respective trees are also held using a vector of the enum TreeTypes which helps with evaluating the trees correctly.
+
+Data for variables is stored as std::variant<double, bool> for simplicity and type safety. This is typedef'ed as Var for simplicity.
+
+Evaluating the trees is handled in the ASGrove::eval() function. Any variables that are created are saved in the std::map<std::string, Var> vars which allows for accessing the data by name.
+
+The ASTree can also be printed using the situational print functions defined in the class.
 
 Custom errors have also been implemented for usage within the programs which can be found at src/lib/error.h. Further details on these errors can be found there. 
 
-The programs src/lex.cpp and src/parse.cpp act as tests of the lexing and parsing logic, taking in input from std::cin and outputting it in clear ways which demonstrate the functions of these two sides of the system.
+The program src/lex.cpp acts as a test of the lexing and parsing logic, taking in input from std::cin and outputting it in clear ways which demonstrate correct functionality.
 
-In order to run src/lex.cpp, the implementation of the lexer in src/lib/lexer.cpp must also be compiled and the parser in src/parse.cpp relies on src/lib/parser.cpp as well as the lexer implementation.
+The program src/calc.cpp acts as a simple interpreter for basic math problems and supports variable assignment.
 
-Make files for the parse and lexer have been implemented and can be accessed with the commands “make parser” and “make lexer”.
+The program src/scrypt.cpp allows for execution of arbitrary code within the parameters of the language.
+
+Make files for all these programs have been implemented and can be accessed with the command "make *insert_program_name*"
