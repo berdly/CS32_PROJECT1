@@ -5,6 +5,12 @@
 
 ASGrove::ASGrove() : statements{}, types{}, vars{}, place{}, parent{nullptr} {}
 ASGrove::ASGrove(std::vector<std::vector<Token>> commands, unsigned start, unsigned end, ASGrove* owner): statements{}, types{}, vars{}, place{}, parent{owner} {
+/*
+Fills in the vectors for the statements and types member variables in ASGrove. 
+Goes through the commands vector, creating statement trees from the vectors. As the statement trees are 
+pushed into the statements member variable, the type is pushed into the types member variable.
+*/
+	
 	//needs to be changed to normal number for loop using start and end
 	for(unsigned i{start}; i <= end; i++){
 		int condition_end{};
@@ -130,14 +136,14 @@ Var ASGrove::calc(bool print){
   }
   StatementTree* statement;
 	try{
-	switch(types.at(place)){
+	switch(types.at(place)){ // Handles the calculation for the tree type using data from types and statements member variables
 		case TreeType::PRINT:
 		case TreeType::EXP:
 			ret = calcHelp(tree->getProot());
 			break;
 		case TreeType::IF:
 			statement = static_cast<StatementTree*>(tree);
-			while(statement){
+			while(statement){	// Checks if the pointer exists, in which it goes through the body and returns the proper values
 				ret = calcHelp(statement->getProot());
 				if(!std::holds_alternative<bool>(ret)){
 					throw ConditionalError{};
