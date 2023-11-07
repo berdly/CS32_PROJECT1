@@ -16,8 +16,6 @@ public:
     const Token& get_pdata() const;
     
     void add_child(ASNode child);
-    //double calcHelp();
-    //void printHelp() const;
 
    //tree shouldn't have variable val
     
