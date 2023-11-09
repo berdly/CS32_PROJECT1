@@ -29,12 +29,7 @@ enum class TokenType{
   LBRACK, // [
   RBRACK, // ]
   SEMI, // ;
-  FUNC, //for regular functions
-  SPECIAL, //for special functions
-  //CALL, 
-  // for left parentheses which come after variables, indicates function call
-  //ACCESS, 
-  // for left brackets which come after variables, indicates array access
+  RETURN,
 };
 //contains all information needed about a given token, including what kind of value it is through the ptype member, also has accessors
 class Token{
