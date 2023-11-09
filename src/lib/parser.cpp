@@ -60,32 +60,84 @@ bool wrapped_bracks(const std::vector<Token>& tokens, unsigned start, unsigned e
 ASTree::ASNode ASTree::build_array(const std::vector<Token>& tokens, unsigned start, unsigned end){
 	ASNode root{tokens.at(start)};
 	int curr_start{start + 1};
+	if(start == end){
+		return root;
+	}
 	int bdepth{};
 	int pdepth{};
 	for(unsigned i{start + 1}; i <= end; i++){
 		switch(tokens.at(i).get_type()){
 			case TokenType::COMMA:
 				if((bdepth == 0) && (pdepth == 0)){
-					root.add_child(this->buildInfix(tokens, start, i - 1, false));
+					root.add_child(this->buildInfix(tokens, curr_start, i - 1, false));
 				}
+				break;
+			case TokenType::LPAR:
+				pdepth++;
+				break;
+            case TokenType::RPAR:
+				pdepth--;
+				if(pdepth < 0){
+					throw ParserError(tokens.at(i));
+					pdepth++;
+				}
+                break;
+			case TokenType::LBRACK:
+				bdepth++;
+				break;
+            case TokenType::RBRACK:
+				bdepth--;
+				if(pdepth < 0){
+					throw ParserError(tokens.at(i));
+					pdepth++;
+				}
+                break;
+			default:
 				break;
 		}
 	}
+	root.add_child(this->buildInfix(tokens, curr_start, end, false));
+	return root;
 }
 ASTree::ASNode ASTree::build_call(const std::vector<Token>& tokens, unsigned start, unsigned end){
-	ASNode root{tokens.at(start)};
+	ASNode root{tokens.at(start + 1)};
+	root.add_child(this->buildInfix(tokens, start, start, false));
 	int curr_start{start};
 	int bdepth{};
 	int pdepth{};
-	for(unsigned i{start + 2}; i <= end - 1; i++){
+	for(unsigned i{start + 2}; i <= end; i++){
 		switch(tokens.at(i).get_type()){
 			case TokenType::COMMA:
 				if((bdepth == 0) && (pdepth == 0)){
-					root.add_child(this->buildInfix(tokens, start, i - 1, false));
+					root.add_child(this->buildInfix(tokens, curr_start, i - 1, false));
 				}
+				break;
+			case TokenType::LPAR:
+				pdepth++;
+				break;
+            case TokenType::RPAR:
+				pdepth--;
+				if(pdepth < 0){
+					throw ParserError(tokens.at(i));
+					pdepth++;
+				}
+                break;
+			case TokenType::LBRACK:
+				bdepth++;
+				break;
+            case TokenType::RBRACK:
+				bdepth--;
+				if(pdepth < 0){
+					throw ParserError(tokens.at(i));
+					pdepth++;
+				}
+                break;
+			default:
 				break;
 		}
 	}
+	root.add_child(this->buildInfix(tokens, curr_start, end, false));
+	return root;
 }
 ASTree::ASTree(const std::vector<Token>& tokens, unsigned start, unsigned end, bool infix) {
     if(tokens.empty()){
@@ -304,7 +356,7 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, unsigned sta
 		return build_array(tokens, start, end - 1);
 	}
 	else if((tokens[start].get_type() == TokenType::CONST) || (tokens[start].get_type() == TokenType::BOOL) || (tokens[start].get_type() == TokenType::VAR) && wrapped(tokens, start+1, end)){
-		return build_call(tokens, start, end);
+		return build_call(tokens, start, end - 1);
 	}
 	//ADD ACCESS
     
