@@ -139,6 +139,13 @@ ASTree::ASNode ASTree::build_call(const std::vector<Token>& tokens, unsigned sta
 	root.add_child(this->buildInfix(tokens, curr_start, end, false));
 	return root;
 }
+ASTree::ASNode ASTree::build_access(const std::vector<Token>& tokens, unsigned start, unsigned end){
+	ASNode root{tokens.at(end)};
+	root.add_child(this->buildInfix(tokens, start, start, false));
+	root.add_child(this->buildInfix(tokens, start + 2, end - 1, false));
+	return root;
+}
+
 ASTree::ASTree(const std::vector<Token>& tokens, unsigned start, unsigned end, bool infix) {
     if(tokens.empty()){
 	    throw ParserError(Token{});
@@ -355,10 +362,14 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, unsigned sta
 	else if(wrapped_bracks(tokens, start, end)){
 		return build_array(tokens, start, end - 1);
 	}
-	else if((tokens[start].get_type() == TokenType::CONST) || (tokens[start].get_type() == TokenType::BOOL) || (tokens[start].get_type() == TokenType::VAR) && wrapped(tokens, start+1, end)){
-		return build_call(tokens, start, end - 1);
+	else if((tokens[start].get_type() == TokenType::CONST) || (tokens[start].get_type() == TokenType::BOOL) || (tokens[start].get_type() == TokenType::VAR)){
+		if(wrapped(tokens, start+1, end)){
+			return build_call(tokens, start, end - 1);
+		}
+		else if(wrapped_bracks(tokens, start+1, end)){
+			return build_access(tokens, start, end);
+		}
 	}
-	//ADD ACCESS
     
     int curr_pres{100};
     int low_idx{-1};

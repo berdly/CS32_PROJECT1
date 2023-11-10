@@ -31,6 +31,7 @@ private:
   ASTree::ASNode buildInfix(const std::vector<Token>&, unsigned, unsigned, bool);
   ASTree::ASNode build_array(const std::vector<Token>&, unsigned, unsigned); //TODO
   ASTree::ASNode build_call(const std::vector<Token>&, unsigned, unsigned); //TODO
+  ASTree::ASNode build_access(const std::vector<Token>&, unsigned, unsigned);
   int precedence(const std::string& text);
 
 
