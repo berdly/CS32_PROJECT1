@@ -432,6 +432,8 @@ std::vector<Token> reader(const std::string& input, bool err) {  // Change retur
                         tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::ELSE));
                     }else if((currToken == "print")){
                         tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::PRINT));
+                    }else if((currToken == "def")){
+                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::DEF));
                     }else if((currToken == "true") || (currToken == "false")){
                         tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::BOOL));
                     }else{
