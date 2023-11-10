@@ -70,6 +70,7 @@ ASTree::ASNode ASTree::build_array(const std::vector<Token>& tokens, unsigned st
 			case TokenType::COMMA:
 				if((bdepth == 0) && (pdepth == 0)){
 					root.add_child(this->buildInfix(tokens, curr_start, i - 1, false));
+					curr_start = i + 1;
 				}
 				break;
 			case TokenType::LPAR:
@@ -110,6 +111,7 @@ ASTree::ASNode ASTree::build_call(const std::vector<Token>& tokens, unsigned sta
 			case TokenType::COMMA:
 				if((bdepth == 0) && (pdepth == 0)){
 					root.add_child(this->buildInfix(tokens, curr_start, i - 1, false));
+					curr_start = i + 1;
 				}
 				break;
 			case TokenType::LPAR:
