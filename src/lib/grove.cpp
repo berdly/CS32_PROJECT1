@@ -113,9 +113,11 @@ ASGrove::ASGrove(std::vector<std::vector<Token>> commands, unsigned start, unsig
 				break;
 			case TokenType::DEF:
 				
-				if(commands.at(i).at(1).get_type() != TokenType::VAR){
+				if((commands.at(i).at(1).get_type() != TokenType::VAR) || (commands.at(i).at(1).get_type() != TokenType::CONST) || (commands.at(i).at(1).get_type() != TokenType::BOOL)){
 					throw ParserError{commands.at(i).at(1)};
 				}
+				statements.push_back(new ASTree{commands.at(i).at(1)});
+				types.push_back(TreeType::DEF);
 				funcs[commands.at(i).at(1).get_text()] = Func{commands.at(i), this};
 				break;
 			default:
@@ -181,12 +183,6 @@ std::pair<std::optional<Var>, bool> ASGrove::calc(bool print){
 		case TreeType::EXP:
 		case TreeType::RETURN:
 			possible_val = calcHelp(tree->getProot());
-			if(possible_val.has_value()){
-					ret = *possible_val;
-			}
-			else{
-				throw ArgError();
-			}
 			break;
 		case TreeType::IF:
 			statement = static_cast<StatementTree*>(tree);
@@ -235,13 +231,21 @@ std::pair<std::optional<Var>, bool> ASGrove::calc(bool print){
 				}
 			}
 			break;
+		case TreeType::DEF:
+			break;
 		}
 		if(print || types.at(place) == TreeType::PRINT){
-			if(ret.holds_double()){
+			if(!possible_val.has_value()){
+				std::cout << "null";
+			}
+			else if(possible_val->holds_double()){
 				std::cout<<ret.get_double()<<std::endl;
 			}
-			else if(ret.holds_bool()){
+			else if(possible_val->holds_bool()){
 				std::cout<< std::boolalpha << ret.get_bool() << std::endl;
+			}
+			else if(possible_val->holds_Arr()){
+				std::cout << "NOT IMPLEMENTED";
 			}
 		}
 	}
@@ -270,10 +274,9 @@ std::pair<std::optional<Var>, bool> ASGrove::calc(bool print){
 		if(!is_func){
 			throw UnexpectedReturn{};
 		}
-		return std::make_pair(std::optional{ret}, true);
+		return std::make_pair(possible_val, true);
 	}
-	
-	return std::make_pair(std::optional{ret}, false);
+	return std::make_pair(possible_val, false);
 }
 
 std::optional<Var> ASGrove::calcHelp(const ASTree::ASNode& root){
@@ -283,7 +286,7 @@ std::optional<Var> ASGrove::calcHelp(const ASTree::ASNode& root){
     const Token& curr{root.get_pdata()};
     Var val{};
     unsigned idx{};
-    Var value{};
+    
 	std::vector<Var> args;
 	std::optional<Var> possible_val{};
     double dummy;

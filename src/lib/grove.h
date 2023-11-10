@@ -53,6 +53,7 @@ IF,
 WHILE,
 PRINT,
 RETURN,
+DEF,
 };
 
 class StatementTree;
