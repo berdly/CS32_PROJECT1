@@ -103,7 +103,7 @@ ASTree::ASNode ASTree::build_array(const std::vector<Token>& tokens, unsigned st
 ASTree::ASNode ASTree::build_call(const std::vector<Token>& tokens, unsigned start, unsigned end){
 	ASNode root{tokens.at(start + 1)};
 	root.add_child(this->buildInfix(tokens, start, start, false));
-	int curr_start{static_cast<int>(start)};
+	int curr_start{static_cast<int>(start + 2)};
 	int bdepth{};
 	int pdepth{};
 	for(unsigned i{start + 2}; i <= end; i++){
