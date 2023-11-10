@@ -464,16 +464,6 @@ std::optional<Var> ASGrove::calcHelp(const ASTree::ASNode& root){
 			}
 			array_holder.back().at(i) = val;
 		}
-		for(const auto& child: children){
-			possible_val = this->calcHelp(child); // recursively obtains the value of a child, the children could be an expression or a constant
-            if(possible_val.has_value()){
-				val = *possible_val;
-			}
-			else{
-				throw InvalidAssignment{};
-			}
-			array_holder.back().push_back(val);
-		}
 		return &(array_holder.back());
 	case TokenType::RBRACK:
 		possible_val = calcHelp(children.at(0)); //added this auto - might not work as intended
