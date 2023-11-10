@@ -482,7 +482,9 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, unsigned sta
 				}
 				break;
             default:
-                throw ParserError(curr);
+				if((pdepth == 0) && (bdepth == 0)){
+                	throw ParserError(curr);
+				}
 				break;
         }
     }
