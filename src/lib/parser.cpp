@@ -383,84 +383,107 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, unsigned sta
     for (unsigned i{start}; i <= end; i++)
     {
         const Token& curr = tokens[i];
-
         switch (curr.get_type()) {
             case TokenType::LPAR:
-		if(pdepth == 0){
-			
-			if(last == TokenType::CONST){
-				throw ParserError(curr);
-			}
-			last = TokenType::CONST;
-			
-		}
-		pdepth++;
-		break;
+				if(((pdepth == 0) && (bdepth == 0))){
+					
+					if(last == TokenType::CONST){
+						throw ParserError(curr);
+					}
+					last = TokenType::CONST;
+					
+				}
+				pdepth++;
+				break;
             case TokenType::RPAR:
-  		pdepth--;
-		if(last == TokenType::EXP){
-			throw ParserError(tokens.at(i));
-		}
-		else if((i > 0) && (tokens.at(i - 1).get_type() == TokenType::LPAR)){
-			throw ParserError(tokens.at(i));
-		}
-		if(pdepth < 0){
-			throw ParserError(tokens.at(i));
-			pdepth++;
-		}
-                break;
-        case TokenType::VAR:
-        case TokenType::CONST:
-	    case TokenType::BOOL:
-		if(pdepth == 0){
-			
-			if(last == TokenType::CONST){
-				throw ParserError(curr);
-			}
-			
-			last = TokenType::CONST;
-   			
-		}
-		break;
-        case TokenType::ASSIGN: // WIP
-		if(pdepth == 0){
-			
-			if(last == TokenType::EXP){
-				throw ParserError(curr);
-			}
-			
-			last = TokenType::EXP;
-   			
-			if(curr_pres > precedence(curr.get_text())){
-				if((i <= 0) || (tokens.at(i - 1).get_type() != TokenType::VAR)){
+				pdepth--;
+				if(last == TokenType::EXP){
 					throw ParserError(tokens.at(i));
 				}
-				curr_pres = precedence(curr.get_text());
-				low_idx = i;
-			}
-		}
-                break;
-	    case TokenType::LOG:
-        case TokenType::EXP:
-		case TokenType::EQUAL:
-                if(pdepth == 0){
-			if(last == TokenType::EXP){
-				throw ParserError(curr);
-			}
-			
-			last = TokenType::EXP;
-			if(curr_pres >= precedence(curr.get_text())){
-				if(i <= 0){
-					throw ParserError(curr);
+				else if((i > 0) && (tokens.at(i - 1).get_type() == TokenType::LPAR)){
+					throw ParserError(tokens.at(i));
 				}
-				curr_pres = precedence(curr.get_text());
-				low_idx = i;
-			}
-		}
-		break;
+				if(pdepth < 0){
+					throw ParserError(tokens.at(i));
+					pdepth++;
+				}
+                break;
+			case TokenType::LBRACK:
+				if(((pdepth == 0) && (bdepth == 0))){
+					
+					if(last == TokenType::CONST){
+						throw ParserError(curr);
+					}
+					last = TokenType::CONST;
+					
+				}
+				bdepth++;
+				break;
+            case TokenType::RBRACK:
+				bdepth--;
+				if(last == TokenType::EXP){
+					throw ParserError(tokens.at(i));
+				}
+				else if((i > 0) && (tokens.at(i - 1).get_type() == TokenType::LBRACK)){
+					throw ParserError(tokens.at(i));
+				}
+				if(bdepth < 0){
+					throw ParserError(tokens.at(i));
+					bdepth++;
+				}
+                break;
+			case TokenType::VAR:
+			case TokenType::CONST:
+			case TokenType::BOOL:
+				if(((pdepth == 0) && (bdepth == 0))){
+					
+					if(last == TokenType::CONST){
+						throw ParserError(curr);
+					}
+					
+					last = TokenType::CONST;
+					
+				}
+				break;
+			case TokenType::ASSIGN: // WIP
+				if(((pdepth == 0) && (bdepth == 0))){
+					
+					if(last == TokenType::EXP){
+						throw ParserError(curr);
+					}
+					
+					last = TokenType::EXP;
+					
+					if(curr_pres > precedence(curr.get_text())){
+						if((i <= 0) || (tokens.at(i - 1).get_type() != TokenType::VAR)){
+							throw ParserError(tokens.at(i));
+						}
+						curr_pres = precedence(curr.get_text());
+						low_idx = i;
+					}
+				}
+				break;
+			case TokenType::LOG:
+			case TokenType::EXP:
+			case TokenType::EQUAL:
+				if(((pdepth == 0) && (bdepth == 0))){
+					if(last == TokenType::EXP){
+						throw ParserError(curr);
+					}
+					
+					last = TokenType::EXP;
+					if(curr_pres >= precedence(curr.get_text())){
+						if(i <= 0){
+							throw ParserError(curr);
+						}
+						curr_pres = precedence(curr.get_text());
+						low_idx = i;
+					}
+				}
+				break;
             default:
                 throw ParserError(curr);
-		break;
+				break;
         }
     }
 
