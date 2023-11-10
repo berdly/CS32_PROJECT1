@@ -169,6 +169,7 @@ std::vector<std::vector<Token>> split_infix(const std::vector<Token>& input, uns
             case TokenType::WHILE:
             case TokenType::IF:
             case TokenType::ELSE:
+            case TokenType::DEF:
                 if(!in_statement){
                     in_statement = true;
                 }
