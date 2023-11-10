@@ -167,7 +167,6 @@ std::optional<Var> ASGrove::search_var(const std::string& query) const{
 
 std::pair<std::optional<Var>, bool> ASGrove::calc(bool print){
   std::optional<Var> possible_val{};
-  Var ret{};
   auto backup{vars};
   if(place >= statements.size()){
 		  throw std::out_of_range("");
@@ -188,16 +187,14 @@ std::pair<std::optional<Var>, bool> ASGrove::calc(bool print){
 			statement = static_cast<StatementTree*>(tree);
 			while(statement){
 				possible_val = calcHelp(statement->getProot());
-				if(possible_val.has_value()){
-					ret = *possible_val;
-				}
-				else{
+				possible_val = calcHelp(statement->getProot());
+				if(!possible_val.has_value()){
 					throw ConditionalError{};
 				}
-				if(!ret.holds_bool()){
+				if(!possible_val->holds_bool()){
 					throw ConditionalError{};
 				}
-				else if(ret.get_bool()){
+				else if(possible_val->get_bool()){
 					statement->get_body()->eval();
 					this->update_existing(statement->get_body()->show_vars());
 					statement->clear();
@@ -211,16 +208,13 @@ std::pair<std::optional<Var>, bool> ASGrove::calc(bool print){
 		    statement = static_cast<StatementTree*>(tree);
 			while(true){
 				possible_val = calcHelp(statement->getProot());
-				if(possible_val.has_value()){
-					ret = *possible_val;
-				}
-				else{
+				if(!possible_val.has_value()){
 					throw ConditionalError{};
 				}
-				if(!ret.holds_bool()){
+				if(!possible_val->holds_bool()){
 					throw ConditionalError{};
 				}
-				else if(ret.get_bool()){
+				else if(possible_val->get_bool()){
 					statement->get_body()->eval();
 					this->update_existing(statement->get_body()->show_vars());
 					statement->clear();
@@ -239,10 +233,10 @@ std::pair<std::optional<Var>, bool> ASGrove::calc(bool print){
 				std::cout << "null";
 			}
 			else if(possible_val->holds_double()){
-				std::cout<<ret.get_double()<<std::endl;
+				std::cout<<possible_val->get_double()<<std::endl;
 			}
 			else if(possible_val->holds_bool()){
-				std::cout<< std::boolalpha << ret.get_bool() << std::endl;
+				std::cout<< std::boolalpha << possible_val->get_bool() << std::endl;
 			}
 			else if(possible_val->holds_Arr()){
 				std::cout << "NOT IMPLEMENTED";
