@@ -234,7 +234,7 @@ std::pair<std::optional<Var>, bool> ASGrove::calc(bool print){
 		case TreeType::DEF:
 			break;
 		}
-		if(print || types.at(place) == TreeType::PRINT){
+		if(print || (types.at(place) == TreeType::PRINT)){
 			if(!possible_val.has_value()){
 				std::cout << "null";
 			}
