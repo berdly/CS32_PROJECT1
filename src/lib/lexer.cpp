@@ -423,25 +423,25 @@ std::vector<Token> reader(const std::string& input, bool err) {  // Change retur
             case '{':
 
                 if (!currToken.empty()) {
-                if(startsVar){
-                    if((currToken == "while")){
-                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::WHILE));
-                    }else if((currToken == "if")){
-                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::IF));
-                    }else if((currToken == "else")){
-                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::ELSE));
-                    }else if((currToken == "print")){
-                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::PRINT));
-                    }else if((currToken == "def")){
-                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::DEF));
-                    }else if((currToken == "true") || (currToken == "false")){
-                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::BOOL));
-                    }else{
-                    tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::VAR));
+                    if(startsVar){
+                        if((currToken == "while")){
+                            tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::WHILE));
+                        }else if((currToken == "if")){
+                            tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::IF));
+                        }else if((currToken == "else")){
+                            tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::ELSE));
+                        }else if((currToken == "print")){
+                            tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::PRINT));
+                        }else if((currToken == "def")){
+                            tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::DEF));
+                        }else if((currToken == "true") || (currToken == "false")){
+                            tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::BOOL));
+                        }else{
+                        tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::VAR));
+                        }
+                        currToken.clear();
+                        startsVar = false;
                     }
-                    currToken.clear();
-                    startsVar = false;
-                }
                 else if(startsNum){
                     tokens.push_back(Token(column - currToken.size(), line, currToken, TokenType::CONST));
                     currToken.clear();
