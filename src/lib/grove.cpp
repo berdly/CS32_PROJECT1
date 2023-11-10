@@ -113,7 +113,7 @@ ASGrove::ASGrove(std::vector<std::vector<Token>> commands, unsigned start, unsig
 				break;
 			case TokenType::DEF:
 				
-				if((commands.at(i).at(1).get_type() != TokenType::VAR) || (commands.at(i).at(1).get_type() != TokenType::CONST) || (commands.at(i).at(1).get_type() != TokenType::BOOL)){
+				if((commands.at(i).at(1).get_type() != TokenType::VAR) && (commands.at(i).at(1).get_type() != TokenType::CONST) && (commands.at(i).at(1).get_type() != TokenType::BOOL)){
 					throw ParserError{commands.at(i).at(1)};
 				}
 				statements.push_back(new ASTree{commands.at(i).at(1)});
