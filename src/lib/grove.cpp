@@ -454,6 +454,16 @@ std::optional<Var> ASGrove::calcHelp(const ASTree::ASNode& root){
 	     }
 	case TokenType::LBRACK:
 		array_holder.emplace_back(children.size());
+		for(unsigned i{}; i < children.size(); i++){
+			possible_val = this->calcHelp(children.at(i)); // recursively obtains the value of a child, the children could be an expression or a constant
+            if(possible_val.has_value()){
+				val = *possible_val;
+			}
+			else{
+				throw InvalidAssignment{};
+			}
+			array_holder.back().at(i) = val;
+		}
 		for(const auto& child: children){
 			possible_val = this->calcHelp(child); // recursively obtains the value of a child, the children could be an expression or a constant
             if(possible_val.has_value()){
