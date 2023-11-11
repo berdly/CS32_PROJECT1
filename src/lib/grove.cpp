@@ -113,7 +113,7 @@ ASGrove::ASGrove(std::vector<std::vector<Token>> commands, unsigned start, unsig
 				break;
 			case TokenType::RETURN:
 				statements.push_back(new ASTree{commands.at(i), 1, static_cast<unsigned>(commands.at(i).size() - 1)});
-				types.push_back(TreeType::PRINT);
+				types.push_back(TreeType::RETURN);
 				break;
 			case TokenType::DEF:
 				
@@ -826,7 +826,7 @@ ASGrove::Func::Func(const std::vector<Token>& tokens, ASGrove* owner): body{}, n
     if(tokens.back().get_type() != TokenType::RBRACE){
       throw ParserError(tokens.back());
     }
-    body = new ASGrove{split_infix(tokens, var_end + 2, static_cast<unsigned>(tokens.size() - 2)), owner};
+    body = new ASGrove{split_infix(tokens, var_end + 2, static_cast<unsigned>(tokens.size() - 2)), owner, true};
   }
 std::optional<Var> ASGrove::Func::operator()(const std::vector<Var>& args) const{
     if(args.size() != names.size()){

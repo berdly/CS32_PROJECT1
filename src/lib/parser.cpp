@@ -388,12 +388,7 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, unsigned sta
         switch (curr.get_type()) {
             case TokenType::LPAR:
 				if(((pdepth == 0) && (bdepth == 0))){
-					
-					if(last == TokenType::CONST){
-						throw ParserError(curr);
-					}
 					last = TokenType::CONST;
-					
 				}
 				pdepth++;
 				break;
