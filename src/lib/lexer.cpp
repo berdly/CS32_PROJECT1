@@ -38,13 +38,13 @@ std::vector<std::vector<Token>> split(const std::vector<Token>& input, unsigned 
                 break;
             case TokenType::EXP:
             case TokenType::ASSIGN:
-		if((i == 0) || (input.at(i - 1).get_type()) != TokenType::LPAR){
-			if(pdepth == 0){
-				parStart = i;
-			}
-			pdepth++;
-		}
-		break;
+                if((i == 0) || (input.at(i - 1).get_type()) != TokenType::LPAR){
+                    if(pdepth == 0){
+                        parStart = i;
+                    }
+                    pdepth++;
+                }
+                break;
             case TokenType::ERR:
                 //std::cout<<"THROW9"<<std::endl;
                 break;

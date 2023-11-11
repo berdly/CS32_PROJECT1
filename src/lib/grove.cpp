@@ -816,6 +816,7 @@ ASGrove::Func::Func(const std::vector<Token>& tokens, ASGrove* owner): body{}, n
         break;
       }
     }
+	//test
     if(var_end == 0 || var_end >= tokens.size() - 3){
       throw ParserError(tokens.back());
     }
