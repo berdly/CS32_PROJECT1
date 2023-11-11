@@ -69,6 +69,7 @@ class ASGrove{
       Func() = default;
       Func(const std::vector<Token>& tokens, ASGrove* owner);
       std::optional<Var> operator()(const std::vector<Var>& args) const;
+      void enclose(const std::map<std::string, Var>&, const std::map<std::string, Func>&);
     };
   public:
     static std::vector<std::vector<Var>> array_holder;

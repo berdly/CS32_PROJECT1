@@ -261,6 +261,7 @@ std::pair<std::optional<Var>, bool> ASGrove::calc(bool print){
 			}
 			break;
 		case TreeType::DEF:
+			funcs[tree->getProot().get_pdata().get_text()].enclose(vars, funcs);
 			break;
 		}
 		if(print || (types.at(place) == TreeType::PRINT)){
@@ -869,6 +870,10 @@ std::optional<Var> ASGrove::Func::operator()(const std::vector<Var>& args) const
     }
     return new_scope.eval();
   }
+void ASGrove::Func::enclose(const std::map<std::string, Var>& new_vars, const std::map<std::string, Func>& new_funcs){
+	this->body->vars = new_vars;
+	this->body->funcs = new_funcs;
+}
 StatementTree::StatementTree(const StatementTree& tree, ASGrove* owner): ASTree{tree.proot}, body{tree.body}, next{tree.next} {
 	body = new ASGrove{*body};
 	body->new_owner(owner);
