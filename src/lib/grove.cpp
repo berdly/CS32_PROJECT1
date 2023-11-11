@@ -54,6 +54,9 @@ void ASGrove::new_owner(ASGrove* owner){
 			case TreeType::IF:
 			case TreeType::WHILE:
 				statements.at(i) = static_cast<ASTree*>(new StatementTree{*(statements.at(i)), this});
+				break;
+			default:
+				break;
 		}
 	}
 }
