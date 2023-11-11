@@ -5,10 +5,13 @@
 std::vector<std::vector<Var>> ASGrove::array_holder{};
 std::optional<Var> Specials::pop(const std::vector<Var>& args){
   if(args.size() != 1){
-    throw ArgError{};
+    throw std::runtime_error("Runtime error: incorrect argument count.");
   }
   if(!(args[0].holds_Arr())){
-    throw ArgError{};
+    throw std::runtime_error("Runtime error: not an array.");
+  }
+  if(args[0].get_Arr()->size() == 0){
+	throw std::runtime_error("Runtime error: underflow.");
   }
   Arr arr{args[0].get_Arr()};
   Var last = arr->back();
@@ -17,19 +20,19 @@ std::optional<Var> Specials::pop(const std::vector<Var>& args){
 }
 std::optional<Var> Specials::len(const std::vector<Var>& args){
   if(args.size() != 1){
-    throw ArgError{};
+    throw std::runtime_error("Runtime error: incorrect argument count.");
   }
   if(!(args[0].holds_Arr())){
-    throw ArgError{};
+    throw std::runtime_error("Runtime error: not an array.");;
   }
   return std::optional<Var>(static_cast<double>(args[0].get_Arr()->size()));
 }
 std::optional<Var> Specials::push(const std::vector<Var>& args){
    if(args.size() != 2){
-    throw ArgError{};
+    throw std::runtime_error("Runtime error: incorrect argument count.");
   }
   if(!(args[0].holds_Arr())){
-    throw ArgError{};
+    throw std::runtime_error("Runtime error: not an array.");
   }
   args[0].get_Arr()->push_back(args[1]);
   return std::optional<Var>{};
@@ -302,7 +305,7 @@ std::pair<std::optional<Var>, bool> ASGrove::calc(bool print){
 	++place;
 	if(types.at(place - 1) == TreeType::RETURN){
 		if(!is_func){
-			throw UnexpectedReturn{};
+			throw std::runtime_error("Runtime error: unexpected return.");
 		}
 		return std::make_pair(possible_val, true);
 	}
@@ -510,7 +513,7 @@ std::optional<Var> ASGrove::calcHelp(const ASTree::ASNode& root){
 			throw InvalidAssignment{};
 		}
 		if(!val.holds_Arr()){
-			throw InvalidAccess{};
+			throw std::runtime_error("Runtime error: not an array.");
 		}
 		possible_val = calcHelp(children.at(1));
 		if(possible_val.has_value()){
@@ -520,10 +523,13 @@ std::optional<Var> ASGrove::calcHelp(const ASTree::ASNode& root){
 			throw InvalidAssignment{};
 		}
 		if(!ret.holds_double()){
-			throw InvalidIndex{};
+			throw std::runtime_error("Runtime error: index is not a number.");
 		}
 		if(std::modf(ret.get_double(), &dummy) != 0){
-			throw FractionalIndex{};
+			throw std::runtime_error("Runtime error: index is not an integer.");
+		}
+		if((static_cast<size_t>(ret.get_double()) > (val.get_Arr()->size() - 1)) || (ret.get_double() < 0)){
+			throw std::runtime_error("Runtime error: index out of bounds.");
 		}
 		return val.get_Arr()->at(static_cast<size_t>(ret.get_double()));
 	case TokenType::LPAR:
@@ -816,7 +822,7 @@ std::optional<Var> ASGrove::find_func(const std::string& name, const std::vector
 	if(special != specials.end()){
 		return special->second(args);
 	}
-	throw ArgError{};
+	throw std::runtime_error(std::string("Runtime Error: unknown identifier ") + name);
 }
 
 ASGrove::Func::Func(const std::vector<Token>& tokens, ASGrove* owner): body{}, names{} {
@@ -862,7 +868,7 @@ ASGrove::Func::Func(const std::vector<Token>& tokens, ASGrove* owner): body{}, n
   }
 std::optional<Var> ASGrove::Func::operator()(const std::vector<Var>& args) const{
     if(args.size() != names.size()){
-      throw ArgError{};
+      throw std::runtime_error("Runtime error: incorrect argument count.");
     }
     ASGrove new_scope{*(this->body), true}; //copies body by value to create new scope
     for(unsigned i{}; i < names.size(); i++){

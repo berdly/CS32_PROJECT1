@@ -85,6 +85,10 @@
             std::cout << "Runtime error: condition is not a bool.\n";
             return 3;
         }
+        catch(const std::runtime_error& e){
+            std::cout << e.what() << '\n';
+            return 3;
+        }
     
     }
 
