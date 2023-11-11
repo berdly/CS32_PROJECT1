@@ -10,6 +10,7 @@
 #include <iostream>
 #include <variant>
 #include <utility>
+#include <memory>
 
 class Var;
 typedef std::vector<Var>* Arr;
@@ -62,12 +63,11 @@ class ASGrove{
   public:
     class Func{
       private:
-      ASGrove* body;
+      std::shared_ptr<ASGrove> body;
       std::vector<std::string> names;
       public:
       Func() = default;
       Func(const std::vector<Token>& tokens, ASGrove* owner);
-      ~Func();
       std::optional<Var> operator()(const std::vector<Var>& args) const;
     };
   public:

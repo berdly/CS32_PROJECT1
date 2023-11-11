@@ -826,7 +826,7 @@ ASGrove::Func::Func(const std::vector<Token>& tokens, ASGrove* owner): body{}, n
     if(tokens.back().get_type() != TokenType::RBRACE){
       throw ParserError(tokens.back());
     }
-    body = new ASGrove{split_infix(tokens, var_end + 2, static_cast<unsigned>(tokens.size() - 2)), owner, true};
+    body = std::make_shared<ASGrove>(new ASGrove{split_infix(tokens, var_end + 2, static_cast<unsigned>(tokens.size() - 2)), owner, true});
   }
 std::optional<Var> ASGrove::Func::operator()(const std::vector<Var>& args) const{
     if(args.size() != names.size()){
@@ -838,9 +838,6 @@ std::optional<Var> ASGrove::Func::operator()(const std::vector<Var>& args) const
     }
     return new_scope.eval();
   }
-ASGrove::Func::~Func(){
-	delete body;
-}
 void StatementTree::push_back(StatementTree* child){
 	if(next){
 		next->push_back(child);
