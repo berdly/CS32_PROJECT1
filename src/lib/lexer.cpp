@@ -107,7 +107,9 @@ std::vector<std::vector<Token>> split_infix(const std::vector<Token>& input, uns
                 break;
         }
     }
-    statements.emplace_back(input.begin() + curr_start, input.begin() + end + 1);
+    if(curr_start != end + 1){
+        statements.emplace_back(input.begin() + curr_start, input.begin() + end + 1);
+    }
     return statements;
 }
 
