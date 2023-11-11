@@ -122,7 +122,7 @@ ASGrove::ASGrove(std::vector<std::vector<Token>> commands, unsigned start, unsig
 				}
 				statements.push_back(new ASTree{commands.at(i).at(1)});
 				types.push_back(TreeType::DEF);
-				funcs[commands.at(i).at(1).get_text()] = Func{commands.at(i), this};
+				funcs.emplace(std::make_pair(commands.at(i).at(1).get_text(), Func{commands.at(i), this}));
 				break;
 			default:
 				statements.push_back(new ASTree{commands.at(i)});
@@ -832,7 +832,7 @@ std::optional<Var> ASGrove::Func::operator()(const std::vector<Var>& args) const
     if(args.size() != names.size()){
       throw ArgError{};
     }
-    ::ASGrove new_scope{*(this->body)}; //copies body by value to create new scope
+    ASGrove new_scope{*(this->body)}; //copies body by value to create new scope
     for(unsigned i{}; i < names.size(); i++){
       new_scope.add_var(names.at(i), args.at(i));
     }
