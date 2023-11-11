@@ -92,7 +92,7 @@ class ASGrove{
     void update_existing(const std::map<std::string, Var>&); //If a Variable exists both in the lower grove and upper grove, takes the value from the lower grove and assigns it to the upper grove. (Makes i++) 
     const std::map<std::string, Var>& show_vars() const;
     void add_var(const std::string& name, Var val);
-    void ASGrove::new_owner(ASGrove* owner);
+    void new_owner(ASGrove* owner);
     
 public:
   ASGrove();
