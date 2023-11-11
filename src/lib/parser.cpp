@@ -5,6 +5,7 @@
 #include <stdexcept>
 ASTree::ASTree() : proot{} {};
 ASTree::ASTree(const Token& token) : proot{ASTree::ASNode{token}} {}
+ASTree::ASTree(const ASTree::ASNode& node): proot{node} {}
 bool wrapped(const std::vector<Token>& tokens, unsigned start, unsigned end){
 	int pdepth{};
 	if(tokens.empty()){

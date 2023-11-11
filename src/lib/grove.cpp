@@ -869,7 +869,7 @@ std::optional<Var> ASGrove::Func::operator()(const std::vector<Var>& args) const
     }
     return new_scope.eval();
   }
-StatementTree::StatementTree(const StatementTree& tree, ASGrove* owner): body{tree.body}, next{tree.next} {
+StatementTree::StatementTree(const StatementTree& tree, ASGrove* owner): ASTree{tree.proot}, body{tree.body}, next{tree.next} {
 	body = new ASGrove{*body};
 	body->new_owner(owner);
 	if(next){

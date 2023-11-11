@@ -24,7 +24,7 @@ public:
     const std::vector<ASNode>& get_kids() const;
   };
 
-private:
+protected:
   ASNode proot;
   ASNode build(const std::vector<Token>& tokens, int start, int end);
   std::vector<std::pair<int,int>> get_child_idx(const std::vector<Token>& tokens, int start, int end);
@@ -39,6 +39,7 @@ public:
   ASTree(const std::vector<Token>& tokens, unsigned start, unsigned end, bool infix = true);
   ASTree(const std::vector<Token>& tokens, bool infix = true);
   ASTree(const Token& token);
+  ASTree(const ASNode&);
   virtual ~ASTree() = default;
   ASTree();
   const ASNode& getProot() const;
