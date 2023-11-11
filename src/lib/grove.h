@@ -97,6 +97,7 @@ public:
   ASGrove(const ASGrove&);
   ASGrove(std::vector<std::vector<Token>> commands, ASGrove* owner = nullptr, bool func = false);
   ~ASGrove();
+  ASGrove(const ASGrove&, bool temp);
   void clear();
   void reset();
   std::optional<Var> eval(); // Evaluates all trees sequentially until the end

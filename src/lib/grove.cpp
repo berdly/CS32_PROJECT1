@@ -39,6 +39,9 @@ const std::map<std::string, Specials::Special> ASGrove::specials{{{"pop", Specia
 ASGrove::ASGrove(const ASGrove& grove): statements{grove.statements}, types{grove.types}, vars{grove.vars}, funcs{grove.funcs}, place{grove.place}, parent{grove.parent}, is_func{grove.is_func} {}
 
 ASGrove::ASGrove() : statements{}, types{}, vars{}, funcs{}, place{}, parent{nullptr}, is_func{false} {}
+ASGrove::ASGrove(const ASGrove& grove, bool temp) : ASGrove{grove} {
+	this->is_func = temp;
+}
 //ASGrove::ASGrove(const std::vector<ASTree>& tree) : statements{tree}, vars{}, place{} {}
 //ASGrove::ASGrove(const ASTree& tree) : statements(std::vector<ASTree>{tree}), vars{}, types{}, place{} {}
 ASGrove::ASGrove(std::vector<std::vector<Token>> commands, unsigned start, unsigned end, ASGrove* owner, bool func): statements{}, types{}, vars{}, funcs{}, place{}, parent{owner}, is_func{func} {
@@ -135,8 +138,10 @@ ASGrove::ASGrove(std::vector<std::vector<Token>> commands, unsigned start, unsig
 ASGrove::ASGrove(std::vector<std::vector<Token>> commands, ASGrove* owner, bool func): ASGrove{commands, 0, static_cast<unsigned>(commands.size() - 1), owner, func} {}
 
 ASGrove::~ASGrove(){
-	for(ASTree* tree: statements){
-		delete tree;
+	if(!is_func){
+		for(ASTree* tree: statements){
+			delete tree;
+		}
 	}
 }
 void ASGrove::reset(){
@@ -827,13 +832,13 @@ ASGrove::Func::Func(const std::vector<Token>& tokens, ASGrove* owner): body{}, n
     if(tokens.back().get_type() != TokenType::RBRACE){
       throw ParserError(tokens.back());
     }
-    body.reset(new ASGrove{split_infix(tokens, var_end + 2, static_cast<unsigned>(tokens.size() - 2)), owner, true});
+    body.reset(new ASGrove{split_infix(tokens, var_end + 2, static_cast<unsigned>(tokens.size() - 2)), owner, false});
   }
 std::optional<Var> ASGrove::Func::operator()(const std::vector<Var>& args) const{
     if(args.size() != names.size()){
       throw ArgError{};
     }
-    ASGrove new_scope{*(this->body)}; //copies body by value to create new scope
+    ASGrove new_scope{*(this->body), true}; //copies body by value to create new scope
     for(unsigned i{}; i < names.size(); i++){
       new_scope.add_var(names.at(i), args.at(i));
     }
