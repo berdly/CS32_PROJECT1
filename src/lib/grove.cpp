@@ -41,6 +41,21 @@ ASGrove::ASGrove(const ASGrove& grove): statements{grove.statements}, types{grov
 ASGrove::ASGrove() : statements{}, types{}, vars{}, funcs{}, place{}, parent{nullptr}, is_func{false} {}
 ASGrove::ASGrove(const ASGrove& grove, bool temp) : ASGrove{grove} {
 	this->is_func = temp;
+	auto p = this->parent;
+	this->new_owner(this);
+	this->parent = p;
+}
+
+void ASGrove::new_owner(ASGrove* owner){
+	is_func = true;
+	parent = owner;
+	for(unsigned i{}; i < statements.size(); i++){
+		switch(types.at(i)){
+			case TreeType::IF:
+			case TreeType::WHILE:
+				statements.at(i) = static_cast<ASTree*>(new StatementTree{*(statements.at(i)), this});
+		}
+	}
 }
 //ASGrove::ASGrove(const std::vector<ASTree>& tree) : statements{tree}, vars{}, place{} {}
 //ASGrove::ASGrove(const ASTree& tree) : statements(std::vector<ASTree>{tree}), vars{}, types{}, place{} {}
@@ -141,6 +156,13 @@ ASGrove::~ASGrove(){
 	if(!is_func){
 		for(ASTree* tree: statements){
 			delete tree;
+		}
+	}
+	else{
+		for(unsigned i{}; i < statements.size(); i++){
+			if((types.at(i) == TreeType::IF) || (types.at(i) == TreeType::WHILE)){
+				delete statements.at(i);
+			}
 		}
 	}
 }
@@ -512,7 +534,7 @@ std::optional<Var> ASGrove::calcHelp(const ASTree::ASNode& root){
 			args.push_back(val);
 		}
 		if(children.at(0).get_pdata().get_type() != TokenType::VAR){
-			throw NotaFunction{};
+			throw std::runtime_error{""};
 		}
 		return this->find_func(children.at(0).get_pdata().get_text(), args);
     default:
@@ -844,6 +866,13 @@ std::optional<Var> ASGrove::Func::operator()(const std::vector<Var>& args) const
     }
     return new_scope.eval();
   }
+StatementTree::StatementTree(const StatementTree& tree, ASGrove* owner): body{tree.body}, next{tree.next} {
+	body = new ASGrove{*body};
+	body->new_owner(owner);
+	if(next){
+		next = new StatementTree(*next, owner);
+	}
+}
 void StatementTree::push_back(StatementTree* child){
 	if(next){
 		next->push_back(child);

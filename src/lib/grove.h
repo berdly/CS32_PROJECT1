@@ -74,6 +74,7 @@ class ASGrove{
     static std::vector<std::vector<Var>> array_holder;
     static const std::map<std::string, Specials::Special> specials;
     friend class Func;
+    friend class StatementTree;
   private:
     std::vector<ASTree*> statements;
     std::vector<TreeType> types; //A reference Vector to tell what type the trees are
@@ -91,6 +92,7 @@ class ASGrove{
     void update_existing(const std::map<std::string, Var>&); //If a Variable exists both in the lower grove and upper grove, takes the value from the lower grove and assigns it to the upper grove. (Makes i++) 
     const std::map<std::string, Var>& show_vars() const;
     void add_var(const std::string& name, Var val);
+    void ASGrove::new_owner(ASGrove* owner);
     
 public:
   ASGrove();
@@ -114,6 +116,7 @@ class StatementTree: public ASTree{
   StatementTree* next;
   public:
   StatementTree(const ASTree& conditional, ASGrove* block) : ASTree{conditional}, body{block}, next{nullptr} {}
+  StatementTree(const StatementTree&, ASGrove* owner);
   virtual ~StatementTree();
   ASGrove* get_body() { return body; }
   StatementTree* get_next() const { return next; }
