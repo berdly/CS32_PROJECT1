@@ -36,6 +36,7 @@ std::optional<Var> Specials::push(const std::vector<Var>& args){
 }
 
 const std::map<std::string, Specials::Special> ASGrove::specials{{{"pop", Specials::pop}, {"len", Specials::len}, {"push", Specials::push}}};
+ASGrove::ASGrove(const ASGrove& grove): statements{grove.statements}, vars{grove.vars}, funcs{grove.funcs}, place{grove.place}, parent{grove.parent}, is_func{grove.is_func} {}
 
 ASGrove::ASGrove() : statements{}, types{}, vars{}, funcs{}, place{}, parent{nullptr}, is_func{false} {}
 //ASGrove::ASGrove(const std::vector<ASTree>& tree) : statements{tree}, vars{}, place{} {}

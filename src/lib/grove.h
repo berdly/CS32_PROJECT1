@@ -94,6 +94,7 @@ class ASGrove{
     
 public:
   ASGrove();
+  ASGrove(const ASGrove&);
   ASGrove(std::vector<std::vector<Token>> commands, ASGrove* owner = nullptr, bool func = false);
   ~ASGrove();
   void clear();
