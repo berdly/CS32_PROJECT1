@@ -471,13 +471,13 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, unsigned sta
 	}
 	auto result{has_call(tokens, start, end)};
 	if(result.second){
-		if(is_callable(tokens, start, result.second - 1)){
+		if(is_callable(tokens, start, result.second)){
 			return build_call(tokens, start, end, result.second);
 		}
 	}
 	result = has_access(tokens, start, end);
 	if(result.second){
-		if(is_callable(tokens, start, result.second - 1)){
+		if(is_callable(tokens, start, result.second)){
 			return build_access(tokens, start, end, result.second);
 		}
 	}
