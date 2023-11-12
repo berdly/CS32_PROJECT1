@@ -19,4 +19,4 @@ tree.o: lex.o src/lib/parser.cpp
 	${CXX} $(CXXFLAGS)  $^ -o $@
 
 lex.o: src/lib/lexer.cpp
-	${CXX} $(CXXFLAGS)  $^ -c $@
+	${CXX} $(CXXFLAGS)  $^ -c -o $@
