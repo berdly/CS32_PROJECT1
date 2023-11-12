@@ -516,14 +516,21 @@ void ASGrove::print_curr() const{
 	this->print(place, 0);
 	std::cout << '\n';
 }
-void ASGrove::print(unsigned i, unsigned indent) const{
+void ASGrove::print(unsigned i, unsigned indent, ASTree* start) const{
   ASTree* tree{statements.at(i)};
   StatementTree* statement;
   int tr{};
   std::pair<Var, bool> funcSearch;
   Func* fun;
+  
+  
+  
+  if(start == nullptr){
   for(unsigned j{}; j < indent * 4; j++){
+	
 	std::cout << ' ';
+  }
+
   }
 	switch(types.at(i)){
 		case TreeType::EXP:
@@ -568,10 +575,56 @@ void ASGrove::print(unsigned i, unsigned indent) const{
 			}else if(statement->getProot().get_pdata().get_text() != "true"){
 				for(unsigned j{}; j < indent * 4; j++){
 				std::cout << ' ';
-  			}
-				std::cout<<"else if "; 
+  				}
+
+				
+				std::cout<<"else {"<<std::endl;
+				
+				indent++;
+				for(unsigned j{}; j < indent * 4; j++){
+				std::cout << ' ';
+  				}
+
+				std::cout<<"if ";
 				printHelp(statement->getProot());
 				std::cout<<" {"<<std::endl;
+
+				statement->get_body()->printAll(indent + 1);
+
+
+				for(unsigned j{}; j < indent * 4; j++){
+					std::cout << ' ';
+  				}
+				
+			
+				std::cout<<'}'<<std::endl;
+				
+				
+
+				statement = statement->get_next();
+				if(statement != nullptr){
+					print(i,indent,statement);	
+				}
+
+				
+				
+				indent--;
+				
+
+				for(unsigned j{}; j <( indent) * 4; j++){
+					std::cout << ' ';
+  				}
+
+				
+
+			
+				
+				std::cout<<'}';
+				
+				tr++;
+				break;
+				
+
 			}else{
 				for(unsigned j{}; j < indent * 4; j++){
 				std::cout << ' ';
@@ -609,10 +662,18 @@ void ASGrove::print(unsigned i, unsigned indent) const{
 			printHelp(tree->getProot());
 			std::cout<<";";
 			break;
+		case TreeType::RETURN:
+			std::cout<<"return ";
+			printHelp(tree->getProot());
+			std::cout<<";";
 		default:
 			break;
 
 		    
+		}
+
+		if(start != nullptr){
+			std::cout<<std::endl;
 		}
 	}
 	
@@ -803,6 +864,10 @@ void ASGrove::print(unsigned i, unsigned indent) const{
         std::cout<<root.get_pdata().get_text();
             break;
 	
+	  case TokenType::VOID:
+	  	std::cout<<"null";
+		break;
+	 
       default:
 		    throw ParserError(root.get_pdata());
             break;

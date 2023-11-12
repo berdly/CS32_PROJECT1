@@ -123,7 +123,7 @@ public:
   std::pair<Var, bool> calc(bool print = true); //Stepper evaluates one tree one step at a time
   void add_tree(ASTree* tree, TreeType type = TreeType::EXP);
   void printAll(unsigned indent = 0) const;
-  void print(unsigned i, unsigned indent) const;
+  void print(unsigned i, unsigned indent, ASTree* start= nullptr) const;
   void print_curr() const;
 };
 
