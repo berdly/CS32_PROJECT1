@@ -1,7 +1,7 @@
 CXXFLAGS = -g -std=c++17 -Wall -Wextra -Werror
 CXX      = g++
 
-scrypt: lex.o tree.o grove.o scryp.o
+scrypt: lex.o tree.o grove.o scrypt.o
 	${CXX} $(CXXFLAGS)  $^ -o $@
 
 format: grove.o src/lib/format.cpp
