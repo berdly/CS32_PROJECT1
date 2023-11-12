@@ -18,5 +18,5 @@ grove.o: tree.o src/lib/grove.h src/lib/grove.cpp
 tree.o: lex.o src/lib/parser.cpp src/lib/parser.h
 	${CXX} $(CXXFLAGS)  $^ -c $@
 
-lex.o: src/lib/error.h lexer.cpp src/lib/lexer.h src/lib/token.h
+lex.o: src/lib/error.h src/lib/lexer.cpp src/lib/lexer.h src/lib/token.h
 	${CXX} $(CXXFLAGS)  $^ -c $@
