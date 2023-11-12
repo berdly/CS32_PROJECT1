@@ -109,7 +109,7 @@ class Func{
       Func() = default;
       Func(const std::vector<Token>& tokens, ASGrove* owner);
       Var operator()(const std::vector<Var>& args) const;
-      void enclose(const std::map<std::string, Var>&, const std::map<std::string, Func>&);
+      void enclose(const std::map<std::string, Var>&);
       std::shared_ptr<ASGrove> get_body(){
         return this->body;
       };
