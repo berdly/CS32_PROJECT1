@@ -814,7 +814,7 @@ Func::Func(const std::vector<Token>& tokens, ASGrove* owner): body{}, names{} {
       }
     }
 	//test
-    if(var_end == 0 || var_end >= tokens.size() - 3){
+    if(var_end == 0){
       throw ParserError(tokens.back());
     }
     if(tokens.at(var_end + 1).get_type() != TokenType::LBRACE){
