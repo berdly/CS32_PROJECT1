@@ -201,6 +201,7 @@ std::pair<Var, bool> ASGrove::search_var(const std::string& query) const{
    else{
 	   return std::make_pair(Var{value->second}, true);
    }
+   return std::make_pair(Var{}, false);
 }
 
 std::pair<Var, bool> ASGrove::calc(bool print){
