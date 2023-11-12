@@ -67,6 +67,7 @@ DEF,
 };
 
 class StatementTree;
+class ASGrove;
 
 class Func{
       private:
