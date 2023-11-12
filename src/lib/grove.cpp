@@ -520,12 +520,41 @@ void ASGrove::print(unsigned i, unsigned indent) const{
   ASTree* tree{statements.at(i)};
   StatementTree* statement;
   int tr{};
+  std::pair<Var, bool> funcSearch;
+  Func* fun;
   for(unsigned j{}; j < indent * 4; j++){
 	std::cout << ' ';
   }
 	switch(types.at(i)){
 		case TreeType::EXP:
 			printHelp(tree->getProot());
+			break;
+		case TreeType::DEF:
+			std::cout<<"def ";
+			printHelp(tree->getProot());
+			std::cout<<"(";
+
+			funcSearch = search_var(tree->getProot().get_pdata().get_text());
+			
+			if((funcSearch.first).holds_Func()){
+				fun = funcSearch.first.get_Func();
+			}
+			
+
+
+			for(size_t i = 0; i < fun->get_names().size(); i++){
+				
+				if(i != fun->get_names().size()-1){
+					std::cout<< fun->get_names().at(i)<<",";
+				}else{
+					std::cout<<fun->get_names().at(i);
+				}
+			}
+			std::cout<<"){\n";
+
+			fun->get_body()->printAll(indent + 1);
+
+			std::cout<<"}\n";
 			break;
 		case TreeType::IF:
 			statement = static_cast<StatementTree*>(tree);
@@ -731,6 +760,40 @@ void ASGrove::print(unsigned i, unsigned indent) const{
 	  case TokenType::RBRACE:
 	  	std::cout<<root.get_pdata().get_text()<<std::endl;
 		//indent  = indent.;
+		break;
+	  case TokenType::LPAR:
+
+		std::cout<<root.get_kids().at(0).get_pdata().get_text()<<"(";
+		for(size_t i = 1; i < root.get_kids().size();i++){
+			printHelp(root.get_kids().at(i));
+
+			if(i != root.get_kids().size()-1){
+				std::cout<< ",";
+			}
+		}
+		std::cout<<");";
+
+	  	break;
+	  case TokenType::LBRACK:
+	  	std::cout<<"[";
+
+		for(size_t i = 0; i < root.get_kids().size();i++){
+			printHelp(root.get_kids().at(i));
+
+			if(i != root.get_kids().size()-1){
+				std::cout<< ",";
+			}
+		}
+		std::cout<<"];";
+
+	  	break;
+	
+	 case TokenType::RBRACK:
+
+		std::cout<< root.get_kids().at(0).get_pdata().get_text()<<"[";
+		printHelp(root.get_kids().at(1));
+		std::cout<<"];";
+
 		break;
 
 		
