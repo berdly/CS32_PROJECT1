@@ -927,7 +927,7 @@ Var ASGrove::find_func(const std::string& name, const std::vector<Var>& args) co
 	auto result{search_var(name)};
 	if(result.second){
 		if(!result.first.holds_Func()){
-			throw std::runtime_error("Runtime Error: Not a function");
+			throw std::runtime_error("Runtime Error: not a function");
 		}
 		return result.first.get_Func()->operator()(args);
 	}
