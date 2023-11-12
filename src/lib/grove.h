@@ -13,7 +13,7 @@
 #include <memory>
 
 class Var;
-typedef std::vector<Var>* Arr;
+typedef std::weak_ptr<std::vector<Var>> Arr;
 //typedef std::vector<Var>::iterator Iter;
 
 namespace Specials{
@@ -80,6 +80,9 @@ class Var{
   bool operator==(const Var& other){
     return this->data == other.data;
   }
+  bool operator!=(const Var& other){
+    return this->data != other.data;
+  }
   bool same_type(const Var& other){
     return this->data->index() == other.data->index();
   }
@@ -88,7 +91,7 @@ class Var{
       out << "null\n";
       return out;
     }
-    Arr a{};
+    std::shared_ptr<std::vector<Var>> a{};
     switch((*(v.data)).index()){
       case 0:
         out << v.get_double();
@@ -97,7 +100,7 @@ class Var{
         out << std::boolalpha << v.get_bool();
         break;
       case 2:
-        a = v.get_Arr();
+        a = v.get_Arr().lock();
         out << '[';
         for(unsigned i{}; i < a->size(); i++){
           out << a->at(i);
@@ -146,7 +149,7 @@ class Func{
 };
 class ASGrove{
   public:
-    static std::vector<std::vector<Var>> array_holder;
+    static std::vector<std::shared_ptr<std::vector<Var>>> array_holder;
     static const std::map<std::string, Specials::Special> specials;
     friend class Func;
     friend class StatementTree;

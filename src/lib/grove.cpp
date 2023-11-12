@@ -2,20 +2,21 @@
 #include "error.h"
 #include <cmath>
 #include "lexer.h"
-std::vector<std::vector<Var>> ASGrove::array_holder{};
+std::vector<std::shared_ptr<std::vector<Var>>> ASGrove::array_holder{};
 Var Specials::pop(const std::vector<Var>& args){
   if(args.size() != 1){
     throw std::runtime_error("Runtime error: incorrect argument count.");
   }
+  std::shared_ptr<std::vector<Var>> ptr{};
   if(!(args[0].holds_Arr())){
     throw std::runtime_error("Runtime error: not an array.");
   }
-  if(args[0].get_Arr()->size() == 0){
+  ptr = args[0].get_Arr().lock();
+  if(ptr->size() == 0){
 	throw std::runtime_error("Runtime error: underflow.");
   }
-  Arr arr{args[0].get_Arr()};
-  Var last = arr->back();
-  arr->pop_back();
+  Var last = ptr->back();
+  ptr->pop_back();
   return last;
 }
 Var Specials::len(const std::vector<Var>& args){
@@ -25,7 +26,7 @@ Var Specials::len(const std::vector<Var>& args){
   if(!(args[0].holds_Arr())){
     throw std::runtime_error("Runtime error: not an array.");;
   }
-  return Var(static_cast<double>(args[0].get_Arr()->size()));
+  return Var(static_cast<double>(args[0].get_Arr().lock()->size()));
 }
 Var Specials::push(const std::vector<Var>& args){
    if(args.size() != 2){
@@ -34,7 +35,7 @@ Var Specials::push(const std::vector<Var>& args){
   if(!(args[0].holds_Arr())){
     throw std::runtime_error("Runtime error: not an array.");
   }
-  args[0].get_Arr()->push_back(args[1]);
+  args[0].get_Arr().lock()->push_back(args[1]);
   return Var{};
 }
 
@@ -424,9 +425,6 @@ Var ASGrove::calcHelp(const ASTree::ASNode& root){
     case TokenType::EQUAL:
 		for(const auto& child: children){
 			possible_val = this->calcHelp(child); // recursively obtains the value of a child, the children could be an expression or a constant
-			if((idx > 0) && !((possible_val.holds_bool() && ret.holds_bool())||(possible_val.holds_double() && ret.holds_double()))){
-				throw TypeError(child.get_pdata());
-			}
 	    	if(idx ==0){ // if the child is the first of its siblings, set the return value to that childs value
 		   		ret = possible_val;
 	   		}else{
@@ -434,20 +432,10 @@ Var ASGrove::calcHelp(const ASTree::ASNode& root){
 		   	switch(curr.get_text()[0]){ //math operations
 
 			case '=':
-				if(ret.holds_bool()){
-			    	ret = ret.get_bool() == possible_val.get_bool();
-				}
-				else{
-					ret = ret.get_double() == possible_val.get_double();
-				}
+			    ret = (ret == possible_val);
 				break;
 			case '!':
-			    if(ret.holds_bool()){
-			    	ret = ret.get_bool() != possible_val.get_bool();
-				}
-				else{
-					ret = ret.get_double() != possible_val.get_double();
-				}
+			    ret = (ret != possible_val);
         	default:
                 break;
 		    }
@@ -471,11 +459,11 @@ Var ASGrove::calcHelp(const ASTree::ASNode& root){
 	case TokenType::VOID:
 		return Var{};
 	case TokenType::LBRACK:
-		array_holder.emplace_back(children.size());
+		array_holder.push_back(std::make_shared<std::vector<Var>>(new std::vector<Var>(children.size())));
 		for(unsigned i{}; i < children.size(); i++){
-			array_holder.back().at(i) = this->calcHelp(children.at(i));;
+			array_holder.back()->at(i) = this->calcHelp(children.at(i));;
 		}
-		return &(array_holder.back());
+		return static_cast<Arr>(array_holder.back());
 	case TokenType::RBRACK:
 		possible_val = calcHelp(children.at(0)); //added this auto - might not work as intended
 		if(!possible_val.holds_Arr()){
@@ -489,10 +477,10 @@ Var ASGrove::calcHelp(const ASTree::ASNode& root){
 		if(std::modf(ret.get_double(), &dummy) != 0){
 			throw std::runtime_error("Runtime error: index is not an integer.");
 		}
-		if((static_cast<size_t>(ret.get_double()) > (possible_val.get_Arr()->size() - 1)) || (ret.get_double() < 0)){
+		if((static_cast<size_t>(ret.get_double()) > (possible_val.get_Arr().lock()->size() - 1)) || (ret.get_double() < 0)){
 			throw std::runtime_error("Runtime error: index out of bounds.");
 		}
-		return possible_val.get_Arr()->at(static_cast<size_t>(ret.get_double()));
+		return possible_val.get_Arr().lock()->at(static_cast<size_t>(ret.get_double()));
 	case TokenType::LPAR:
 		for(unsigned i{1}; i < children.size(); i++){
 			args.push_back(this->calcHelp(children.at(i)));
