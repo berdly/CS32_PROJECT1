@@ -137,7 +137,12 @@ ASGrove::ASGrove(std::vector<std::vector<Token>> commands, unsigned start, unsig
 				types.push_back(TreeType::PRINT);
 				break;
 			case TokenType::RETURN:
-				statements.push_back(new ASTree{commands.at(i), 1, static_cast<unsigned>(commands.at(i).size() - 1)});
+				if(commands.at(i).size() == 1){
+					statements.push_back(new ASTree{Token{0,0,"null", TokenType::VOID}});
+				}
+				else{
+					statements.push_back(new ASTree{commands.at(i), 1, static_cast<unsigned>(commands.at(i).size() - 1)});
+				}
 				types.push_back(TreeType::RETURN);
 				break;
 			case TokenType::DEF:
