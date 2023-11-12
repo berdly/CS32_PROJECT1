@@ -275,7 +275,7 @@ std::pair<Var, bool> ASGrove::calc(bool print){
 			}
 			break;
 		case TreeType::DEF:
-			funcs[tree->getProot().get_pdata().get_text()].enclose(vars, funcs);
+			funcs[tree->getProot().get_pdata().get_text()].enclose(vars);
 			break;
 		}
 		if(print || (types.at(place) == TreeType::PRINT)){
