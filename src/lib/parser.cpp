@@ -359,13 +359,13 @@ const Token& ASTree::ASNode::get_pdata() const{
 
 ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, unsigned start, unsigned end, bool trimmed)
 {
-    if((start == end) && ((tokens[start].get_type() == TokenType::CONST) || (tokens[start].get_type() == TokenType::BOOL) || (tokens[start].get_type() == TokenType::VAR))){
+    if((start == end) && ((tokens[start].get_type() == TokenType::CONST) || (tokens[start].get_type() == TokenType::BOOL) || (tokens[start].get_type() == TokenType::VAR) || (tokens[start].get_type() == TokenType::VOID))){
 	    return ASTree::ASNode{tokens[start]};
     }
 	else if(wrapped_bracks(tokens, start, end)){
 		return build_array(tokens, start, end - 1);
 	}
-	else if((tokens[start].get_type() == TokenType::CONST) || (tokens[start].get_type() == TokenType::BOOL) || (tokens[start].get_type() == TokenType::VAR)){
+	else if((tokens[start].get_type() == TokenType::CONST) || (tokens[start].get_type() == TokenType::BOOL) || (tokens[start].get_type() == TokenType::VAR)  || (tokens[start].get_type() == TokenType::VOID)){
 		if(wrapped(tokens, start+1, end)){
 			return build_call(tokens, start, end - 1);
 		}
@@ -433,6 +433,7 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, unsigned sta
 			case TokenType::VAR:
 			case TokenType::CONST:
 			case TokenType::BOOL:
+			case TokenType::VOID:
 				if(((pdepth == 0) && (bdepth == 0))){
 					
 					if(last == TokenType::CONST){

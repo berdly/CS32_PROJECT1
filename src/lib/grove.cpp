@@ -3,7 +3,7 @@
 #include <cmath>
 #include "lexer.h"
 std::vector<std::vector<Var>> ASGrove::array_holder{};
-std::optional<Var> Specials::pop(const std::vector<Var>& args){
+Var Specials::pop(const std::vector<Var>& args){
   if(args.size() != 1){
     throw std::runtime_error("Runtime error: incorrect argument count.");
   }
@@ -16,18 +16,18 @@ std::optional<Var> Specials::pop(const std::vector<Var>& args){
   Arr arr{args[0].get_Arr()};
   Var last = arr->back();
   arr->pop_back();
-  return std::optional<Var>(last);
+  return last;
 }
-std::optional<Var> Specials::len(const std::vector<Var>& args){
+Var Specials::len(const std::vector<Var>& args){
   if(args.size() != 1){
     throw std::runtime_error("Runtime error: incorrect argument count.");
   }
   if(!(args[0].holds_Arr())){
     throw std::runtime_error("Runtime error: not an array.");;
   }
-  return std::optional<Var>(static_cast<double>(args[0].get_Arr()->size()));
+  return Var(static_cast<double>(args[0].get_Arr()->size()));
 }
-std::optional<Var> Specials::push(const std::vector<Var>& args){
+Var Specials::push(const std::vector<Var>& args){
    if(args.size() != 2){
     throw std::runtime_error("Runtime error: incorrect argument count.");
   }
@@ -35,7 +35,7 @@ std::optional<Var> Specials::push(const std::vector<Var>& args){
     throw std::runtime_error("Runtime error: not an array.");
   }
   args[0].get_Arr()->push_back(args[1]);
-  return std::optional<Var>{};
+  return Var{};
 }
 
 const std::map<std::string, Specials::Special> ASGrove::specials{{{"pop", Specials::pop}, {"len", Specials::len}, {"push", Specials::push}}};
@@ -148,6 +148,7 @@ ASGrove::ASGrove(std::vector<std::vector<Token>> commands, unsigned start, unsig
 				statements.push_back(new ASTree{commands.at(i).at(1)});
 				types.push_back(TreeType::DEF);
 				funcs.emplace(std::make_pair(commands.at(i).at(1).get_text(), Func{commands.at(i), this}));
+				add_var(commands.at(i).at(1).get_text(), &funcs[commands.at(i).at(1).get_text()]);
 				break;
 			default:
 				statements.push_back(new ASTree{commands.at(i)});
@@ -175,36 +176,35 @@ ASGrove::~ASGrove(){
 void ASGrove::reset(){
 	place = 0;
 }
-std::optional<Var> ASGrove::eval(){
+Var ASGrove::eval(){
       while(place < statements.size()){
       	auto val = calc(false);
 		if(val.second){
 			return val.first;
 		}
       }
-      return std::optional<Var>{};
+      return Var{};
 }
 
 void ASGrove::add_var(const std::string& name, Var val){
   vars[name] = val;
 }
 
-std::optional<Var> ASGrove::search_var(const std::string& query) const{
+std::pair<Var, bool> ASGrove::search_var(const std::string& query) const{
    auto value{vars.find(query)};//map iterator type
    if(value == vars.end()){
 	   if(parent){
 		   auto pval{parent->search_var(query)};
-		   return (pval.has_value()) ? pval : std::optional<Var>{};
+		   return pval.second ? std::make_pair(pval.first, true) : std::make_pair(Var{}, false);
 	   }
-	   return std::optional<Var>{};
    }
    else{
-	   return std::optional<Var>{value->second};
+	   return std::make_pair(Var{value->second}, true);
    }
 }
 
-std::pair<std::optional<Var>, bool> ASGrove::calc(bool print){
-  std::optional<Var> possible_val{};
+std::pair<Var, bool> ASGrove::calc(bool print){
+  Var possible_val{};
   auto backup{vars};
   if(place >= statements.size()){
 		  throw std::out_of_range("");
@@ -229,10 +229,10 @@ std::pair<std::optional<Var>, bool> ASGrove::calc(bool print){
 				if(!possible_val.has_value()){
 					throw ConditionalError{};
 				}
-				if(!possible_val->holds_bool()){
+				if(!possible_val.holds_bool()){
 					throw ConditionalError{};
 				}
-				else if(possible_val->get_bool()){
+				else if(possible_val.get_bool()){
 					statement->get_body()->eval();
 					this->update_existing(statement->get_body()->show_vars());
 					statement->clear();
@@ -249,10 +249,10 @@ std::pair<std::optional<Var>, bool> ASGrove::calc(bool print){
 				if(!possible_val.has_value()){
 					throw ConditionalError{};
 				}
-				if(!possible_val->holds_bool()){
+				if(!possible_val.holds_bool()){
 					throw ConditionalError{};
 				}
-				else if(possible_val->get_bool()){
+				else if(possible_val.get_bool()){
 					statement->get_body()->eval();
 					this->update_existing(statement->get_body()->show_vars());
 					statement->clear();
@@ -271,13 +271,13 @@ std::pair<std::optional<Var>, bool> ASGrove::calc(bool print){
 			if(!possible_val.has_value()){
 				std::cout << "null";
 			}
-			else if(possible_val->holds_double()){
-				std::cout<<possible_val->get_double()<<std::endl;
+			else if(possible_val.holds_double()){
+				std::cout<<possible_val.get_double()<<std::endl;
 			}
-			else if(possible_val->holds_bool()){
-				std::cout<< std::boolalpha << possible_val->get_bool() << std::endl;
+			else if(possible_val.holds_bool()){
+				std::cout<< std::boolalpha << possible_val.get_bool() << std::endl;
 			}
-			else if(possible_val->holds_Arr()){
+			else if(possible_val.holds_Arr()){
 				std::cout << "NOT IMPLEMENTED";
 			}
 		}
@@ -312,83 +312,68 @@ std::pair<std::optional<Var>, bool> ASGrove::calc(bool print){
 	return std::make_pair(possible_val, false);
 }
 
-std::optional<Var> ASGrove::calcHelp(const ASTree::ASNode& root){
+Var ASGrove::calcHelp(const ASTree::ASNode& root){
     //TODO make optional due to new void return types
     Var ret{}; // will be returned
     const auto& children{root.get_kids()};
     const Token& curr{root.get_pdata()};
-    Var val{};
     unsigned idx{};
-    
 	std::vector<Var> args;
-	std::optional<Var> possible_val{};
+	Var possible_val{};
     double dummy;
+	std::pair<Var, bool> result;
+
     switch(curr.get_type()){
       case TokenType::ASSIGN:
             possible_val = this->calcHelp(children.back());
-			if(possible_val.has_value()){
-				val = *possible_val;
-			}
-			else{
-				throw InvalidAssignment{};
-			}
             for(size_t i{}; i < children.size() - 1 ; i++){
-                this->add_var(children.at(i).get_pdata().get_text(), *possible_val);
+                this->add_var(children.at(i).get_pdata().get_text(), possible_val);
             }
-
-            return val;
-
-            break;
-		
+            return possible_val;
      case TokenType::EXP:
 	    ret = 0.0;
 		for(const auto& child: children){
 		    possible_val = this->calcHelp(child); // recursively obtains the value of a child, the children could be an expression or a constant
-            if(possible_val.has_value()){
-				val = *possible_val;
-			}
-			else{
-				throw InvalidAssignment{};
-			}
-			if(!(val.holds_double() && ret.holds_double())){
+
+			if(!(possible_val.holds_double() && ret.holds_double())){
 				throw TypeError(child.get_pdata());
 			}
 	    	if(idx ==0){ // if the child is the first of its siblings, set the return value to that childs value
-		   		ret = val;
+		   		ret = possible_val;
 	   		}else{
 				 
 		   switch(curr.get_text()[0]){ //math operations
 
 			case '*':
-			    ret = ret.get_double() * val.get_double();
+			    ret = ret.get_double() * possible_val.get_double();
                             break;
 			case '+':
-			    ret = ret.get_double() + val.get_double();
+			    ret = ret.get_double() + possible_val.get_double();
                             break;
 			case '-':
-			    ret = ret.get_double() - val.get_double();
+			    ret = ret.get_double() - possible_val.get_double();
                             break;
 			case '/':
-			    if(val.get_double() == 0){
+			    if(possible_val.get_double() == 0){
 				throw ZeroDivision{};
 			    }
-			    ret = ret.get_double() / val.get_double();
+			    ret = ret.get_double() / possible_val.get_double();
                             break;
 			case '%':
-			    ret = std::fmod(ret.get_double(), val.get_double());
+			    ret = std::fmod(ret.get_double(), possible_val.get_double());
 			    break;
 			case '<':
 				if(curr.get_text()== "<="){
-					ret = ret.get_double() <= val.get_double();
+					ret = ret.get_double() <= possible_val.get_double();
 				}else{
-					ret = ret.get_double() < val.get_double();
+					ret = ret.get_double() < possible_val.get_double();
 				}
 				break;
 			case '>':
 				if(curr.get_text()== ">="){
-					ret = ret.get_double() >= val.get_double();
+					ret = ret.get_double() >= possible_val.get_double();
 				}else{
-					ret = ret.get_double() > val.get_double();
+					ret = ret.get_double() > possible_val.get_double();
 				}
 				break;
 			
@@ -405,29 +390,23 @@ std::optional<Var> ASGrove::calcHelp(const ASTree::ASNode& root){
 	    ret = true;
 		for(const auto& child: children){
 			possible_val = this->calcHelp(child); // recursively obtains the value of a child, the children could be an expression or a constant
-            if(possible_val.has_value()){
-				val = *possible_val;
-			}
-			else{
-				throw InvalidAssignment{};
-			}
-			if(!(val.holds_bool() && ret.holds_bool())){
+			if(!(possible_val.holds_bool() && ret.holds_bool())){
 				throw TypeError(child.get_pdata());
 			}
 	    	if(idx ==0){ // if the child is the first of its siblings, set the return value to that childs value
-		   		ret = val;
+		   		ret = possible_val;
 	   		}else{
 				 
 		   		switch(curr.get_text()[0]){ //math operations
 
 			case '&':
-			    ret = ret.get_bool() && val.get_bool();
+			    ret = ret.get_bool() && possible_val.get_bool();
                             break;
 			case '|':
-			    ret = ret.get_bool() || val.get_bool();
+			    ret = ret.get_bool() || possible_val.get_bool();
                             break;
 			case '^':
-			    ret = (ret.get_bool() != val.get_bool());
+			    ret = (ret.get_bool() != possible_val.get_bool());
                             break;
 
         	default:
@@ -441,35 +420,29 @@ std::optional<Var> ASGrove::calcHelp(const ASTree::ASNode& root){
     case TokenType::EQUAL:
 		for(const auto& child: children){
 			possible_val = this->calcHelp(child); // recursively obtains the value of a child, the children could be an expression or a constant
-            if(possible_val.has_value()){
-				val = *possible_val;
-			}
-			else{
-				throw InvalidAssignment{};
-			}
-			if((idx > 0) && !((val.holds_bool() && ret.holds_bool())||(val.holds_double() && ret.holds_double()))){
+			if((idx > 0) && !((possible_val.holds_bool() && ret.holds_bool())||(possible_val.holds_double() && ret.holds_double()))){
 				throw TypeError(child.get_pdata());
 			}
 	    	if(idx ==0){ // if the child is the first of its siblings, set the return value to that childs value
-		   		ret = val;
+		   		ret = possible_val;
 	   		}else{
 				 
 		   	switch(curr.get_text()[0]){ //math operations
 
 			case '=':
 				if(ret.holds_bool()){
-			    	ret = ret.get_bool() == val.get_bool();
+			    	ret = ret.get_bool() == possible_val.get_bool();
 				}
 				else{
-					ret = ret.get_double() == val.get_double();
+					ret = ret.get_double() == possible_val.get_double();
 				}
 				break;
 			case '!':
 			    if(ret.holds_bool()){
-			    	ret = ret.get_bool() != val.get_bool();
+			    	ret = ret.get_bool() != possible_val.get_bool();
 				}
 				else{
-					ret = ret.get_double() != val.get_double();
+					ret = ret.get_double() != possible_val.get_double();
 				}
         	default:
                 break;
@@ -484,64 +457,41 @@ std::optional<Var> ASGrove::calcHelp(const ASTree::ASNode& root){
     case TokenType::BOOL:
 	    return curr.get_text()[0] == 't';
     case TokenType::VAR:
-	     possible_val = this->search_var(curr.get_text()); //added this auto - might not work as intended
-	     if(possible_val.has_value()){
-		 return *possible_val;
+	     result = this->search_var(curr.get_text()); //added this auto - might not work as intended
+	     if(result.second){
+		  	return result.first;
 	     }
 	     else{
-		 throw IdentifierError(curr);
+		 	throw IdentifierError(curr);
 	     }
+	case TokenType::VOID:
+		return Var{};
 	case TokenType::LBRACK:
 		array_holder.emplace_back(children.size());
 		for(unsigned i{}; i < children.size(); i++){
-			possible_val = this->calcHelp(children.at(i)); // recursively obtains the value of a child, the children could be an expression or a constant
-            if(possible_val.has_value()){
-				val = *possible_val;
-			}
-			else{
-				throw InvalidAssignment{};
-			}
-			array_holder.back().at(i) = val;
+			array_holder.back().at(i) = this->calcHelp(children.at(i));;
 		}
 		return &(array_holder.back());
 	case TokenType::RBRACK:
 		possible_val = calcHelp(children.at(0)); //added this auto - might not work as intended
-		if(possible_val.has_value()){
-			val = *possible_val;
-		}
-		else{
-			throw InvalidAssignment{};
-		}
-		if(!val.holds_Arr()){
+		if(!possible_val.holds_Arr()){
 			throw std::runtime_error("Runtime error: not an array.");
 		}
 		possible_val = calcHelp(children.at(1));
-		if(possible_val.has_value()){
-			ret = *possible_val;
-		}
-		else{
-			throw InvalidAssignment{};
-		}
+		
 		if(!ret.holds_double()){
 			throw std::runtime_error("Runtime error: index is not a number.");
 		}
 		if(std::modf(ret.get_double(), &dummy) != 0){
 			throw std::runtime_error("Runtime error: index is not an integer.");
 		}
-		if((static_cast<size_t>(ret.get_double()) > (val.get_Arr()->size() - 1)) || (ret.get_double() < 0)){
+		if((static_cast<size_t>(ret.get_double()) > (possible_val.get_Arr()->size() - 1)) || (ret.get_double() < 0)){
 			throw std::runtime_error("Runtime error: index out of bounds.");
 		}
-		return val.get_Arr()->at(static_cast<size_t>(ret.get_double()));
+		return possible_val.get_Arr()->at(static_cast<size_t>(ret.get_double()));
 	case TokenType::LPAR:
 		for(unsigned i{1}; i < children.size(); i++){
-			possible_val = this->calcHelp(children.at(i)); // recursively obtains the value of a child, the children could be an expression or a constant
-            if(possible_val.has_value()){
-				val = *possible_val;
-			}
-			else{
-				throw InvalidAssignment{};
-			}
-			args.push_back(val);
+			args.push_back(this->calcHelp(children.at(i)));
 		}
 		if(children.at(0).get_pdata().get_type() != TokenType::VAR){
 			throw std::runtime_error{""};
@@ -810,10 +760,13 @@ void ASGrove::clear(){
 	vars.clear();
 }
 
-std::optional<Var> ASGrove::find_func(const std::string& name, const std::vector<Var>& args) const {
-	auto func{funcs.find(name)};
-	if(func != funcs.end()){
-		return func->second(args);
+Var ASGrove::find_func(const std::string& name, const std::vector<Var>& args) const {
+	auto result{search_var(name)};
+	if(result.second){
+		if(!result.first.holds_Func()){
+			throw std::runtime_error("Runtime Error: Not a function");
+		}
+		return result.first.get_Func()->operator()(args);
 	}
 	if(parent){
 		return parent->find_func(name, args);
@@ -825,7 +778,7 @@ std::optional<Var> ASGrove::find_func(const std::string& name, const std::vector
 	throw std::runtime_error(std::string("Runtime Error: unknown identifier ") + name);
 }
 
-ASGrove::Func::Func(const std::vector<Token>& tokens, ASGrove* owner): body{}, names{} {
+Func::Func(const std::vector<Token>& tokens, ASGrove* owner): body{}, names{} {
     unsigned var_end{};
     if(tokens.at(2).get_type() != TokenType::LPAR){
       throw ParserError{tokens.at(2)};
@@ -866,7 +819,7 @@ ASGrove::Func::Func(const std::vector<Token>& tokens, ASGrove* owner): body{}, n
     }
     body.reset(new ASGrove{split_infix(tokens, var_end + 2, static_cast<unsigned>(tokens.size() - 2)), owner, false});
   }
-std::optional<Var> ASGrove::Func::operator()(const std::vector<Var>& args) const{
+Var Func::operator()(const std::vector<Var>& args) const{
     if(args.size() != names.size()){
       throw std::runtime_error("Runtime error: incorrect argument count.");
     }
@@ -876,7 +829,7 @@ std::optional<Var> ASGrove::Func::operator()(const std::vector<Var>& args) const
     }
     return new_scope.eval();
   }
-void ASGrove::Func::enclose(const std::map<std::string, Var>& new_vars, const std::map<std::string, Func>& new_funcs){
+void Func::enclose(const std::map<std::string, Var>& new_vars, const std::map<std::string, Func>& new_funcs){
 	this->body->vars = new_vars;
 	this->body->funcs = new_funcs;
 }
