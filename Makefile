@@ -4,16 +4,17 @@ CXX      = g++
 scrypt: lex.o tree.o grove.o scrypt.o
 	${CXX} $(CXXFLAGS)  $^ -o $@
 
-format: grove.o src/lib/format.cpp
+format: grove.o src/format.cpp
 	${CXX} $(CXXFLAGS)  $^ -o $@
-calc: grove.o src/lib/calc.cpp
+calc: grove.o src/calc.cpp
 	${CXX} $(CXXFLAGS)  $^ -o $@
 
 lex: lex.o
 	${CXX} $(CXXFLAGS)  $^ -o $@
 
-scrypt.o: src/lib/scrypt.cpp
+scrypt.o: src/scrypt.cpp
 	${CXX} $(CXXFLAGS)  $^ -c -o $@
+
 grove.o: src/lib/grove.cpp
 	${CXX} $(CXXFLAGS)  $^ -c -o $@
 
