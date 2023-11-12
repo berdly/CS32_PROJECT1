@@ -401,9 +401,6 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, unsigned sta
 				if(last == TokenType::EXP){
 					throw ParserError(tokens.at(i));
 				}
-				else if((i > 0) && (tokens.at(i - 1).get_type() == TokenType::LPAR)){
-					throw ParserError(tokens.at(i));
-				}
 				if(pdepth < 0){
 					throw ParserError(tokens.at(i));
 					pdepth++;
@@ -411,10 +408,6 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, unsigned sta
                 break;
 			case TokenType::LBRACK:
 				if(((pdepth == 0) && (bdepth == 0))){
-					
-					if(last == TokenType::CONST){
-						throw ParserError(curr);
-					}
 					last = TokenType::CONST;
 					
 				}
@@ -423,9 +416,6 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, unsigned sta
             case TokenType::RBRACK:
 				bdepth--;
 				if(last == TokenType::EXP){
-					throw ParserError(tokens.at(i));
-				}
-				else if((i > 0) && (tokens.at(i - 1).get_type() == TokenType::LBRACK)){
 					throw ParserError(tokens.at(i));
 				}
 				if(bdepth < 0){
