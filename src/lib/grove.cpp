@@ -2,7 +2,7 @@
 #include "error.h"
 #include <cmath>
 #include "lexer.h"
-std::vector<std::shared_ptr<std::vector<Var>>> ASGrove::array_holder{};
+std::vector<std::shared_ptr<std::vector<Var>>> ASGrove::array_holder{nullptr};
 Var Specials::pop(const std::vector<Var>& args){
   if(args.size() != 1){
     throw std::runtime_error("Runtime error: incorrect argument count.");
