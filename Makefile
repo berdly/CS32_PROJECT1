@@ -12,11 +12,11 @@ calc: grove.o calc.cpp
 lex: lex.o lex.cpp
 	${CXX} $(CXXFLAGS)  $^ -o $@
 
-grove.o: tree.o src/lib/grove.h src/lib/grove.cpp
-	${CXX} $(CXXFLAGS)  $^ -c -o $@
+grove.o: tree.o src/lib/grove.cpp
+	${CXX} $(CXXFLAGS)  $^ -o $@
 
-tree.o: lex.o src/lib/parser.cpp src/lib/parser.h
-	${CXX} $(CXXFLAGS)  $^ -c -o $@
+tree.o: lex.o src/lib/parser.cpp
+	${CXX} $(CXXFLAGS)  $^ -o $@
 
-lex.o: src/lib/error.h src/lib/lexer.cpp src/lib/lexer.h src/lib/token.h
-	${CXX} $(CXXFLAGS)  $^ -c -o $@
+lex.o: src/lib/lexer.cpp
+	${CXX} $(CXXFLAGS)  $^ -c $@
