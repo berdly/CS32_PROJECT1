@@ -78,12 +78,34 @@ class Var{
   }
   */
   bool operator==(const Var& other){
-    return this->data == other.data;
+    if(!same_type(other)){
+      return false;
+    }
+    if(!has_value()){
+      return !other.has_value();
+    }
+    switch(data->index()){
+      case 0:
+        return get_double() == other.get_double();
+      case 1:
+        return get_bool() == other.get_bool();
+      case 2:
+        return this->get_Arr().lock() == other.get_Arr().lock();
+      case 3:
+        return get_Func() == other.get_Func();
+      case 4:
+        return get_Special() == other.get_Special();
+      default:
+        return false;
+    }
   }
   bool operator!=(const Var& other){
-    return this->data != other.data;
+    return !(*this == other);
   }
   bool same_type(const Var& other){
+    if(!has_value()){
+      return !other.has_value();
+    }
     return this->data->index() == other.data->index();
   }
   friend std::ostream& operator<<(std::ostream& out, const Var& v){
