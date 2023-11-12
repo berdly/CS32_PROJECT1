@@ -390,6 +390,7 @@ std::pair<unsigned, bool> ASTree::has_call(const std::vector<Token>& tokens, uns
 				if(pdepth == 0){
 					return std::make_pair(static_cast<unsigned>(i), true);
 				}
+				break;
 			case TokenType::RPAR:
 				pdepth--;
 			default:
