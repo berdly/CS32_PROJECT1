@@ -823,7 +823,12 @@ Func::Func(const std::vector<Token>& tokens, ASGrove* owner): body{}, names{} {
     if(tokens.back().get_type() != TokenType::RBRACE){
       throw ParserError(tokens.back());
     }
-    body.reset(new ASGrove{split_infix(tokens, var_end + 2, static_cast<unsigned>(tokens.size() - 2)), owner, false});
+	if(var_end + 2 == tokens.size() - 1){
+		body.reset(new ASGrove{std::vector<std::vector<Token>>{std::vector{Token{0,0,"return", TokenType::RETURN}}}});
+	}
+    else{
+		body.reset(new ASGrove{split_infix(tokens, var_end + 2, static_cast<unsigned>(tokens.size() - 2)), owner, false});
+	}
   }
 Var Func::operator()(const std::vector<Var>& args) const{
     if(args.size() != names.size()){

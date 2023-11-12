@@ -4,14 +4,18 @@ CXX      = g++
 scrypt: lex.o tree.o grove.o scrypt.o
 	${CXX} $(CXXFLAGS)  $^ -o $@
 
-format: grove.o src/format.cpp
+format: lex.o tree.o grove.o format.o
 	${CXX} $(CXXFLAGS)  $^ -o $@
-calc: grove.o src/calc.cpp
+calc: lex.o tree.o grove.o calc.o
 	${CXX} $(CXXFLAGS)  $^ -o $@
 
 lex: lex.o
 	${CXX} $(CXXFLAGS)  $^ -o $@
 
+calc.o: src/calc.cpp
+	${CXX} $(CXXFLAGS)  $^ -c -o $@
+format.o: src/format.cpp
+	${CXX} $(CXXFLAGS)  $^ -c -o $@
 scrypt.o: src/scrypt.cpp
 	${CXX} $(CXXFLAGS)  $^ -c -o $@
 
