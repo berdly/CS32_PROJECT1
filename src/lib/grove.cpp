@@ -898,7 +898,7 @@ void ASGrove::print(unsigned i, unsigned indent, ASTree* start) const{
             break;
 	
 	  case TokenType::VOID:
-	  	std::cout<<"";
+	  	std::cout<<root.get_pdata().get_text();
 		break;
 	 
       default:
