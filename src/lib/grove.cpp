@@ -138,7 +138,7 @@ ASGrove::ASGrove(std::vector<std::vector<Token>> commands, unsigned start, unsig
 				break;
 			case TokenType::RETURN:
 				if(commands.at(i).size() == 1){
-					statements.push_back(new ASTree{Token{0,0,"null", TokenType::VOID}});
+					statements.push_back(new ASTree{Token{0,0,"", TokenType::VOID}});
 				}
 				else{
 					statements.push_back(new ASTree{commands.at(i), 1, static_cast<unsigned>(commands.at(i).size() - 1)});
@@ -984,7 +984,7 @@ Func::Func(const std::vector<Token>& tokens, ASGrove* owner): body{}, names{} {
       throw ParserError(tokens.back());
     }
 	if(var_end + 2 == tokens.size() - 1){
-		body.reset(new ASGrove{std::vector<std::vector<Token>>{std::vector{Token{0,0,"return", TokenType::RETURN}}}});
+		body.reset(new ASGrove{std::vector<std::vector<Token>>{std::vector{Token{0,0,"", TokenType::RETURN}}}});
 	}
     else{
 		body.reset(new ASGrove{split_infix(tokens, var_end + 2, static_cast<unsigned>(tokens.size() - 2)), owner, false});
