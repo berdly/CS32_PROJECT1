@@ -13,10 +13,10 @@ lex: lex.o lex.cpp
 	${CXX} $(CXXFLAGS)  $^ -o $@
 
 grove.o: tree.o src/lib/grove.cpp
-	${CXX} $(CXXFLAGS)  $^ -o $@
+	${CXX} $(CXXFLAGS)  $^ -c -o $@
 
 tree.o: lex.o src/lib/parser.cpp
-	${CXX} $(CXXFLAGS)  $^ -o $@
+	${CXX} $(CXXFLAGS)  $^ -c -o $@
 
 lex.o: src/lib/lexer.cpp
 	${CXX} $(CXXFLAGS)  $^ -c -o $@
