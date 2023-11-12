@@ -528,6 +528,7 @@ void ASGrove::print(unsigned i, unsigned indent) const{
 	switch(types.at(i)){
 		case TreeType::EXP:
 			printHelp(tree->getProot());
+			std::cout<<";";
 			break;
 		case TreeType::DEF:
 			std::cout<<"def ";
@@ -545,13 +546,13 @@ void ASGrove::print(unsigned i, unsigned indent) const{
 			for(size_t i = 0; i < fun->get_names().size(); i++){
 				
 				if(i != fun->get_names().size()-1){
-					std::cout<< fun->get_names().at(i)<<",";
+					std::cout<< fun->get_names().at(i)<<", ";
 				}else{
 					std::cout<<fun->get_names().at(i);
 				}
 			}
-			std::cout<<"){\n";
-
+			std::cout<<") {\n";
+ 
 			fun->get_body()->printAll(indent + 1);
 
 			std::cout<<"}\n";
@@ -606,6 +607,7 @@ void ASGrove::print(unsigned i, unsigned indent) const{
 		case TreeType::PRINT:
 			std::cout<<"print ";
 			printHelp(tree->getProot());
+			std::cout<<";";
 			break;
 		default:
 			break;
@@ -768,10 +770,10 @@ void ASGrove::print(unsigned i, unsigned indent) const{
 			printHelp(root.get_kids().at(i));
 
 			if(i != root.get_kids().size()-1){
-				std::cout<< ",";
+				std::cout<< ", ";
 			}
 		}
-		std::cout<<");";
+		std::cout<<")";
 
 	  	break;
 	  case TokenType::LBRACK:
@@ -781,10 +783,10 @@ void ASGrove::print(unsigned i, unsigned indent) const{
 			printHelp(root.get_kids().at(i));
 
 			if(i != root.get_kids().size()-1){
-				std::cout<< ",";
+				std::cout<< ", ";
 			}
 		}
-		std::cout<<"];";
+		std::cout<<"]";
 
 	  	break;
 	
@@ -792,7 +794,7 @@ void ASGrove::print(unsigned i, unsigned indent) const{
 
 		std::cout<< root.get_kids().at(0).get_pdata().get_text()<<"[";
 		printHelp(root.get_kids().at(1));
-		std::cout<<"];";
+		std::cout<<"]";
 
 		break;
 
