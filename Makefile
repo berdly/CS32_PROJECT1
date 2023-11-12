@@ -1,21 +1,23 @@
 CXXFLAGS = -g -std=c++17 -Wall -Wextra -Werror
 CXX      = g++
 
-scrypt: grove.o scrypt.cpp
+scrypt: lex.o tree.o grove.o scryp.o
 	${CXX} $(CXXFLAGS)  $^ -o $@
 
-format: grove.o format.cpp
+format: grove.o src/lib/format.cpp
 	${CXX} $(CXXFLAGS)  $^ -o $@
-calc: grove.o calc.cpp
-	${CXX} $(CXXFLAGS)  $^ -o $@
-
-lex: lex.o lex.cpp
+calc: grove.o src/lib/calc.cpp
 	${CXX} $(CXXFLAGS)  $^ -o $@
 
-grove.o: tree.o src/lib/grove.cpp
+lex: lex.o
+	${CXX} $(CXXFLAGS)  $^ -o $@
+
+scrypt.o: src/lib/scrypt.cpp
+	${CXX} $(CXXFLAGS)  $^ -c -o $@
+grove.o: src/lib/grove.cpp
 	${CXX} $(CXXFLAGS)  $^ -c -o $@
 
-tree.o: lex.o src/lib/parser.cpp
+tree.o: src/lib/parser.cpp
 	${CXX} $(CXXFLAGS)  $^ -c -o $@
 
 lex.o: src/lib/lexer.cpp
