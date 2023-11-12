@@ -50,6 +50,35 @@ class Var{
   Func* get_Func() const{
     return(std::get<Func*>(*this->data));
   }
+  friend std::ostream& operator<<(std::ostream& out, const Var& v){
+    if(!v.has_value()){
+      out << "null\n";
+      return out;
+    }
+    Arr a{};
+    switch((*(v.data)).index()){
+      case 0:
+        out << v.get_double() << '\n';
+        return out;
+      case 1:
+        out << std::boolalpha << v.get_bool() << '\n';
+        return out;
+      case 2:
+        a = v.get_Arr();
+        out << '[';
+        for(unsigned i{}; i < a->size(); i++){
+          out << a->at(i);
+          if(i < a->size() - 1){
+            out << ", ";
+          }
+        }
+        out << "]\n";
+        return out;
+      case 3:
+        out << "FUNC NOT IMLEMENTED";
+        return out;
+    }
+  }
 };
 namespace Specials{
 Var pop(const std::vector<Var>& args);

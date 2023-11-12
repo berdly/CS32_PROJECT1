@@ -279,18 +279,7 @@ std::pair<Var, bool> ASGrove::calc(bool print){
 			break;
 		}
 		if(print || (types.at(place) == TreeType::PRINT)){
-			if(!possible_val.has_value()){
-				std::cout << "null";
-			}
-			else if(possible_val.holds_double()){
-				std::cout<<possible_val.get_double()<<std::endl;
-			}
-			else if(possible_val.holds_bool()){
-				std::cout<< std::boolalpha << possible_val.get_bool() << std::endl;
-			}
-			else if(possible_val.holds_Arr()){
-				std::cout << "NOT IMPLEMENTED";
-			}
+			std::cout << possible_val;
 		}
 	}
 	catch(const ZeroDivision&){
