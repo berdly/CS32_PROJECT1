@@ -50,6 +50,12 @@ class Var{
   Func* get_Func() const{
     return(std::get<Func*>(*this->data));
   }
+  bool operator==(const Var& other){
+    return this->data == other.data;
+  }
+  bool same_type(const Var& other){
+    return this->data->index() == other.data->index();
+  }
   friend std::ostream& operator<<(std::ostream& out, const Var& v){
     if(!v.has_value()){
       out << "null\n";
@@ -58,11 +64,11 @@ class Var{
     Arr a{};
     switch((*(v.data)).index()){
       case 0:
-        out << v.get_double() << '\n';
-        return out;
+        out << v.get_double();
+        break;
       case 1:
-        out << std::boolalpha << v.get_bool() << '\n';
-        return out;
+        out << std::boolalpha << v.get_bool();
+        break;
       case 2:
         a = v.get_Arr();
         out << '[';
@@ -72,14 +78,16 @@ class Var{
             out << ", ";
           }
         }
-        out << "]\n";
-        return out;
+        out << ']';
+        break;
       case 3:
         out << "FUNC NOT IMLEMENTED";
-        return out;
+        break;
       default:
-       return out;
+        break;
     }
+    out << '\n';
+    return out;
   }
 };
 namespace Specials{

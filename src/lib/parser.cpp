@@ -101,16 +101,21 @@ ASTree::ASNode ASTree::build_array(const std::vector<Token>& tokens, unsigned st
 	root.add_child(this->buildInfix(tokens, curr_start, end, false));
 	return root;
 }
-ASTree::ASNode ASTree::build_call(const std::vector<Token>& tokens, unsigned start, unsigned end){
-	ASNode root{tokens.at(start + 1)};
-	root.add_child(this->buildInfix(tokens, start, start, false));
-	if(start + 1 == end){
+ASTree::ASNode ASTree::build_call(const std::vector<Token>& tokens, unsigned start, unsigned end, unsigned func_end){
+	ASNode root{tokens.at(func_end)};
+	if((start + 2 < func_end) && wrapped(tokens, start, func_end - 1)){
+		root.add_child(this->buildInfix(tokens, start + 1, func_end - 2, true));
+	}
+	else{
+		root.add_child(this->buildInfix(tokens, start, func_end - 1, false));
+	}
+	if(func_end + 1 == end){
 		return root;
 	}
-	int curr_start{static_cast<int>(start + 2)};
+	int curr_start{static_cast<int>(func_end + 1)};
 	int bdepth{};
 	int pdepth{};
-	for(unsigned i{start + 2}; i <= end; i++){
+	for(unsigned i{start + 2}; i < end; i++){
 		switch(tokens.at(i).get_type()){
 			case TokenType::COMMA:
 				if((bdepth == 0) && (pdepth == 0)){
@@ -133,19 +138,19 @@ ASTree::ASNode ASTree::build_call(const std::vector<Token>& tokens, unsigned sta
 				break;
             case TokenType::RBRACK:
 				bdepth--;
-				if(pdepth < 0){
+				if(bdepth < 0){
 					throw ParserError(tokens.at(i));
-					pdepth++;
+					bdepth++;
 				}
                 break;
 			default:
 				break;
 		}
 	}
-	root.add_child(this->buildInfix(tokens, curr_start, end, false));
+	root.add_child(this->buildInfix(tokens, curr_start, end - 1, false));
 	return root;
 }
-ASTree::ASNode ASTree::build_access(const std::vector<Token>& tokens, unsigned start, unsigned end){
+ASTree::ASNode ASTree::build_access(const std::vector<Token>& tokens, unsigned start, unsigned end, unsigned var_end){
 	ASNode root{tokens.at(end)};
 	root.add_child(this->buildInfix(tokens, start, start, false));
 	root.add_child(this->buildInfix(tokens, start + 2, end - 1, false));
@@ -360,6 +365,88 @@ const Token& ASTree::ASNode::get_pdata() const{
     return pdata;
 }
 
+std::pair<unsigned, bool> ASTree::has_call(const std::vector<Token>& tokens, unsigned start, unsigned end){
+	if((end < start + 2) || (tokens.at(end).get_type() != TokenType::RPAR)){
+		return std::make_pair(0, false);
+	}
+	int pdepth{-1};
+	for(int i{static_cast<int>(end - 1)}; i >= static_cast<int>(start); i--){
+		switch(tokens.at(i).get_type()){
+			case TokenType::LPAR:
+				pdepth++;
+				if(pdepth == 0){
+					return std::make_pair(static_cast<unsigned>(i), true);
+				}
+			case TokenType::RPAR:
+				pdepth--;
+			default:
+				break;
+		}
+	}
+	return std::make_pair(0,false);
+}
+std::pair<unsigned, bool> ASTree::has_access(const std::vector<Token>& tokens, unsigned start, unsigned end){
+	if((end < start + 2) || (tokens.at(end).get_type() != TokenType::RPAR)){
+		return std::make_pair(0, false);
+	}
+	int pdepth{-1};
+	for(int i{static_cast<int>(end - 1)}; i >= static_cast<int>(start); i--){
+		switch(tokens.at(i).get_type()){
+			case TokenType::LPAR:
+				pdepth++;
+				if(pdepth == 0){
+					return std::make_pair(static_cast<unsigned>(i), true);
+				}
+				break;
+			case TokenType::RPAR:
+				pdepth--;
+				break;
+			default:
+				break;
+		}
+	}
+	return std::make_pair(0,false);
+}
+bool ASTree::is_callable(const std::vector<Token>& tokens, unsigned start, unsigned end){
+	int pdepth{};
+	int bdepth{};
+	for(unsigned i{start}; i <= end; i++){
+		switch(tokens.at(i).get_type()){
+			case TokenType::LPAR:
+				pdepth++;
+				break;
+			case TokenType::RPAR:
+				pdepth--;
+				if(pdepth < 0){
+					throw ParserError(tokens.at(i));
+				}
+				break;
+			case TokenType::LBRACK:
+				bdepth++;
+				break;
+			case TokenType::RBRACK:
+				bdepth--;
+				if(pdepth < 0){
+					throw ParserError(tokens.at(i));
+				}
+				break;
+			case TokenType::CONST:
+			case TokenType::BOOL:
+			case TokenType::VOID:
+			case TokenType::VAR:
+				break;
+			default:
+				if((pdepth == 0) && (bdepth == 0)){
+					return false;
+				}
+				break;
+		}
+	}
+	if(!((pdepth == 0) && (bdepth == 0))){
+		throw ParserError(tokens.at(end));
+	}
+	return true;
+}
 ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, unsigned start, unsigned end, bool trimmed)
 {
     if((start == end) && ((tokens[start].get_type() == TokenType::CONST) || (tokens[start].get_type() == TokenType::BOOL) || (tokens[start].get_type() == TokenType::VAR) || (tokens[start].get_type() == TokenType::VOID))){
@@ -368,12 +455,16 @@ ASTree::ASNode ASTree::buildInfix(const std::vector<Token>& tokens, unsigned sta
 	else if(wrapped_bracks(tokens, start, end)){
 		return build_array(tokens, start, end - 1);
 	}
-	else if((tokens[start].get_type() == TokenType::CONST) || (tokens[start].get_type() == TokenType::BOOL) || (tokens[start].get_type() == TokenType::VAR)  || (tokens[start].get_type() == TokenType::VOID)){
-		if(wrapped(tokens, start+1, end)){
-			return build_call(tokens, start, end - 1);
+	auto result{has_call(tokens, start, end)};
+	if(result.second){
+		if(is_callable(tokens, start, result.second - 1)){
+			return build_call(tokens, start, end, result.second);
 		}
-		else if(wrapped_bracks(tokens, start+1, end)){
-			return build_access(tokens, start, end);
+	}
+	result = has_access(tokens, start, end);
+	if(result.second){
+		if(is_callable(tokens, start, result.second - 1)){
+			return build_access(tokens, start, end, result.second);
 		}
 	}
     

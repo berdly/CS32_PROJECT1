@@ -30,8 +30,11 @@ protected:
   std::vector<std::pair<int,int>> get_child_idx(const std::vector<Token>& tokens, int start, int end);
   ASTree::ASNode buildInfix(const std::vector<Token>&, unsigned, unsigned, bool);
   ASTree::ASNode build_array(const std::vector<Token>&, unsigned, unsigned); //TODO
-  ASTree::ASNode build_call(const std::vector<Token>&, unsigned, unsigned); //TODO
-  ASTree::ASNode build_access(const std::vector<Token>&, unsigned, unsigned);
+  ASTree::ASNode build_call(const std::vector<Token>&, unsigned, unsigned, unsigned); //TODO
+  ASTree::ASNode build_access(const std::vector<Token>&, unsigned, unsigned, unsigned);
+  std::pair<unsigned, bool> has_call(const std::vector<Token>&, unsigned, unsigned);
+  std::pair<unsigned, bool> has_access(const std::vector<Token>&, unsigned, unsigned);
+  bool is_callable(const std::vector<Token>&, unsigned, unsigned);
   int precedence(const std::string& text);
 
 
