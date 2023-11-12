@@ -77,6 +77,8 @@ class Var{
       case 3:
         out << "FUNC NOT IMLEMENTED";
         return out;
+      default:
+       return out;
     }
   }
 };
