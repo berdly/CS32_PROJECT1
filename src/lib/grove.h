@@ -22,6 +22,7 @@ class Var{
   Var(double d): data{d} {}
   Var(bool b): data{b} {}
   Var(Arr a): data{a} {}
+  Var(Func* f): data{f} {}
   bool has_value() const{
     return data.has_value();
   }

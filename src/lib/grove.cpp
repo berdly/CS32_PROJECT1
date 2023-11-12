@@ -148,7 +148,7 @@ ASGrove::ASGrove(std::vector<std::vector<Token>> commands, unsigned start, unsig
 				statements.push_back(new ASTree{commands.at(i).at(1)});
 				types.push_back(TreeType::DEF);
 				funcs.emplace(std::make_pair(commands.at(i).at(1).get_text(), Func{commands.at(i), this}));
-				add_var(commands.at(i).at(1).get_text(), static_cast<Func*>(&funcs[commands.at(i).at(1).get_text()]));
+				add_var(commands.at(i).at(1).get_text(), Var{static_cast<Func*>(&funcs[commands.at(i).at(1).get_text()])});
 				break;
 			default:
 				statements.push_back(new ASTree{commands.at(i)});
