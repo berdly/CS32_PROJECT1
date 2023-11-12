@@ -211,6 +211,10 @@ std::pair<Var, bool> ASGrove::search_var(const std::string& query) const{
    else{
 	   return std::make_pair(Var{value->second}, true);
    }
+   auto special{specials.find(query)};
+   if(special != specials.end()){
+	   return std::make_pair(special->second, true);
+   }
    return std::make_pair(Var{}, false);
 }
 
@@ -493,10 +497,16 @@ Var ASGrove::calcHelp(const ASTree::ASNode& root){
 		for(unsigned i{1}; i < children.size(); i++){
 			args.push_back(this->calcHelp(children.at(i)));
 		}
-		if(children.at(0).get_pdata().get_type() != TokenType::VAR){
-			throw std::runtime_error{""};
+		possible_val = this->calcHelp(children.at(0));
+		if(possible_val.holds_Func()){
+			return possible_val.get_Func()->operator()(args);
 		}
-		return this->find_func(children.at(0).get_pdata().get_text(), args);
+		else if(possible_val.holds_Special()){
+			return possible_val.get_Special()(args);
+		}
+		else{
+			throw std::runtime_error("Runtime error: not a function.");
+		}
     default:
             //throw ParserError(root.get_pdata());
             break;

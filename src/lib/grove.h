@@ -14,15 +14,26 @@
 
 class Var;
 typedef std::vector<Var>* Arr;
+//typedef std::vector<Var>::iterator Iter;
+
+namespace Specials{
+Var pop(const std::vector<Var>& args);
+Var len(const std::vector<Var>& args);
+Var push(const std::vector<Var>& args);
+typedef decltype(&pop) Special;
+}
+
 class Func;
 class Var{
-  std::optional<std::variant<double, bool, Arr, Func*>> data;
+  std::optional<std::variant<double, bool, Arr, Func*, Specials::Special/*, Iter*/>> data;
   public:
   Var() : data{} {}
   Var(double d): data{d} {}
   Var(bool b): data{b} {}
   Var(Arr a): data{a} {}
   Var(Func* f): data{f} {}
+  //Var(Iter i): data{i} {}
+  Var (Specials::Special s): data{s} {}
   bool has_value() const{
     return data.has_value();
   }
@@ -38,6 +49,14 @@ class Var{
   bool holds_Func() const{
     return(this->has_value() && std::holds_alternative<Func*>(*this->data));
   }
+  bool holds_Special() const{
+    return(this->has_value() && std::holds_alternative<Specials::Special>(*this->data));
+  }
+  /*
+  bool holds_Iter() const{
+    return(this->has_value() && std::holds_alternative<Iter>(*this->data));
+  }
+  */
   double get_double() const{
     return(std::get<double>(*this->data));
   }
@@ -50,6 +69,14 @@ class Var{
   Func* get_Func() const{
     return(std::get<Func*>(*this->data));
   }
+  Specials::Special get_Special() const{
+    return(std::get<Specials::Special>(*this->data));
+  }
+  /*
+  Iter get_Iter() const{
+    return(std::get<Iter>(*this->data));
+  }
+  */
   bool operator==(const Var& other){
     return this->data == other.data;
   }
@@ -80,22 +107,14 @@ class Var{
         }
         out << ']';
         break;
-      case 3:
-        out << "FUNC NOT IMLEMENTED";
-        break;
       default:
+        out << "NOT IMPLEMENTED";
         break;
     }
     out << '\n';
     return out;
   }
 };
-namespace Specials{
-Var pop(const std::vector<Var>& args);
-Var len(const std::vector<Var>& args);
-Var push(const std::vector<Var>& args);
-typedef decltype(&pop) Special;
-}
 
 enum class TreeType{
 EXP,
