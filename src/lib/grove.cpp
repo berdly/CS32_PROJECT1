@@ -516,50 +516,163 @@ void ASGrove::print_curr() const{
 	this->print(place, 0);
 	std::cout << '\n';
 }
-void ASGrove::print(unsigned i, unsigned indent) const{
+void ASGrove::print(unsigned i, unsigned indent, ASTree* start) const{
   ASTree* tree{statements.at(i)};
   StatementTree* statement;
   int tr{};
+  std::pair<Var, bool> funcSearch;
+  Func* fun;
+  
+  
+  
+  if(start == nullptr){
   for(unsigned j{}; j < indent * 4; j++){
+	
 	std::cout << ' ';
+  }
+
   }
 	switch(types.at(i)){
 		case TreeType::EXP:
 			printHelp(tree->getProot());
+			std::cout<<";";
+			break;
+		case TreeType::DEF:
+			std::cout<<"def ";
+			printHelp(tree->getProot());
+			std::cout<<"(";
+
+			funcSearch = search_var(tree->getProot().get_pdata().get_text());
+			
+			if((funcSearch.first).holds_Func()){
+				fun = funcSearch.first.get_Func();
+			}
+			
+
+
+			for(size_t i = 0; i < fun->get_names().size(); i++){
+				
+				if(i != fun->get_names().size()-1){
+					std::cout<< fun->get_names().at(i)<<", ";
+				}else{
+					std::cout<<fun->get_names().at(i);
+				}
+			}
+			std::cout<<") {\n";
+ 
+			fun->get_body()->printAll(indent + 1);
+
+			std::cout<<"}\n";
 			break;
 		case TreeType::IF:
-			statement = static_cast<StatementTree*>(tree);
+			if(start!= nullptr){
+				statement = static_cast<StatementTree*>(start);
+  			}else{
+				statement = static_cast<StatementTree*>(tree);
+			}
 			tr = 0;
 			while(statement != nullptr){
-			if(tr == 0){
+			if(tr == 0 && start == nullptr){
 				std::cout<<"if "; 
 				printHelp(statement->getProot());
 				std::cout<<" {"<<std::endl;
+
+				statement->get_body()->printAll(indent + 1);
+					for(unsigned j{}; j < indent * 4; j++){
+						std::cout << ' ';
+  					}
+			
+			
+			statement = statement->get_next();
+			if(statement == nullptr){
+				std::cout<<'}';
+			}else{
+				std::cout<<'}'<<std::endl;
+			}
+			tr++;
 			}else if(statement->getProot().get_pdata().get_text() != "true"){
 				for(unsigned j{}; j < indent * 4; j++){
 				std::cout << ' ';
-  			}
-				std::cout<<"else if "; 
+  				}
+
+				
+				std::cout<<"else {"<<std::endl;
+				
+				indent++;
+				for(unsigned j{}; j < indent * 4; j++){
+				std::cout << ' ';
+  				}
+
+				std::cout<<"if ";
 				printHelp(statement->getProot());
 				std::cout<<" {"<<std::endl;
+
+				statement->get_body()->printAll(indent + 1);
+
+
+				for(unsigned j{}; j < indent * 4; j++){
+					std::cout << ' ';
+  				}
+				
+			
+				std::cout<<'}'<<std::endl;
+				
+				
+
+				statement = statement->get_next();
+				if(statement != nullptr){
+					print(i,indent,statement);	
+				}
+
+				
+				
+				indent--;
+				
+
+				for(unsigned j{}; j <( indent) * 4; j++){
+					std::cout << ' ';
+  				}
+
+				
+
+			
+				
+				std::cout<<'}';
+				
+				tr++;
+				break;
+				
+
 			}else{
 				for(unsigned j{}; j < indent * 4; j++){
 				std::cout << ' ';
-  			}
+  				}
 				std::cout<<"else {"<<std::endl; 
+				
+				
+
+				statement->get_body()->printAll(indent + 1);
+
+				
+				for(unsigned j{}; j < indent * 4; j++){
+				std::cout << ' ';
+  				}
+
+			
+			
+			statement = statement->get_next();
+			if(statement == nullptr){
+				std::cout<<'}';
+			}else{
+				std::cout<<'}'<<std::endl;
+			}
+			tr++;
 
 			}
 			
 			
-			statement->get_body()->printAll(indent + 1);
-			for(unsigned j{}; j < indent * 4; j++){
-				std::cout << ' ';
-  			}
-			std::cout<<'}'<<std::endl;
-			statement = statement->get_next();
-			tr++;
-			
 			}
+			
 			
 			break;
 		case TreeType::WHILE:
@@ -577,11 +690,20 @@ void ASGrove::print(unsigned i, unsigned indent) const{
 		case TreeType::PRINT:
 			std::cout<<"print ";
 			printHelp(tree->getProot());
+			std::cout<<";";
 			break;
+		case TreeType::RETURN:
+			std::cout<<"return ";
+			printHelp(tree->getProot());
+			std::cout<<";";
 		default:
 			break;
 
 		    
+		}
+
+		if(start != nullptr){
+			std::cout<<std::endl;
 		}
 	}
 	
@@ -732,12 +854,50 @@ void ASGrove::print(unsigned i, unsigned indent) const{
 	  	std::cout<<root.get_pdata().get_text()<<std::endl;
 		//indent  = indent.;
 		break;
+	  case TokenType::LPAR:
+
+		std::cout<<root.get_kids().at(0).get_pdata().get_text()<<"(";
+		for(size_t i = 1; i < root.get_kids().size();i++){
+			printHelp(root.get_kids().at(i));
+
+			if(i != root.get_kids().size()-1){
+				std::cout<< ", ";
+			}
+		}
+		std::cout<<")";
+
+	  	break;
+	  case TokenType::LBRACK:
+	  	std::cout<<"[";
+
+		for(size_t i = 0; i < root.get_kids().size();i++){
+			printHelp(root.get_kids().at(i));
+
+			if(i != root.get_kids().size()-1){
+				std::cout<< ", ";
+			}
+		}
+		std::cout<<"]";
+
+	  	break;
+	
+	 case TokenType::RBRACK:
+
+		std::cout<< root.get_kids().at(0).get_pdata().get_text()<<"[";
+		printHelp(root.get_kids().at(1));
+		std::cout<<"]";
+
+		break;
 
 		
       case TokenType::VAR:
         std::cout<<root.get_pdata().get_text();
             break;
 	
+	  case TokenType::VOID:
+	  	std::cout<<"null";
+		break;
+	 
       default:
 		    throw ParserError(root.get_pdata());
             break;

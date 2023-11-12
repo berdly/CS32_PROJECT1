@@ -27,3 +27,6 @@ tree.o: src/lib/parser.cpp
 
 lex.o: src/lib/lexer.cpp
 	${CXX} $(CXXFLAGS)  $^ -c -o $@
+
+clean:
+	rm -f *.o lex format calc

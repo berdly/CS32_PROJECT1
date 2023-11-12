@@ -79,6 +79,12 @@ class Func{
       Func(const std::vector<Token>& tokens, ASGrove* owner);
       Var operator()(const std::vector<Var>& args) const;
       void enclose(const std::map<std::string, Var>&, const std::map<std::string, Func>&);
+      std::shared_ptr<ASGrove> get_body(){
+        return this->body;
+      };
+      std::vector<std::string> get_names(){
+        return this->names;
+      };
 };
 class ASGrove{
   public:
@@ -117,7 +123,7 @@ public:
   std::pair<Var, bool> calc(bool print = true); //Stepper evaluates one tree one step at a time
   void add_tree(ASTree* tree, TreeType type = TreeType::EXP);
   void printAll(unsigned indent = 0) const;
-  void print(unsigned i, unsigned indent) const;
+  void print(unsigned i, unsigned indent, ASTree* start= nullptr) const;
   void print_curr() const;
 };
 
