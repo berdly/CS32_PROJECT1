@@ -562,7 +562,7 @@ void ASGrove::print(unsigned i, unsigned indent, ASTree* start) const{
  
 			fun->get_body()->printAll(indent + 1);
 
-			std::cout<<"}\n";
+			std::cout<<"}";
 			break;
 		case TreeType::IF:
 			if(start!= nullptr){
@@ -895,7 +895,7 @@ void ASGrove::print(unsigned i, unsigned indent, ASTree* start) const{
             break;
 	
 	  case TokenType::VOID:
-	  	std::cout<<"null";
+	  	std::cout<<"";
 		break;
 	 
       default:
