@@ -115,7 +115,7 @@ ASTree::ASNode ASTree::build_call(const std::vector<Token>& tokens, unsigned sta
 	int curr_start{static_cast<int>(func_end + 1)};
 	int bdepth{};
 	int pdepth{};
-	for(unsigned i{start + 2}; i < end; i++){
+	for(unsigned i{static_cast<unsigned>(curr_start)}; i < end; i++){
 		switch(tokens.at(i).get_type()){
 			case TokenType::COMMA:
 				if((bdepth == 0) && (pdepth == 0)){
