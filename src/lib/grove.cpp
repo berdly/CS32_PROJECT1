@@ -562,6 +562,9 @@ void ASGrove::print(unsigned i, unsigned indent, ASTree* start) const{
  
 			fun->get_body()->printAll(indent + 1);
 
+			for(unsigned j{}; j < indent * 4; j++){
+				std::cout << ' ';
+  				}
 			std::cout<<"}";
 			break;
 		case TreeType::IF:
