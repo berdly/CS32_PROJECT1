@@ -152,8 +152,21 @@ ASTree::ASNode ASTree::build_call(const std::vector<Token>& tokens, unsigned sta
 }
 ASTree::ASNode ASTree::build_access(const std::vector<Token>& tokens, unsigned start, unsigned end, unsigned var_end){
 	ASNode root{tokens.at(end)};
-	root.add_child(this->buildInfix(tokens, start, start, false));
-	root.add_child(this->buildInfix(tokens, start + 2, end - 1, false));
+	if((start + 2 < var_end) && wrapped(tokens, start, var_end - 1)){
+		root.add_child(this->buildInfix(tokens, start + 1, var_end - 2, true));
+	}
+	else{
+		root.add_child(this->buildInfix(tokens, start, var_end - 1, false));
+	}
+	if(var_end + 1 >= end){
+		throw ParserError(tokens.at(end));
+	}
+	if(wrapped(tokens, var_end + 1, end - 1)){
+		root.add_child(this->buildInfix(tokens, var_end + 2, end - 2, true));
+	}
+	else{
+		root.add_child(this->buildInfix(tokens, var_end + 1, end - 1, false));
+	}
 	return root;
 }
 
