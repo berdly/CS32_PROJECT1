@@ -1019,7 +1019,9 @@ Var Func::operator()(const std::vector<Var>& args) const{
     return new_scope.eval();
   }
 void Func::enclose(const std::map<std::string, Var>& new_vars){
-	this->body->vars = new_vars;
+	for(const auto& var: new_vars){
+		this->body->vars.insert_or_assign(var.first, var.second);
+	}
 }
 StatementTree::StatementTree(const StatementTree& tree, ASGrove* owner): ASTree{tree.proot}, body{tree.body}, next{tree.next} {
 	body = new ASGrove{*body};
