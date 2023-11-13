@@ -532,7 +532,7 @@ void ASGrove::print_curr() const{
 	std::cout << '\n';
 }
 void ASGrove::print_line() const{
-	AsTree * tree{statements.at(place)};
+	ASTree * tree{statements.at(place)};
 	printHelp(tree->getProot());
 	std::cout << '\n';
 }
