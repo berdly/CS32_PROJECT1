@@ -130,7 +130,7 @@ ASGrove::ASGrove(std::vector<std::vector<Token>> commands, unsigned start, unsig
 					throw ParserError{commands.at(i).back(), PErrType::END};
 				}
 				state = static_cast<StatementTree*>(statements.back());
-				if(condition_end == commands.at(i).size() - 2){
+				if(condition_end == static_cast<int>(commands.at(i).size() - 2)){
 					state->push_back(new StatementTree{ASTree{tree}, new ASGrove{std::vector<std::vector<Token>>{std::vector<Token>{Token{0,0,"", TokenType::VOID}}}}});
 				}
 				else{
