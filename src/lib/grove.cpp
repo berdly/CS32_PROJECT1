@@ -731,9 +731,15 @@ void ASGrove::print(unsigned i, unsigned indent, ASTree* start) const{
 			std::cout<<";";
 			break;
 		case TreeType::RETURN:
-			std::cout<<"return";
+			
+			if(tree->getProot().get_pdata().get_type() == TokenType::VOID){
+				std::cout<<"return";
+			}else{
+				std::cout<<"return ";
+			}
 			printHelp(tree->getProot());
 			std::cout<<";";
+			break;
 		default:
 			break;
 
