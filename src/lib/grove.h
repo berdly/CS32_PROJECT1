@@ -13,7 +13,18 @@
 #include <memory>
 
 class Var;
-typedef std::weak_ptr<std::vector<Var>> Arr;
+class Arr{
+  unsigned idx;
+  public:
+  Arr() = default;
+  Arr(unsigned);
+  bool operator==(const Arr&);
+  Var& at(unsigned);
+  unsigned size();
+  Var& back();
+  Var& front();
+  std::vector<Var>& get();
+};
 //typedef std::vector<Var>::iterator Iter;
 
 namespace Specials{
@@ -82,7 +93,7 @@ class Var{
       return false;
     }
     if(!has_value()){
-      return !other.has_value();
+      return other.has_value();
     }
     switch(data->index()){
       case 0:
@@ -90,7 +101,7 @@ class Var{
       case 1:
         return get_bool() == other.get_bool();
       case 2:
-        return this->get_Arr().lock() == other.get_Arr().lock();
+        return this->get_Arr() == other.get_Arr();
       case 3:
         return get_Func() == other.get_Func();
       case 4:
@@ -110,10 +121,10 @@ class Var{
   }
   friend std::ostream& operator<<(std::ostream& out, const Var& v){
     if(!v.has_value()){
-      out << "null\n";
+      out << "null";
       return out;
     }
-    std::shared_ptr<std::vector<Var>> a{};
+    Arr a{v.get_Arr()};
     switch((*(v.data)).index()){
       case 0:
         out << v.get_double();
@@ -122,11 +133,10 @@ class Var{
         out << std::boolalpha << v.get_bool();
         break;
       case 2:
-        a = v.get_Arr().lock();
         out << '[';
-        for(unsigned i{}; i < a->size(); i++){
-          out << a->at(i);
-          if(i < a->size() - 1){
+        for(unsigned i{}; i < a.size(); i++){
+          out << a.at(i);
+          if(i < a.size() - 1){
             out << ", ";
           }
         }
@@ -136,7 +146,6 @@ class Var{
         out << "NOT IMPLEMENTED";
         break;
     }
-    out << '\n';
     return out;
   }
 };
@@ -171,7 +180,7 @@ class Func{
 };
 class ASGrove{
   public:
-    static std::vector<std::shared_ptr<std::vector<Var>>> array_holder;
+    static std::vector<std::vector<Var>> array_holder;
     static const std::map<std::string, Specials::Special> specials;
     friend class Func;
     friend class StatementTree;

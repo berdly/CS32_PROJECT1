@@ -2,21 +2,20 @@
 #include "error.h"
 #include <cmath>
 #include "lexer.h"
-std::vector<std::shared_ptr<std::vector<Var>>> ASGrove::array_holder{nullptr};
+std::vector<std::vector<Var>> ASGrove::array_holder{};
 Var Specials::pop(const std::vector<Var>& args){
   if(args.size() != 1){
     throw std::runtime_error("Runtime error: incorrect argument count.");
   }
-  std::shared_ptr<std::vector<Var>> ptr{};
   if(!(args[0].holds_Arr())){
     throw std::runtime_error("Runtime error: not an array.");
   }
-  ptr = args[0].get_Arr().lock();
-  if(ptr->size() == 0){
+  if(args[0].get_Arr().size() == 0){
 	throw std::runtime_error("Runtime error: underflow.");
   }
-  Var last = ptr->back();
-  ptr->pop_back();
+  std::vector<Var>& arr{args[0].get_Arr().get()};
+  Var last = arr.back();
+  arr.pop_back();
   return last;
 }
 Var Specials::len(const std::vector<Var>& args){
@@ -26,7 +25,7 @@ Var Specials::len(const std::vector<Var>& args){
   if(!(args[0].holds_Arr())){
     throw std::runtime_error("Runtime error: not an array.");;
   }
-  return Var(static_cast<double>(args[0].get_Arr().lock()->size()));
+  return Var(static_cast<double>(args[0].get_Arr().size()));
 }
 Var Specials::push(const std::vector<Var>& args){
    if(args.size() != 2){
@@ -35,7 +34,7 @@ Var Specials::push(const std::vector<Var>& args){
   if(!(args[0].holds_Arr())){
     throw std::runtime_error("Runtime error: not an array.");
   }
-  args[0].get_Arr().lock()->push_back(args[1]);
+  args[0].get_Arr().get().push_back(args[1]);
   return Var{};
 }
 
@@ -332,7 +331,27 @@ Var ASGrove::calcHelp(const ASTree::ASNode& root){
       case TokenType::ASSIGN:
             possible_val = this->calcHelp(children.back());
             for(size_t i{}; i < children.size() - 1 ; i++){
-                this->add_var(children.at(i).get_pdata().get_text(), possible_val);
+				if(children.at(i).get_pdata().get_type() == TokenType::RBRACK){
+					ret = calcHelp(children.at(i).get_kids().at(1));
+					if(!ret.holds_double()){
+						throw std::runtime_error("Runtime error: index is not a number.");
+					}
+					if(std::modf(ret.get_double(), &dummy) != 0){
+						throw std::runtime_error("Runtime error: index is not an integer.");
+					}
+					dummy = ret.get_double();
+					ret = calcHelp(children.at(i).get_kids().at(0));
+					if(!ret.holds_Arr()){
+							throw std::runtime_error("Runtime error: not an array.");
+					}
+					if((static_cast<size_t>(dummy) > (ret.get_Arr().size() - 1)) || (dummy < 0)){
+						throw std::runtime_error("Runtime error: index out of bounds.");
+					}
+					ret.get_Arr().at(static_cast<unsigned>(dummy)) = possible_val; 
+				}
+				else{
+                	this->add_var(children.at(i).get_pdata().get_text(), possible_val);
+				}
             }
             return possible_val;
      case TokenType::EXP:
@@ -459,11 +478,11 @@ Var ASGrove::calcHelp(const ASTree::ASNode& root){
 	case TokenType::VOID:
 		return Var{};
 	case TokenType::LBRACK:
-		array_holder.push_back(std::make_shared<std::vector<Var>>(new std::vector<Var>(children.size())));
+		array_holder.emplace_back(children.size());
 		for(unsigned i{}; i < children.size(); i++){
-			array_holder.back()->at(i) = this->calcHelp(children.at(i));;
+			array_holder.back().at(i) = this->calcHelp(children.at(i));;
 		}
-		return static_cast<Arr>(array_holder.back());
+		return Arr{array_holder.size() - 1};
 	case TokenType::RBRACK:
 		possible_val = calcHelp(children.at(0)); //added this auto - might not work as intended
 		if(!possible_val.holds_Arr()){
@@ -477,10 +496,10 @@ Var ASGrove::calcHelp(const ASTree::ASNode& root){
 		if(std::modf(ret.get_double(), &dummy) != 0){
 			throw std::runtime_error("Runtime error: index is not an integer.");
 		}
-		if((static_cast<size_t>(ret.get_double()) > (possible_val.get_Arr().lock()->size() - 1)) || (ret.get_double() < 0)){
+		if((static_cast<size_t>(ret.get_double()) > (possible_val.get_Arr().size() - 1)) || (ret.get_double() < 0)){
 			throw std::runtime_error("Runtime error: index out of bounds.");
 		}
-		return possible_val.get_Arr().lock()->at(static_cast<size_t>(ret.get_double()));
+		return possible_val.get_Arr().at(static_cast<size_t>(ret.get_double()));
 	case TokenType::LPAR:
 		for(unsigned i{1}; i < children.size(); i++){
 			args.push_back(this->calcHelp(children.at(i)));
@@ -1021,3 +1040,23 @@ StatementTree::~StatementTree(){
 		delete body;
 	}
 }
+Arr::Arr(unsigned num) : idx{num} {}
+ bool Arr::operator==(const Arr& other){
+	return idx == other.idx;
+ }
+  //std::vector<Var>& get();
+  Var& Arr::at(unsigned num){
+	return ASGrove::array_holder.at(idx).at(num);
+  }
+  unsigned Arr::size(){
+	return ASGrove::array_holder.at(idx).size();
+  }
+  Var& Arr::back(){
+	return ASGrove::array_holder.at(idx).back();
+  }
+  Var& Arr::front(){
+	return ASGrove::array_holder.at(idx).front();
+  }
+  std::vector<Var>& Arr::get(){
+	return ASGrove::array_holder.at(idx);
+  }
