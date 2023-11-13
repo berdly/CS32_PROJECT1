@@ -171,7 +171,8 @@ ASTree::ASNode ASTree::build_access(const std::vector<Token>& tokens, unsigned s
 }
 
 ASTree::ASTree(const std::vector<Token>& tokens, unsigned start, unsigned end, bool infix) {
-    unsigned curr_start{}, curr_end{};
+    unsigned curr_start{start};
+	unsigned curr_end{end};
 	if(tokens.empty()){
 	    throw ParserError(Token{});
     }
