@@ -400,7 +400,7 @@ std::pair<unsigned, bool> ASTree::has_call(const std::vector<Token>& tokens, uns
 	return std::make_pair(0,false);
 }
 std::pair<unsigned, bool> ASTree::has_access(const std::vector<Token>& tokens, unsigned start, unsigned end){
-	if((end < start + 2) || (tokens.at(end).get_type() != TokenType::RPAR)){
+	if((end < start + 2) || (tokens.at(end).get_type() != TokenType::RBRACK)){
 		return std::make_pair(0, false);
 	}
 	int pdepth{-1};
