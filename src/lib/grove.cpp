@@ -921,7 +921,8 @@ void ASGrove::print(unsigned i, unsigned indent, ASTree* start) const{
 	
 	 case TokenType::RBRACK:
 
-		std::cout<< root.get_kids().at(0).get_pdata().get_text()<<"[";
+		printHelp(root.get_kids().at(0));
+		std::cout<<"[";
 		printHelp(root.get_kids().at(1));
 		std::cout<<"]";
 
