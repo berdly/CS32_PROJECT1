@@ -406,13 +406,13 @@ std::pair<unsigned, bool> ASTree::has_access(const std::vector<Token>& tokens, u
 	int pdepth{-1};
 	for(int i{static_cast<int>(end - 1)}; i >= static_cast<int>(start); i--){
 		switch(tokens.at(i).get_type()){
-			case TokenType::LPAR:
+			case TokenType::LBRACK:
 				pdepth++;
 				if(pdepth == 0){
 					return std::make_pair(static_cast<unsigned>(i), true);
 				}
 				break;
-			case TokenType::RPAR:
+			case TokenType::RBRACK:
 				pdepth--;
 				break;
 			default:
