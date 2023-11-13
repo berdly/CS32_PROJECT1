@@ -746,7 +746,11 @@ void ASGrove::print(unsigned i, unsigned indent, ASTree* start) const{
 				if(tree->getProot().get_pdata().get_text() == " "){
 					break;
 				}
-				std::cout<<"return";
+				if(tree->getProot().get_pdata().get_text() == ""){
+					std::cout<<"return;";
+					break;
+				}
+				std::cout<<"return ";
 				printHelp(tree->getProot());
 				std::cout<<";";
 			}else{
@@ -959,7 +963,7 @@ void ASGrove::print(unsigned i, unsigned indent, ASTree* start) const{
 		if(root.get_pdata().get_text() == ""){
 			std::cout<<root.get_pdata().get_text();
 		}else{
-	  	std::cout<<" "<<root.get_pdata().get_text();
+	  	std::cout<<root.get_pdata().get_text();
 		}
 		break;
 	 
