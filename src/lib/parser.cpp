@@ -171,16 +171,21 @@ ASTree::ASNode ASTree::build_access(const std::vector<Token>& tokens, unsigned s
 }
 
 ASTree::ASTree(const std::vector<Token>& tokens, unsigned start, unsigned end, bool infix) {
-    if(tokens.empty()){
+    unsigned curr_start, curr_end;
+	if(tokens.empty()){
 	    throw ParserError(Token{});
     }
     if(infix){
-	    if(wrapped(tokens, start, end)){
-	    this->proot = this->buildInfix(tokens, start + 1, end - 1, true);
-	    }
-	    else{
-		    this->proot = this->buildInfix(tokens, start, end, false);
-	    }
+	    while((curr_start < curr_end) && wrapped(tokens, curr_start, curr_end)){
+			curr_start++;
+			curr_end--;
+		}
+		if(curr_start == start){
+			this->proot = this->buildInfix(tokens, start, end, false);
+		}
+		else{
+			this->proot = this->buildInfix(tokens, curr_start, curr_end, true);
+		}
     }else{
     this->proot = this->build(tokens, 0, tokens.size() - 1);
     }
