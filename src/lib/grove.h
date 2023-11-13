@@ -218,6 +218,7 @@ public:
   void printAll(unsigned indent = 0) const;
   void print(unsigned i, unsigned indent, ASTree* start= nullptr) const;
   void print_curr() const;
+  void print_line() const;
 };
 
 class StatementTree: public ASTree{
