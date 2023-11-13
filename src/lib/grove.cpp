@@ -531,6 +531,12 @@ void ASGrove::print_curr() const{
 	this->print(place, 0);
 	std::cout << '\n';
 }
+void ASGrove::print_line() const{
+	AsTree * tree{statements.at(place)};
+	printHelp(tree->getProot());
+	std::cout << '\n';
+}
+
 void ASGrove::print(unsigned i, unsigned indent, ASTree* start) const{
   ASTree* tree{statements.at(i)};
   StatementTree* statement;
