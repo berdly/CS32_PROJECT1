@@ -482,7 +482,7 @@ Var ASGrove::calcHelp(const ASTree::ASNode& root){
 		for(unsigned i{}; i < children.size(); i++){
 			array_holder.back().at(i) = this->calcHelp(children.at(i));;
 		}
-		return Arr{array_holder.size() - 1};
+		return Arr{static_cast<unsigned>(array_holder.size() - 1)};
 	case TokenType::RBRACK:
 		possible_val = calcHelp(children.at(0)); //added this auto - might not work as intended
 		if(!possible_val.holds_Arr()){
