@@ -93,7 +93,7 @@ class Var{
       return false;
     }
     if(!has_value()){
-      return other.has_value();
+      return !other.has_value();
     }
     switch(data->index()){
       case 0:
