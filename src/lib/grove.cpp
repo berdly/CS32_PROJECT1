@@ -14,9 +14,9 @@ Var Specials::pop(const std::vector<Var>& args){
 	throw std::runtime_error("Runtime error: underflow.");
   }
   std::vector<Var>& arr{args[0].get_Arr().get()};
-  Var las = arr.back();
+  Var last = arr.back();
   arr.pop_back();
-  return las;
+  return last;
 }
 Var Specials::len(const std::vector<Var>& args){
   if(args.size() != 1){
