@@ -59,6 +59,9 @@
         catch(const IdentifierError& e){
             std::cout<<e.new_what()<<'\n';
         }
+        catch(const std::runtime_error& e){
+            std::cout << e.what() << '\n';
+        }
         /*
         catch(const std::out_of_range& e){
             std::cout << e.what() << '\n';

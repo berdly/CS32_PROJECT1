@@ -228,9 +228,10 @@ std::pair<Var, bool> ASGrove::calc(bool print){
   if(!tree){
 	  throw std::runtime_error("BAD GROVE");
   }
+  TreeType type{types.at(place)};
   StatementTree* statement;
 	try{
-	switch(types.at(place)){
+	switch(type){
 		case TreeType::PRINT:
 		case TreeType::EXP:
 		case TreeType::RETURN:
@@ -240,7 +241,6 @@ std::pair<Var, bool> ASGrove::calc(bool print){
 			statement = static_cast<StatementTree*>(tree);
 			while(statement){
 				possible_val = calcHelp(statement->getProot());
-				possible_val = calcHelp(statement->getProot());
 				if(!possible_val.has_value()){
 					throw ConditionalError{};
 				}
@@ -248,10 +248,14 @@ std::pair<Var, bool> ASGrove::calc(bool print){
 					throw ConditionalError{};
 				}
 				else if(possible_val.get_bool()){
-					statement->get_body()->eval();
+					possible_val = statement->get_body()->eval();
+					
 					this->update_existing(statement->get_body()->show_vars());
 					statement->clear();
 					statement->get_body()->reset();
+					if(possible_val.has_value()){
+						type = TreeType::RETURN;
+					}
 					break;
 				}
 				statement = statement->get_next();
@@ -307,7 +311,7 @@ std::pair<Var, bool> ASGrove::calc(bool print){
 		throw ConditionalError{};
 	}
 	++place;
-	if(types.at(place - 1) == TreeType::RETURN){
+	if(type == TreeType::RETURN){
 		if(!is_func){
 			throw std::runtime_error("Runtime error: unexpected return.");
 		}
