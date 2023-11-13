@@ -1098,8 +1098,8 @@ StatementTree::~StatementTree(){
 	}
 }
 Arr::Arr(unsigned num) : idx{num} {}
- bool Arr::operator==(const Arr& other){
-	return idx == other.idx;
+ bool Arr::operator==(Arr& other){
+	return std::vector<Var>(this->get()) == std::vector<Var>(other.get());
  }
   //std::vector<Var>& get();
   Var& Arr::at(unsigned num){

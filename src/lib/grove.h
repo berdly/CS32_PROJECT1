@@ -18,7 +18,7 @@ class Arr{
   public:
   Arr() = default;
   Arr(unsigned);
-  bool operator==(const Arr&);
+  bool operator==(Arr&);
   Var& at(unsigned);
   unsigned size();
   Var& back();
