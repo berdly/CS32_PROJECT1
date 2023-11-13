@@ -124,7 +124,7 @@ class Var{
       out << "null";
       return out;
     }
-    Arr a{v.get_Arr()};
+    Arr a{};
     switch((*(v.data)).index()){
       case 0:
         out << v.get_double();
@@ -133,6 +133,7 @@ class Var{
         out << std::boolalpha << v.get_bool();
         break;
       case 2:
+        a = v.get_Arr();
         out << '[';
         for(unsigned i{}; i < a.size(); i++){
           out << a.at(i);
