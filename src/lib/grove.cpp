@@ -935,7 +935,7 @@ void ASGrove::print(unsigned i, unsigned indent, ASTree* start) const{
 	
 	  case TokenType::VOID:
 		if(root.get_pdata().get_text() == ""){
-			std::cout<<<root.get_pdata().get_text();
+			std::cout<<root.get_pdata().get_text();
 		}else{
 	  	std::cout<<" "<<root.get_pdata().get_text();
 		}
