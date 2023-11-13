@@ -349,8 +349,11 @@ Var ASGrove::calcHelp(const ASTree::ASNode& root){
 					}
 					ret.get_Arr().at(static_cast<unsigned>(dummy)) = possible_val; 
 				}
-				else{
+				else if (children.at(i).get_pdata().get_type() == TokenType::VAR){
                 	this->add_var(children.at(i).get_pdata().get_text(), possible_val);
+				}
+				else{
+					throw std::runtime_error("Runtime error: invalid assignee.");
 				}
             }
             return possible_val;
