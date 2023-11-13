@@ -934,10 +934,10 @@ void ASGrove::print(unsigned i, unsigned indent, ASTree* start) const{
             break;
 	
 	  case TokenType::VOID:
-		if(root.get_pdata().get_text() == "null"){
-			std::cout<<" "<<root.get_pdata().get_text();
+		if(root.get_pdata().get_text() == ""){
+			std::cout<<<root.get_pdata().get_text();
 		}else{
-	  	std::cout<<root.get_pdata().get_text();
+	  	std::cout<<" "<<root.get_pdata().get_text();
 		}
 		break;
 	 
