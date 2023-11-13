@@ -9,11 +9,11 @@ format: lex.o tree.o grove.o format.o
 calc: lex.o tree.o grove.o calc.o
 	${CXX} $(CXXFLAGS)  $^ -o $@
 
-lex: lexx.o lex.o
+lex: lex.o lexx.o
 	${CXX} $(CXXFLAGS)  $^ -o $@
-	
+
 lexx.o: src/lex.cpp 
-	${CXX} $(CXXFLAGS)  $^ -o $@
+	${CXX} $(CXXFLAGS)  $^ -c -o $@
 
 calc.o: src/calc.cpp
 	${CXX} $(CXXFLAGS)  $^ -c -o $@
