@@ -1036,6 +1036,7 @@ StatementTree::~StatementTree(){
 	if(next){
 		delete next;
 	}
+	2 + 2;
 	if(body){
 		delete body;
 	}
