@@ -492,7 +492,7 @@ Var ASGrove::calcHelp(const ASTree::ASNode& root){
 		if(!possible_val.holds_Arr()){
 			throw std::runtime_error("Runtime error: not an array.");
 		}
-		possible_val = calcHelp(children.at(1));
+		ret = calcHelp(children.at(1));
 		
 		if(!ret.holds_double()){
 			throw std::runtime_error("Runtime error: index is not a number.");
@@ -503,7 +503,7 @@ Var ASGrove::calcHelp(const ASTree::ASNode& root){
 		if((static_cast<size_t>(ret.get_double()) > (possible_val.get_Arr().size() - 1)) || (ret.get_double() < 0)){
 			throw std::runtime_error("Runtime error: index out of bounds.");
 		}
-		return possible_val.get_Arr().at(static_cast<size_t>(ret.get_double()));
+		return possible_val.get_Arr().at(static_cast<unsigned>(ret.get_double()));
 	case TokenType::LPAR:
 		for(unsigned i{1}; i < children.size(); i++){
 			args.push_back(this->calcHelp(children.at(i)));
