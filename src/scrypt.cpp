@@ -30,7 +30,7 @@
         linecount++;
      }
         //std::cout<<input<<std::endl;
-        //std::cout << fullinput << '\n';
+        std::cout << fullinput << '\n';
         auto tokens{reader(fullinput)};
         auto token_lists{split_infix(tokens, 0, static_cast<unsigned>(tokens.size() - 1))};
   /*    
@@ -89,11 +89,8 @@
             std::cout << e.what() << '\n';
             return 3;
         }
-        catch (const std::bad_variant_access& e){
-            std::cout << e.what() << '\n';
-            return 4;
-        }
-    
+        catch(const std::out_of_range&) {}
+        
     }
 
 
