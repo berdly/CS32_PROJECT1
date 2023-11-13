@@ -593,7 +593,11 @@ void ASGrove::print(unsigned i, unsigned indent, ASTree* start) const{
 					std::cout<<fun->get_names().at(i);
 				}
 			}
-			std::cout<<") {\n";
+			if(fun->get_body()->statements.at(0)->getProot().get_pdata().get_type() == TokenType::VOID && fun->get_body()->statements.at(0)->getProot().get_pdata().get_text() == " "){
+				std::cout<<"){";
+			}else{
+				std::cout<<") {\n";
+			}
  
 			fun->get_body()->printAll(indent + 1);
 
