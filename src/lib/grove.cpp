@@ -315,6 +315,11 @@ std::pair<Var, bool> ASGrove::calc(bool print){
 		vars = backup;
 		throw ConditionalError{};
 	}
+	catch(const std::runtime_error& e){
+		++place;
+		vars = backup;
+		throw e;
+	}
 	++place;
 	if(type == TreeType::RETURN){
 		if(!is_func){
