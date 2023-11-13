@@ -101,7 +101,7 @@ class Var{
       case 1:
         return get_bool() == other.get_bool();
       case 2:
-        return this->get_Arr() == other.get_Arr();
+        return (this->get_Arr() == this->get_Arr()) || (this->get_Arr().get() == other.get_Arr().get());
       case 3:
         return get_Func() == other.get_Func();
       case 4:
