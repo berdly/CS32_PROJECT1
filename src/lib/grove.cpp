@@ -594,7 +594,7 @@ void ASGrove::print(unsigned i, unsigned indent, ASTree* start) const{
 				}
 			}
 			if(fun->get_body()->statements.at(0)->getProot().get_pdata().get_type() == TokenType::VOID && fun->get_body()->statements.at(0)->getProot().get_pdata().get_text() == " "){
-				std::cout<<"){";
+				std::cout<<") {";
 			}else{
 				std::cout<<") {\n";
 			}
