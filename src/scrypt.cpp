@@ -89,6 +89,10 @@
             std::cout << e.what() << '\n';
             return 3;
         }
+        catch (const std::bad_variant_access& e){
+            std::cout << e.what() << '\n';
+            return 4;
+        }
     
     }
 
