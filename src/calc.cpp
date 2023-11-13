@@ -30,7 +30,7 @@
             if((token_list.size() == 1) && token_list.at(0).get_type() == TokenType::ERR){}
             else if(!token_list.empty()){
             grove.add_tree(new ASTree{token_list});
-            grove.print_curr();
+            grove.print_line();
             grove.calc();
             }
             else{
