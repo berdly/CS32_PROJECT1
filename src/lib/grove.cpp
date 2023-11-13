@@ -283,7 +283,7 @@ std::pair<Var, bool> ASGrove::calc(bool print){
 			break;
 		}
 		if(print || (types.at(place) == TreeType::PRINT)){
-			std::cout << possible_val;
+			std::cout << possible_val << '\n';
 		}
 	}
 	catch(const ZeroDivision&){
