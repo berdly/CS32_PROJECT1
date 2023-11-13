@@ -88,7 +88,7 @@ class Var{
     return(std::get<Iter>(*this->data));
   }
   */
-  bool operator==(const Var& other){
+  bool operator==(const Var& other) const {
     if(!same_type(other)){
       return false;
     }
@@ -110,10 +110,10 @@ class Var{
         return false;
     }
   }
-  bool operator!=(const Var& other){
+  bool operator!=(const Var& other) const {
     return !(*this == other);
   }
-  bool same_type(const Var& other){
+  bool same_type(const Var& other) const {
     if(!has_value()){
       return !other.has_value();
     }
