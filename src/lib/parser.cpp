@@ -44,7 +44,7 @@ bool wrapped_bracks(const std::vector<Token>& tokens, unsigned start, unsigned e
 			}
 			else if(tokens.at(i).get_type() == TokenType::RBRACK){
 				if(pdepth == 0){
-					return (i == end) && (end > 1);
+					return (i == end);
 				}
 				
 				else{
