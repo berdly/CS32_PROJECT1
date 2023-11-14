@@ -11,6 +11,9 @@ int main() {
             input += line + "\n"; // Concatenating each line with a newline character
             l = true;
         }
+        else {
+            input += "\n";
+        }
         if (std::cin.eof()) {
             break;
         }
