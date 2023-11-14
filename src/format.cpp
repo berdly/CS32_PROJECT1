@@ -30,7 +30,7 @@
         input.clear();
         linecount++;
      }
-        std::cout<<fullinput<<std::endl;
+        //std::cout<<fullinput<<std::endl;
 
         auto tokens{reader(fullinput)};
         auto token_lists{split_infix(tokens, 0, static_cast<unsigned>(tokens.size() - 1))};
