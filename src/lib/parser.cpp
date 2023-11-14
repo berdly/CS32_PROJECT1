@@ -119,7 +119,7 @@ ASTree::ASNode ASTree::build_call(const std::vector<Token>& tokens, unsigned sta
 		switch(tokens.at(i).get_type()){
 			case TokenType::COMMA:
 				if((bdepth == 0) && (pdepth == 0)){
-					if(curr_start > i - 1){
+					if(curr_start > static_cast<int>(i) - 1){
 						throw ParserError{tokens.at(i)};
 					}
 					root.add_child(this->buildInfix(tokens, curr_start, i - 1, false));
