@@ -1,16 +1,35 @@
 CXXFLAGS = -g -std=c++17 -Wall -Wextra -Werror
 CXX      = g++
 
-
-parser: parse
-	./parse
-
-lexer: lex
-	./lex
-
-parse: src/lib/error.h src/lib/lexer.cpp src/lib/lexer.h src/lib/parser.cpp src/lib/parser.h src/lib/token.h src/parse.cpp src/lib/grove.h src/lib/grove.cpp
+scrypt: lex.o tree.o grove.o scrypt.o
 	${CXX} $(CXXFLAGS)  $^ -o $@
 
-
-lex: src/lib/error.h src/lib/lexer.cpp src/lib/lexer.h src/lib/token.h src/lex.cpp
+format: lex.o tree.o grove.o format.o
 	${CXX} $(CXXFLAGS)  $^ -o $@
+calc: lex.o tree.o grove.o calc.o
+	${CXX} $(CXXFLAGS)  $^ -o $@
+
+lex: lex.o lexx.o
+	${CXX} $(CXXFLAGS)  $^ -o $@
+
+lexx.o: src/lex.cpp 
+	${CXX} $(CXXFLAGS)  $^ -c -o $@
+
+calc.o: src/calc.cpp
+	${CXX} $(CXXFLAGS)  $^ -c -o $@
+format.o: src/format.cpp
+	${CXX} $(CXXFLAGS)  $^ -c -o $@
+scrypt.o: src/scrypt.cpp
+	${CXX} $(CXXFLAGS)  $^ -c -o $@
+
+grove.o: src/lib/grove.cpp
+	${CXX} $(CXXFLAGS)  $^ -c -o $@
+
+tree.o: src/lib/parser.cpp
+	${CXX} $(CXXFLAGS)  $^ -c -o $@
+
+lex.o: src/lib/lexer.cpp
+	${CXX} $(CXXFLAGS)  $^ -c -o $@
+
+clean:
+	rm -f *.o lex format calc

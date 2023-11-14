@@ -14,6 +14,23 @@ enum class TokenType{
   LPAR,
   RPAR,
   ERR,
+  IF,
+  ELSE,
+  WHILE,
+  PRINT,
+  ASSIGN,
+  LOG,
+  BOOL,
+  LBRACE,
+  RBRACE,
+  //new
+  DEF, //keyword 'def'
+  COMMA, // ,
+  LBRACK, // [
+  RBRACK, // ]
+  SEMI, // ;
+  RETURN,
+  VOID,
 };
 //contains all information needed about a given token, including what kind of value it is through the ptype member, also has accessors
 class Token{
