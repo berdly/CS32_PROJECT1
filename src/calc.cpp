@@ -59,6 +59,7 @@
         catch(const IdentifierError& e){
             std::cout<<e.new_what()<<'\n';
         }
+        //test
         catch(const std::runtime_error& e){
             std::cout << e.what() << '\n';
         }
